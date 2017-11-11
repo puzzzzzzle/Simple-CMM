@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="LexerCompiler:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/LexerCompiler_jar</output-path>
+    <root id="archive" name="LexerCompiler.jar">
+      <element id="module-output" name="LexerCompiler" />
+    </root>
+  </artifact>
+</component>

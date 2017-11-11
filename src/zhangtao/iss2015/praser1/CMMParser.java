@@ -90,6 +90,13 @@ public class CMMParser {
         errorNum++;
     }
 
+    private void jumpToNextStatement() {
+        while (!currentToken.getContent().equals(ConstValues.SEMICOLON)) {
+            nextToken();
+        }
+//        nextToken();
+    }
+
     /**
      * 处理每条语句
      *
@@ -155,8 +162,7 @@ public class CMMParser {
     }
 
     /**
-     * forStatement :FOR LPAREN (assignStatement) SEMICOLON condition SEMICOLON assignStatement
-     * RPAREN LBRACE statement RBRACE;
+     * for语句
      *
      * @return TokenTree
      */
@@ -257,8 +263,7 @@ public class CMMParser {
     }
 
     /**
-     * ifStatement: IF LPAREN condition RPAREN LBRACE statement RBRACE (ELSE LBRACE
-     * statement RBRACE)?;
+     * if语句
      *
      * @return TokenTree
      */
@@ -367,7 +372,7 @@ public class CMMParser {
     }
 
     /**
-     * whileStatement: WHILE LPAREN condition RPAREN LBRACE statement RBRACE;
+     * while语句
      *
      * @return TokenTree
      */
@@ -443,7 +448,7 @@ public class CMMParser {
     }
 
     /**
-     * readStatement: READ LPAREN ID RPAREN SEMICOLON;
+     * read语句
      *
      * @return TokenTree
      */
@@ -498,7 +503,7 @@ public class CMMParser {
     }
 
     /**
-     * writeStatement: WRITE LPAREN expression RPAREN SEMICOLON;
+     * write语句
      *
      * @return TokenTree
      */
@@ -539,7 +544,7 @@ public class CMMParser {
     }
 
     /**
-     * assignStatement: (ID | ID array) ASSIGN expression SEMICOLON;
+     * 赋值语句
      *
      * @param isFor 是否是在for循环中调用
      * @return TokenTree
@@ -620,7 +625,7 @@ public class CMMParser {
     }
 
     /**
-     * declareProcess: (ID|ID array)(ASSIGN expression)?;
+     * 声明变量
      *
      * @param root 根结点
      * @return TokenTree
@@ -645,44 +650,37 @@ public class CMMParser {
 //                            currentToken.getLine());
 //                    root.add(idNode);
                     nextToken();
-                    if(currentToken.getKind().equals("标识符")){
+                    if (currentToken.getKind().equals("标识符")) {
                         TokenTree idNode = new TokenTree("数组标识符", currentToken.getContent(),
                                 currentToken.getLine());
                         idNode.setArraySize(Integer.parseInt(num));
                         root.add(idNode);
-                    }else {
+                    } else {
                         String error = " 数组声明失败，不是标识符\"" + "\n";
                         error(error);
+                        jumpToNextStatement();
                         return new TokenTree(ConstValues.ERROR + "数组声明失败，不是标识符\"]\"");
                     }
                     nextToken();
                     if (!currentToken.getContent().equals(ConstValues.SEMICOLON)) {
                         String error = " 数组一次只能声明一个，且不能赋值\"" + "\n";
                         error(error);
+                        jumpToNextStatement();
                         return new TokenTree(ConstValues.ERROR + "数组一次只能声明一个，且不能赋值\"]\"");
                     }
-//                    preToken();
-//                    nextToken();
                 } else {
                     String error = " 缺少右中括号\"]\"" + "\n";
                     error(error);
+                    jumpToNextStatement();
                     return new TokenTree(ConstValues.ERROR + "缺少右中括号\"]\"");
                 }
             } else {
                 String error = "数组中必须用整数来初始化" + "\n";
                 error(error);
+                jumpToNextStatement();
                 return new TokenTree(ConstValues.ERROR + "数组中必须为整数来初始化\"]\"");
             }
-//            if (currentToken != null
-//                    && currentToken.getContent().equals(ConstValues.RBRACKET)) {
-//                nextToken();
-//            } else { // 报错
-//                String error = " 缺少右中括号\"]\"" + "\n";
-//                error(error);
-//                return new TokenTree(ConstValues.ERROR + "缺少右中括号\"]\"");
-//            }
         } else {
-//            nextToken();
             if (currentToken != null && currentToken.getKind().equals("标识符")) {
                 TokenTree idNode = new TokenTree("标识符", currentToken.getContent(),
                         currentToken.getLine());
@@ -691,7 +689,10 @@ public class CMMParser {
                 // 处理array的情况
                 if (currentToken != null
                         && currentToken.getContent().equals(ConstValues.LBRACKET)) {
-                    idNode.add(array());
+                    String error = " 数组声明语句出错" + "\n";
+                    error(error);
+                    root.add(new TokenTree(ConstValues.ERROR + "数组应在关键字后申明大小"));
+                    jumpToNextStatement();
                 } else if (currentToken != null
                         && !currentToken.getContent().equals(ConstValues.ASSIGN)
                         && !currentToken.getContent().equals(ConstValues.SEMICOLON)
@@ -723,7 +724,6 @@ public class CMMParser {
     }
 
     /**
-     *
      * @return TokenTree
      */
     private final TokenTree condition() {
@@ -745,7 +745,6 @@ public class CMMParser {
     }
 
     /**
-     *
      * @return TokenTree
      */
     private final TokenTree expression() {
@@ -766,7 +765,6 @@ public class CMMParser {
     }
 
     /**
-     *
      * @return TokenTree
      */
     private final TokenTree term() {
@@ -787,7 +785,6 @@ public class CMMParser {
     }
 
     /**
-     *
      * @return TokenTree
      */
     private final TokenTree factor() {
@@ -854,7 +851,7 @@ public class CMMParser {
     }
 
     /**
-     * array : LBRACKET (expression) RBRACKET;
+     * array操作
      *
      * @return TokenTree
      */
@@ -883,7 +880,7 @@ public class CMMParser {
     }
 
     /**
-     * add_op : PLUS | MINUS;
+     * add语句
      *
      * @return TokenTree
      */
@@ -909,7 +906,7 @@ public class CMMParser {
     }
 
     /**
-     * mul_op : TIMES | DIVIDE;
+     * mul语句
      *
      * @return TokenTree
      */
@@ -935,7 +932,7 @@ public class CMMParser {
     }
 
     /**
-     * comparison_op: LT | GT | EQUAL | NOTEQUAL;
+     * comparison语句
      *
      * @return TokenTree
      */

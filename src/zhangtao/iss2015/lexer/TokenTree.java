@@ -12,7 +12,7 @@ public class TokenTree extends DefaultMutableTreeNode {
     private String content;
     //当前结点所在行号
     private int lineNum;
-    //如果是数组的话，它的大小
+    //如果是数组的话，它的大小,或操作符中，操作单元的位置
     private int arraySize=-1;
 
     public int getArraySize() {

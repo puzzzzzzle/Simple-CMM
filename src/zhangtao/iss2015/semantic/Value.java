@@ -19,7 +19,6 @@ public class Value {
     /**
      * 创建一个type型值对象
      * @param type
-     * @param value
      */
     public Value(int type) {
         this.mType = type;

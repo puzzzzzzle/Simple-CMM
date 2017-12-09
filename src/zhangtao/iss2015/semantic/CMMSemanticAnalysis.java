@@ -1,12 +1,10 @@
 package zhangtao.iss2015.semantic;
 
-//import com.vincent.main.CompilerFrame;
-
+import zhangtao.iss2015.gui.Controller;
 import zhangtao.iss2015.lexer.ConstValues;
-import zhangtao.iss2015.lexer.TokenTree;
+import zhangtao.iss2015.lexer.TokenTreeNode;
 
 import javax.swing.*;
-import java.awt.*;
 import java.math.BigDecimal;
 
 
@@ -17,7 +15,7 @@ public class CMMSemanticAnalysis extends Thread {
 	// 语义分析时的符号表
 	private SymbolTable table = new SymbolTable();
 	// 语法分析得到的抽象语法树 
-	private TokenTree root;
+	private TokenTreeNode root;
 	// 语义分析错误信息 
 	private String errorInfo = "";
 	// 语义分析错误个数 
@@ -25,9 +23,11 @@ public class CMMSemanticAnalysis extends Thread {
 	// 语义分析标识符作用域 
 	private int level = 0;
 
+	Controller controller = null;
 
-	public CMMSemanticAnalysis(TokenTree root) {
+	public CMMSemanticAnalysis(TokenTreeNode root,Controller controller) {
 		this.root = root;
+		this.controller=controller;
 	}
 
 	public void error(String error, int line) {
@@ -68,8 +68,10 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @return 返回用户输入内容的字符串形式
 	 */
-	public synchronized String readInput() {
+	public synchronized String readInput(){
 	    //todo:input
+        String result = controller.inputTextDialog("输入","输入","输入");
+//        wait();
 //		String result = null;
 //		try {
 //			while (userInput == null) {
@@ -81,7 +83,7 @@ public class CMMSemanticAnalysis extends Thread {
 //		result = userInput;
 //		userInput = null;
 //		return result;
-        return null;
+        return result;
 	}
 
 	/**
@@ -89,20 +91,8 @@ public class CMMSemanticAnalysis extends Thread {
 	 */
 	public void run() {
 		//todo:run
-//		table.removeAll();
-//		statement(root);
-//		CompilerFrame.problemArea.append("\n");
-//		CompilerFrame.problemArea.append("**********语义分析结果**********\n");
-//		if (errorNum != 0) {
-//			CompilerFrame.problemArea.append(errorInfo);
-//			CompilerFrame.problemArea.append("该程序中共有" + errorNum + "个语义错误！\n");
-//			CompilerFrame.proAndConPanel.setSelectedIndex(1);
-//			JOptionPane.showMessageDialog(new JPanel(), "程序进行语义分析时发现错误，请修改！",
-//					"语义分析", JOptionPane.ERROR_MESSAGE);
-//		} else {
-//			CompilerFrame.problemArea.append("该程序中共有" + errorNum + "个语义错误！\n");
-//			CompilerFrame.proAndConPanel.setSelectedIndex(0);
-//		}
+		table.removeAll();
+		statement(root);
 	}
 
 	/**
@@ -110,9 +100,9 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root 根结点
 	 */
-	private void statement(TokenTree root) {
+	private void statement(TokenTreeNode root) {
 		for (int i = 0; i < root.getChildCount(); i++) {
-			TokenTree currentNode = root.getChildAt(i);
+			TokenTreeNode currentNode = root.getChildAt(i);
 			String content = currentNode.getContent();
 			if (content.equals(ConstValues.INT) || content.equals(ConstValues.DOUBLE)
 					|| content.equals(ConstValues.BOOL)
@@ -154,12 +144,12 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root 根结点
 	 */
-	private void forDeclare(TokenTree root) {
+	private void forDeclare(TokenTreeNode root) {
 		// 结点显示的内容,即声明变量的类型int real bool string
 		String content = root.getContent();
 		int index = 0;
 		while (index < root.getChildCount()) {
-			TokenTree temp = root.getChildAt(index);
+			TokenTreeNode temp = root.getChildAt(index);
 			// 变量值
 			String name = temp.getContent();
 			// 判断变量是否已经被声明
@@ -173,7 +163,7 @@ public class CMMSemanticAnalysis extends Thread {
 							&& root.getChildAt(index).getContent().equals(
 									ConstValues.ASSIGN)) {
 						// 获得变量的初始子节点
-						TokenTree valueNode = root.getChildAt(index).getChildAt(
+						TokenTreeNode valueNode = root.getChildAt(index).getChildAt(
 								0);
 						String value = valueNode.getContent();
 						if (content.equals(ConstValues.INT)) { // 声明int型变量
@@ -492,9 +482,9 @@ public class CMMSemanticAnalysis extends Thread {
 	 * @param root
 	 *            语法树中assign语句结点
 	 */
-	private void forAssign(TokenTree root) {
+	private void forAssign(TokenTreeNode root) {
 		// 赋值语句左半部分
-		TokenTree node1 = root.getChildAt(0);
+		TokenTreeNode node1 = root.getChildAt(0);
 		// 赋值语句左半部分标识符
 		String node1Value = node1.getContent();
 		if (table.getAllLevel(node1Value, level) != null) {
@@ -514,7 +504,7 @@ public class CMMSemanticAnalysis extends Thread {
 		// 赋值语句左半部分标识符类型
 		String node1Kind = table.getAllLevel(node1Value, level).getKind();
 		// 赋值语句右半部分
-		TokenTree node2 = root.getChildAt(1);
+		TokenTreeNode node2 = root.getChildAt(1);
 		String node2Kind = node2.getNodeKind();
 		String node2Value = node2.getContent();
 		// 赋值语句右半部分的值
@@ -651,15 +641,15 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root 语法树中for语句结点
 	 */
-	private void forFor(TokenTree root) {
+	private void forFor(TokenTreeNode root) {
 		// 根结点Initialization
-		TokenTree initializationNode = root.getChildAt(0);
+		TokenTreeNode initializationNode = root.getChildAt(0);
 		// 根结点Condition
-		TokenTree conditionNode = root.getChildAt(1);
+		TokenTreeNode conditionNode = root.getChildAt(1);
 		// 根结点Change
-		TokenTree changeNode = root.getChildAt(2);
+		TokenTreeNode changeNode = root.getChildAt(2);
 		// 根结点Statements
-		TokenTree statementNode = root.getChildAt(3);
+		TokenTreeNode statementNode = root.getChildAt(3);
 		// for循环语句初始值
 		forAssign(initializationNode.getChildAt(0));
 		// 条件为真
@@ -678,17 +668,17 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root  语法树中if语句结点
 	 */
-	private void forIf(TokenTree root) {
+	private void forIf(TokenTreeNode root) {
 		int count = root.getChildCount();
 		// 根结点Condition
-		TokenTree conditionNode = root.getChildAt(0);
+		TokenTreeNode conditionNode = root.getChildAt(0);
 		// 根结点Statements
-		TokenTree statementNode = root.getChildAt(1);
+		TokenTreeNode statementNode = root.getChildAt(1);
 		// 条件为真
 		if (forCondition(conditionNode.getChildAt(0))) {
 			statement(statementNode);
 		} else if (count == 3) { // 条件为假且有else语句
-			TokenTree elseNode = root.getChildAt(2);
+			TokenTreeNode elseNode = root.getChildAt(2);
 			level++;
 			statement(elseNode);
 			level--;
@@ -703,11 +693,11 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root  语法树中while语句结点
 	 */
-	private void forWhile(TokenTree root) {
+	private void forWhile(TokenTreeNode root) {
 		// 根结点Condition
-		TokenTree conditionNode = root.getChildAt(0);
+		TokenTreeNode conditionNode = root.getChildAt(0);
 		// 根结点Statements
-		TokenTree statementNode = root.getChildAt(1);
+		TokenTreeNode statementNode = root.getChildAt(1);
 		while (forCondition(conditionNode.getChildAt(0))) {
 			statement(statementNode);
 			level--;
@@ -721,10 +711,8 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root 语法树中read语句结点
 	 */
-	private void forRead(TokenTree root) {
+	private void forRead(TokenTreeNode root) {
 //		CompilerFrame.consoleArea.setText("");
-		//todo:color
-//		CompilerFrame.setControlArea(Color.GREEN, true);
 		// 要读取的变量的名称
 		String idName = root.getContent();
 		// 查找变量
@@ -786,59 +774,49 @@ public class CMMSemanticAnalysis extends Thread {
 	 * 
 	 * @param root  语法树中write语句结点
 	 */
-	private void forWrite(TokenTree root) {
+	private void forWrite(TokenTreeNode root) {
+
 		//todo:write
-//		CompilerFrame.setControlArea(Color.BLACK, false);
-//		// 结点显示的内容
-//		String content = root.getContent();
-//		// 结点的类型
-//		String kind = root.getNodeKind();
-//		if (kind.equals("整数") || kind.equals("实数")) { // 常量
-//			CompilerFrame.consoleArea.setText(CompilerFrame.consoleArea
-//					.getText()
-//					+ content + "\n");
-//		} else if (kind.equals("字符串")) { // 字符串
-//			CompilerFrame.consoleArea.setText(CompilerFrame.consoleArea
-//					.getText()
-//					+ content + "\n");
-//		} else if (kind.equals("标识符")) { // 标识符
-//			if (checkID(root, level)) {
-//				if (root.getChildCount() != 0) {
-//					String s = forArray(root.getChildAt(0), table.getAllLevel(
-//							content, level).getArrayElementsNum());
-//					if (s != null)
-//						content += "@" + s;
-//					else
-//						return;
-//				}
-//				SymbolTableElement temp = table.getAllLevel(content, level);
-//				if (temp.getKind().equals(ConstValues.INT)) {
-//					CompilerFrame.consoleArea.setText(CompilerFrame.consoleArea
-//							.getText()
-//							+ temp.getIntValue() + "\n");
-//				} else if (temp.getKind().equals(ConstValues.DOUBLE)) {
-//					CompilerFrame.consoleArea.setText(CompilerFrame.consoleArea
-//							.getText()
-//							+ temp.getRealValue() + "\n");
-//				} else {
-//					CompilerFrame.consoleArea.setText(CompilerFrame.consoleArea
-//							.getText()
-//							+ temp.getStringValue() + "\n");
-//				}
-//			} else {
-//				return;
-//			}
-//		} else if (content.equals(ConstValues.PLUS)
-//				|| content.equals(ConstValues.MINUS)
-//				|| content.equals(ConstValues.TIMES)
-//				|| content.equals(ConstValues.DIVIDE)) { // 表达式
-//			String value = forExpression(root);
-//			if (value != null) {
-//				CompilerFrame.consoleArea.setText(CompilerFrame.consoleArea
-//						.getText()
-//						+ value + "\n");
-//			}
-//		}
+		// 结点显示的内容
+		String content = root.getContent();
+		// 结点的类型
+		String kind = root.getNodeKind();
+		if (kind.equals("整数") || kind.equals("实数")) { // 常量
+            controller.writeToConsole(content);
+		} else if (kind.equals("字符串")) { // 字符串
+            controller.writeToConsole(content);
+		} else if (kind.equals("标识符")) { // 标识符
+			if (checkID(root, level)) {
+				if (root.getChildCount() != 0) {
+					String s = forArray(root.getChildAt(0), table.getAllLevel(
+							content, level).getArrayElementsNum());
+					if (s != null)
+						content += "@" + s;
+					else
+						return;
+				}
+				SymbolTableElement temp = table.getAllLevel(content, level);
+				if (temp.getKind().equals(ConstValues.INT)) {
+                    controller.writeToConsole(temp.getIntValue());
+
+				} else if (temp.getKind().equals(ConstValues.DOUBLE)) {
+                    controller.writeToConsole(temp.getRealValue());
+
+				} else {
+                    controller.writeToConsole(temp.getStringValue());
+				}
+			} else {
+				return;
+			}
+		} else if (content.equals(ConstValues.PLUS)
+				|| content.equals(ConstValues.MINUS)
+				|| content.equals(ConstValues.TIMES)
+				|| content.equals(ConstValues.DIVIDE)) { // 表达式
+			String value = forExpression(root);
+			if (value != null) {
+                controller.writeToConsole(value);
+			}
+		}
 	}
 
 	/**
@@ -847,7 +825,7 @@ public class CMMSemanticAnalysis extends Thread {
 	 * @param root 根节点
 	 * @return 返回计算结果
 	 */
-	private boolean forCondition(TokenTree root) {
+	private boolean forCondition(TokenTreeNode root) {
 		// > < <> == true false 布尔变量
 		String content = root.getContent();
 		if (content.equals(ConstValues.TRUE)) {
@@ -947,14 +925,14 @@ public class CMMSemanticAnalysis extends Thread {
 	 * @param root 根节点
 	 * @return 返回计算结果
 	 */
-	private String forExpression(TokenTree root) {
+	private String forExpression(TokenTreeNode root) {
 		boolean isInt = true;
 		// + -
 		String content = root.getContent();
 		// 存放两个运算对象的结果
 		String[] results = new String[2];
 		for (int i = 0; i < root.getChildCount(); i++) {
-			TokenTree tempNode = root.getChildAt(i);
+			TokenTreeNode tempNode = root.getChildAt(i);
 			String kind = tempNode.getNodeKind();
 			String tempContent = tempNode.getContent();
 			if (kind.equals("整数")) { // 整数
@@ -1032,7 +1010,7 @@ public class CMMSemanticAnalysis extends Thread {
 	 * @param arraySize  数组大小
 	 * @return 出错返回null
 	 */
-	private String forArray(TokenTree root, int arraySize) {
+	private String forArray(TokenTreeNode root, int arraySize) {
 		if (root.getNodeKind().equals("整数")) {
 			int i = Integer.parseInt(root.getContent());
 			if (i > -1 && i < arraySize) {
@@ -1109,7 +1087,7 @@ public class CMMSemanticAnalysis extends Thread {
 	 * @param level 字符串作用域
 	 * @return 如果声明且初始化则返回true,否则返回false
 	 */
-	private boolean checkID(TokenTree root, int level) {
+	private boolean checkID(TokenTreeNode root, int level) {
 		// 标识符名称
 		String idName = root.getContent();
 		// 标识符未声明

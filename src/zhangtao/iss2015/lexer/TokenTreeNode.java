@@ -5,7 +5,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * 节点树
  */
-public class TokenTree extends DefaultMutableTreeNode {
+public class TokenTreeNode extends DefaultMutableTreeNode {
     //当前结点类型
     private String nodeKind;
     // 当前结点内容
@@ -25,25 +25,25 @@ public class TokenTree extends DefaultMutableTreeNode {
 
 
 
-    public TokenTree() {
+    public TokenTreeNode() {
         super();
         nodeKind = "";
         content = "";
     }
 
-    public TokenTree(String content) {
+    public TokenTreeNode(String content) {
         super(content);
         this.content = content;
         nodeKind = "";
     }
 
-    public TokenTree(String kind, String content) {
+    public TokenTreeNode(String kind, String content) {
         super(content);
         this.content = content;
         nodeKind = kind;
     }
 
-    public TokenTree(String kind, String content, int lineNum) {
+    public TokenTreeNode(String kind, String content, int lineNum) {
         super(content);
         this.content = content;
         this.lineNum = lineNum;
@@ -81,12 +81,12 @@ public class TokenTree extends DefaultMutableTreeNode {
      * @param childNode
      *            要添加的孩子结点
      */
-    public void add(TokenTree childNode) {
+    public void add(TokenTreeNode childNode) {
         super.add(childNode);
     }
 
-    public TokenTree getChildAt(int index) {
-        return (TokenTree) super.getChildAt(index);
+    public TokenTreeNode getChildAt(int index) {
+        return (TokenTreeNode) super.getChildAt(index);
     }
 
 }

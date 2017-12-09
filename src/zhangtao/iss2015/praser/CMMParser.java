@@ -3,9 +3,12 @@ package zhangtao.iss2015.praser;
 
 import zhangtao.iss2015.lexer.ConstValues;
 import zhangtao.iss2015.lexer.Token;
-import zhangtao.iss2015.lexer.TokenTree;
+import zhangtao.iss2015.lexer.TokenTreeNode;
+import zhangtao.iss2015.semantic.TokenList;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * CMM语法分析器
@@ -23,7 +26,15 @@ public class CMMParser {
     // 错误信息
     private String errorInfo = "";
     // 语法分析根结点
-    private static TokenTree root;
+    private static TokenTreeNode root;
+    //TreeNode List
+    private static LinkedList<TokenList> treeNodeList;
+    private static Token current = null;
+    //token迭代器
+    private static ListIterator<Token> iterator = null;
+
+
+
 
     public CMMParser(List<Token> tokens) {
         this.tokens = tokens;
@@ -61,11 +72,11 @@ public class CMMParser {
      *
      * @return
      */
-    public TokenTree execute() {
+    public TokenTreeNode execute() {
         this.setIndex(0);
         this.setErrorInfo("");
         this.setErrorNum(0);
-        root = new TokenTree("Parser");
+        root = new TokenTreeNode("Parser");
         while (index < tokens.size()) {
             root.add(statement());
         }
@@ -116,10 +127,10 @@ public class CMMParser {
         Token previous = tokens.get(index - 1);
         if (currentToken != null
                 && currentToken.getLine() == previous.getLine()) {
-            line += currentToken.getLine() + " 行,第 " + currentToken.getColumn()
+            line += currentToken.getLine() + " 行,第 " + currentToken.getCulomn()
                     + " 列：";
         } else
-            line += previous.getLine() + " 行,第 " + previous.getColumn() + " 列：";
+            line += previous.getLine() + " 行,第 " + previous.getCulomn() + " 列：";
         errorInfo += line + error;
         errorNum++;
     }
@@ -128,11 +139,11 @@ public class CMMParser {
     /**
      * 处理每条语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree statement() {
+    private final TokenTreeNode statement() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         // 声明语句
         if (currentToken != null
                 &&
@@ -166,7 +177,7 @@ public class CMMParser {
         // read语句
         else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.READ)) {
-            TokenTree readNode = new TokenTree("关键字", ConstValues.READ, currentToken
+            TokenTreeNode readNode = new TokenTreeNode("关键字", ConstValues.READ, currentToken
                     .getLine());
             readNode.add(readStatement());
             tempNode = readNode;
@@ -174,7 +185,7 @@ public class CMMParser {
         // write语句
         else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.WRITE)) {
-            TokenTree writeNode = new TokenTree("关键字", ConstValues.WRITE,
+            TokenTreeNode writeNode = new TokenTreeNode("关键字", ConstValues.WRITE,
                     currentToken.getLine());
             writeNode.add(writeStatement());
             tempNode = writeNode;
@@ -183,7 +194,7 @@ public class CMMParser {
         else {
             String error = " 语法错误：" + currentToken.getContent() + "\n";
             error(error);
-            tempNode = new TokenTree(ConstValues.ERROR + "语法错误！");
+            tempNode = new TokenTreeNode(ConstValues.ERROR + "语法错误！");
             nextToken();
         }
         return tempNode;
@@ -193,9 +204,9 @@ public class CMMParser {
      * 声明变量
      *
      * @param root 根结点
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree declareProcess(TokenTree root) {
+    private final TokenTreeNode declareProcess(TokenTreeNode root) {
         //数组开始
         if (currentToken.getContent().equals(ConstValues.LBRACKET)) {
 //            System.out.println("[");
@@ -204,18 +215,18 @@ public class CMMParser {
 //                idNode.add(array());
 //            } else
             // 保存要返回的结点
-            TokenTree tempNode = null;
+            TokenTreeNode tempNode = null;
             nextToken();
             if (currentToken.getKind().equals("整数")) {
                 String num = currentToken.getContent();
                 nextToken();
                 if (currentToken.getContent().equals(ConstValues.RBRACKET)) {
-//                    TokenTree idNode = new TokenTree("数组标识符", currentToken.getContent(),
+//                    TokenTreeNode idNode = new TokenTreeNode("数组标识符", currentToken.getContent(),
 //                            currentToken.getLine());
 //                    root.add(idNode);
                     nextToken();
                     if (currentToken.getKind().equals("标识符")) {
-                        TokenTree idNode = new TokenTree("标识符", currentToken.getContent(),
+                        TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
                                 currentToken.getLine());
                         idNode.setArraySize(Integer.parseInt(num));
                         root.add(idNode);
@@ -223,30 +234,30 @@ public class CMMParser {
                         String error = " 数组声明失败，不是标识符\"" + "\n";
                         error(error);
                         jumpToNextStatement();
-                        return new TokenTree(ConstValues.ERROR + "数组声明失败，不是标识符\"]\"");
+                        return new TokenTreeNode(ConstValues.ERROR + "数组声明失败，不是标识符\"]\"");
                     }
                     nextToken();
                     if (!currentToken.getContent().equals(ConstValues.SEMICOLON)) {
                         String error = " 数组一次只能声明一个，且不能赋值\"" + "\n";
                         error(error);
                         jumpToNextStatement();
-                        return new TokenTree(ConstValues.ERROR + "数组一次只能声明一个，且不能赋值\"]\"");
+                        return new TokenTreeNode(ConstValues.ERROR + "数组一次只能声明一个，且不能赋值\"]\"");
                     }
                 } else {
                     String error = " 缺少右中括号\"]\"" + "\n";
                     error(error);
                     jumpToNextStatement();
-                    return new TokenTree(ConstValues.ERROR + "缺少右中括号\"]\"");
+                    return new TokenTreeNode(ConstValues.ERROR + "缺少右中括号\"]\"");
                 }
             } else {
                 String error = "数组中必须用整数来初始化" + "\n";
                 error(error);
                 jumpToNextStatement();
-                return new TokenTree(ConstValues.ERROR + "数组中必须为整数来初始化\"]\"");
+                return new TokenTreeNode(ConstValues.ERROR + "数组中必须为整数来初始化\"]\"");
             }
         } else {
             if (currentToken != null && currentToken.getKind().equals("标识符")) {
-                TokenTree idNode = new TokenTree("标识符", currentToken.getContent(),
+                TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
                         currentToken.getLine());
                 root.add(idNode);
                 nextToken();
@@ -255,7 +266,7 @@ public class CMMParser {
                         && currentToken.getContent().equals(ConstValues.LBRACKET)) {
                     String error = " 数组声明语句出错，数组大小应在关键字后面" + "\n";
                     error(error);
-                    root.add(new TokenTree(ConstValues.ERROR + "数组应在关键字后申明大小"));
+                    root.add(new TokenTreeNode(ConstValues.ERROR + "数组应在关键字后申明大小"));
                     jumpToNextStatement();
                 } else if (currentToken != null
                         && !currentToken.getContent().equals(ConstValues.ASSIGN)
@@ -264,20 +275,20 @@ public class CMMParser {
                     String error = " 声明语句出错,标识符后出现不正确的token" + "\n";
                     error(error);
                     root
-                            .add(new TokenTree(ConstValues.ERROR
+                            .add(new TokenTreeNode(ConstValues.ERROR
                                     + "声明语句出错,标识符后出现不正确的token"));
                     nextToken();
                 }
             } else { // 报错
                 String error = " 声明语句中标识符出错" + "\n";
                 error(error);
-                root.add(new TokenTree(ConstValues.ERROR + "声明语句中标识符出错"));
+                root.add(new TokenTreeNode(ConstValues.ERROR + "声明语句中标识符出错"));
                 nextToken();
             }
             // 匹配赋值符号=
             if (currentToken != null
                     && currentToken.getContent().equals(ConstValues.ASSIGN)) {
-                TokenTree assignNode = new TokenTree("分隔符", ConstValues.ASSIGN,
+                TokenTreeNode assignNode = new TokenTreeNode("分隔符", ConstValues.ASSIGN,
                         currentToken.getLine());
                 root.add(assignNode);
                 nextToken();
@@ -290,13 +301,13 @@ public class CMMParser {
     /**
      * for语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree forStatement() {
+    private final TokenTreeNode forStatement() {
         // 是否有大括号,默认为true
         boolean hasBrace = true;
         // if函数返回结点的根结点
-        TokenTree forNode = new TokenTree("关键字", "for", currentToken.getLine());
+        TokenTreeNode forNode = new TokenTreeNode("关键字", "for", currentToken.getLine());
         nextToken();
         // 匹配左括号
         if (currentToken != null
@@ -305,10 +316,10 @@ public class CMMParser {
         } else { // 报错
             String error = " for循环语句缺少左括号\"(\"" + "\n";
             error(error);
-            forNode.add(new TokenTree(ConstValues.ERROR + "for循环语句缺少左括号\"(\""));
+            forNode.add(new TokenTreeNode(ConstValues.ERROR + "for循环语句缺少左括号\"(\""));
         }
         // initialization
-        TokenTree initializationNode = new TokenTree("initialization",
+        TokenTreeNode initializationNode = new TokenTreeNode("initialization",
                 "Initialization", currentToken.getLine());
         initializationNode.add(assignStatement(true));
         forNode.add(initializationNode);
@@ -319,10 +330,10 @@ public class CMMParser {
         } else {
             String error = " for循环语句缺少分号\";\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "for循环语句缺少分号\";\"");
+            return new TokenTreeNode(ConstValues.ERROR + "for循环语句缺少分号\";\"");
         }
         // condition
-        TokenTree conditionNode = new TokenTree("condition", "Condition",
+        TokenTreeNode conditionNode = new TokenTreeNode("condition", "Condition",
                 currentToken.getLine());
         conditionNode.add(condition());
         forNode.add(conditionNode);
@@ -333,10 +344,10 @@ public class CMMParser {
         } else {
             String error = " for循环语句缺少分号\";\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "for循环语句缺少分号\";\"");
+            return new TokenTreeNode(ConstValues.ERROR + "for循环语句缺少分号\";\"");
         }
         // change
-        TokenTree changeNode = new TokenTree("change", "Change", currentToken
+        TokenTreeNode changeNode = new TokenTreeNode("change", "Change", currentToken
                 .getLine());
         changeNode.add(assignStatement(true));
         forNode.add(changeNode);
@@ -347,7 +358,7 @@ public class CMMParser {
         } else { // 报错
             String error = " if条件语句缺少右括号\")\"" + "\n";
             error(error);
-            forNode.add(new TokenTree(ConstValues.ERROR + "if条件语句缺少右括号\")\""));
+            forNode.add(new TokenTreeNode(ConstValues.ERROR + "if条件语句缺少右括号\")\""));
         }
         // 匹配左大括号{
         if (currentToken != null
@@ -357,7 +368,7 @@ public class CMMParser {
             hasBrace = false;
         }
         // statement
-        TokenTree statementNode = new TokenTree("statement", "Statements",
+        TokenTreeNode statementNode = new TokenTreeNode("statement", "Statements",
                 currentToken.getLine());
         forNode.add(statementNode);
         if (hasBrace) {
@@ -380,7 +391,7 @@ public class CMMParser {
             } else { // 报错
                 String error = " if条件语句缺少右大括号\"}\"" + "\n";
                 error(error);
-                forNode.add(new TokenTree(ConstValues.ERROR + "if条件语句缺少右大括号\"}\""));
+                forNode.add(new TokenTreeNode(ConstValues.ERROR + "if条件语句缺少右大括号\"}\""));
             }
         } else {
             statementNode.add(statement());
@@ -391,15 +402,15 @@ public class CMMParser {
     /**
      * if语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree ifStatement() {
+    private final TokenTreeNode ifStatement() {
         // if语句是否有大括号,默认为true
         boolean hasIfBrace = true;
         // else语句是否有大括号,默认为true
         boolean hasElseBrace = true;
         // if函数返回结点的根结点
-        TokenTree ifNode = new TokenTree("关键字", "if", currentToken.getLine());
+        TokenTreeNode ifNode = new TokenTreeNode("关键字", "if", currentToken.getLine());
         nextToken();
         // 匹配左括号(
         if (currentToken != null
@@ -408,10 +419,10 @@ public class CMMParser {
         } else { // 报错
             String error = " if条件语句缺少左括号\"(\"" + "\n";
             error(error);
-            ifNode.add(new TokenTree(ConstValues.ERROR + "if条件语句缺少左括号\"(\""));
+            ifNode.add(new TokenTreeNode(ConstValues.ERROR + "if条件语句缺少左括号\"(\""));
         }
         // condition
-        TokenTree conditionNode = new TokenTree("condition", "Condition",
+        TokenTreeNode conditionNode = new TokenTreeNode("condition", "Condition",
                 currentToken.getLine());
         ifNode.add(conditionNode);
         conditionNode.add(condition());
@@ -422,7 +433,7 @@ public class CMMParser {
         } else { // 报错
             String error = " if条件语句缺少右括号\")\"" + "\n";
             error(error);
-            ifNode.add(new TokenTree(ConstValues.ERROR + "if条件语句缺少右括号\")\""));
+            ifNode.add(new TokenTreeNode(ConstValues.ERROR + "if条件语句缺少右括号\")\""));
         }
         // 匹配左大括号{
         if (currentToken != null
@@ -432,7 +443,7 @@ public class CMMParser {
             hasIfBrace = false;
         }
         // statement
-        TokenTree statementNode = new TokenTree("statement", "Statements",
+        TokenTreeNode statementNode = new TokenTreeNode("statement", "Statements",
                 currentToken.getLine());
         ifNode.add(statementNode);
         if (hasIfBrace) {
@@ -455,7 +466,7 @@ public class CMMParser {
             } else { // 报错
                 String error = " if条件语句缺少右大括号\"}\"" + "\n";
                 error(error);
-                ifNode.add(new TokenTree(ConstValues.ERROR + "if条件语句缺少右大括号\"}\""));
+                ifNode.add(new TokenTreeNode(ConstValues.ERROR + "if条件语句缺少右大括号\"}\""));
             }
         } else {
             if (currentToken != null)
@@ -463,7 +474,7 @@ public class CMMParser {
         }
         if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.ELSE)) {
-            TokenTree elseNode = new TokenTree("关键字", ConstValues.ELSE, currentToken
+            TokenTreeNode elseNode = new TokenTreeNode("关键字", ConstValues.ELSE, currentToken
                     .getLine());
             ifNode.add(elseNode);
             nextToken();
@@ -486,7 +497,7 @@ public class CMMParser {
                 } else { // 报错
                     String error = " else语句缺少右大括号\"}\"" + "\n";
                     error(error);
-                    elseNode.add(new TokenTree(ConstValues.ERROR
+                    elseNode.add(new TokenTreeNode(ConstValues.ERROR
                             + "else语句缺少右大括号\"}\""));
                 }
             } else {
@@ -500,13 +511,13 @@ public class CMMParser {
     /**
      * while语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree whileStatement() {
+    private final TokenTreeNode whileStatement() {
         // 是否有大括号,默认为true
         boolean hasBrace = true;
         // while函数返回结点的根结点
-        TokenTree whileNode = new TokenTree("关键字", ConstValues.WHILE, currentToken
+        TokenTreeNode whileNode = new TokenTreeNode("关键字", ConstValues.WHILE, currentToken
                 .getLine());
         nextToken();
         // 匹配左括号(
@@ -516,10 +527,10 @@ public class CMMParser {
         } else { // 报错
             String error = " while循环缺少左括号\"(\"" + "\n";
             error(error);
-            whileNode.add(new TokenTree(ConstValues.ERROR + "while循环缺少左括号\"(\""));
+            whileNode.add(new TokenTreeNode(ConstValues.ERROR + "while循环缺少左括号\"(\""));
         }
         // condition
-        TokenTree conditionNode = new TokenTree("condition", "Condition",
+        TokenTreeNode conditionNode = new TokenTreeNode("condition", "Condition",
                 currentToken.getLine());
         whileNode.add(conditionNode);
         conditionNode.add(condition());
@@ -530,7 +541,7 @@ public class CMMParser {
         } else { // 报错
             String error = " while循环缺少右括号\")\"" + "\n";
             error(error);
-            whileNode.add(new TokenTree(ConstValues.ERROR + "while循环缺少右括号\")\""));
+            whileNode.add(new TokenTreeNode(ConstValues.ERROR + "while循环缺少右括号\")\""));
         }
         // 匹配左大括号{
         if (currentToken != null
@@ -540,7 +551,7 @@ public class CMMParser {
             hasBrace = false;
         }
         // statement
-        TokenTree statementNode = new TokenTree("statement", "Statements",
+        TokenTreeNode statementNode = new TokenTreeNode("statement", "Statements",
                 currentToken.getLine());
         whileNode.add(statementNode);
         if (hasBrace) {
@@ -564,7 +575,7 @@ public class CMMParser {
             } else { // 报错
                 String error = " while循环缺少右大括号\"}\"" + "\n";
                 error(error);
-                whileNode.add(new TokenTree(ConstValues.ERROR + "while循环缺少右大括号\"}\""));
+                whileNode.add(new TokenTreeNode(ConstValues.ERROR + "while循环缺少右大括号\"}\""));
             }
         } else {
             if (currentToken != null)
@@ -576,11 +587,11 @@ public class CMMParser {
     /**
      * read语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree readStatement() {
+    private final TokenTreeNode readStatement() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         nextToken();
         // 匹配左括号(
         if (currentToken != null
@@ -589,11 +600,11 @@ public class CMMParser {
         } else {
             String error = " read语句缺少左括号\"(\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "read语句缺少左括号\"(\"");
+            return new TokenTreeNode(ConstValues.ERROR + "read语句缺少左括号\"(\"");
         }
         // 匹配标识符
         if (currentToken != null && currentToken.getKind().equals("标识符")) {
-            tempNode = new TokenTree("标识符", currentToken.getContent(),
+            tempNode = new TokenTreeNode("标识符", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
             // 判断是否是为数组赋值
@@ -605,7 +616,7 @@ public class CMMParser {
             String error = " read语句左括号后不是标识符" + "\n";
             error(error);
             nextToken();
-            return new TokenTree(ConstValues.ERROR + "read语句左括号后不是标识符");
+            return new TokenTreeNode(ConstValues.ERROR + "read语句左括号后不是标识符");
         }
         // 匹配右括号)
         if (currentToken != null
@@ -614,7 +625,7 @@ public class CMMParser {
         } else {
             String error = " read语句缺少右括号\")\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "read语句缺少右括号\")\"");
+            return new TokenTreeNode(ConstValues.ERROR + "read语句缺少右括号\")\"");
         }
         // 匹配分号;
         if (currentToken != null
@@ -623,7 +634,7 @@ public class CMMParser {
         } else {
             String error = " read语句缺少分号\";\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "read语句缺少分号\";\"");
+            return new TokenTreeNode(ConstValues.ERROR + "read语句缺少分号\";\"");
         }
         return tempNode;
     }
@@ -631,11 +642,11 @@ public class CMMParser {
     /**
      * write语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree writeStatement() {
+    private final TokenTreeNode writeStatement() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         nextToken();
         // 匹配左括号(
         if (currentToken != null
@@ -644,7 +655,7 @@ public class CMMParser {
         } else {
             String error = " write语句缺少左括号\"(\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "write语句缺少左括号\"(\"");
+            return new TokenTreeNode(ConstValues.ERROR + "write语句缺少左括号\"(\"");
         }
         // 调用expression函数匹配表达式
         tempNode = expression();
@@ -655,7 +666,7 @@ public class CMMParser {
         } else {
             String error = " write语句缺少右括号\")\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "write语句缺少右括号\")\"");
+            return new TokenTreeNode(ConstValues.ERROR + "write语句缺少右括号\")\"");
         }
         // 匹配分号;
         if (currentToken != null
@@ -664,7 +675,7 @@ public class CMMParser {
         } else {
             String error = " write语句缺少分号\";\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "write语句缺少分号\";\"");
+            return new TokenTreeNode(ConstValues.ERROR + "write语句缺少分号\";\"");
         }
         return tempNode;
     }
@@ -673,13 +684,13 @@ public class CMMParser {
      * 赋值语句
      *
      * @param isFor 是否是在for循环中调用
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree assignStatement(boolean isFor) {
+    private final TokenTreeNode assignStatement(boolean isFor) {
         // assign函数返回结点的根结点
-        TokenTree assignNode = new TokenTree("运算符", ConstValues.ASSIGN, currentToken
+        TokenTreeNode assignNode = new TokenTreeNode("运算符", ConstValues.ASSIGN, currentToken
                 .getLine());
-        TokenTree idNode = new TokenTree("标识符", currentToken.getContent(),
+        TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
                 currentToken.getLine());
         assignNode.add(idNode);
         nextToken();
@@ -695,7 +706,7 @@ public class CMMParser {
         } else { // 报错
             String error = " 赋值语句缺少\"=\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "赋值语句缺少\"=\"");
+            return new TokenTreeNode(ConstValues.ERROR + "赋值语句缺少\"=\"");
         }
         // expression
         assignNode.add(condition());
@@ -708,7 +719,7 @@ public class CMMParser {
             } else { // 报错
                 String error = " 赋值语句缺少分号\";\"" + "\n";
                 error(error);
-                assignNode.add(new TokenTree(ConstValues.ERROR + "赋值语句缺少分号\";\""));
+                assignNode.add(new TokenTreeNode(ConstValues.ERROR + "赋值语句缺少分号\";\""));
             }
         }
         return assignNode;
@@ -717,10 +728,10 @@ public class CMMParser {
     /**
      * 声明语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree declareStatement() {
-        TokenTree declareNode = new TokenTree("关键字", currentToken.getContent(),
+    private final TokenTreeNode declareStatement() {
+        TokenTreeNode declareNode = new TokenTreeNode("关键字", currentToken.getContent(),
                 currentToken.getLine());
         nextToken();
         // declareProcess
@@ -745,25 +756,25 @@ public class CMMParser {
         } else { // 报错
             String error = " 声明语句缺少分号\";\"" + "\n";
             error(error);
-            declareNode.add(new TokenTree(ConstValues.ERROR + "声明语句缺少分号\";\""));
+            declareNode.add(new TokenTreeNode(ConstValues.ERROR + "声明语句缺少分号\";\""));
         }
         return declareNode;
     }
 
 
     /**
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree condition() {
+    private final TokenTreeNode condition() {
         // 记录expression生成的结点
-        TokenTree tempNode = expression();
+        TokenTreeNode tempNode = expression();
         // 如果条件判断为比较表达式
         if (currentToken != null
                 && (currentToken.getContent().equals(ConstValues.EQUAL)
                 || currentToken.getContent().equals(ConstValues.NOTEQUAL)
                 || currentToken.getContent().equals(ConstValues.LT) || currentToken
                 .getContent().equals(ConstValues.GT))) {
-            TokenTree comparisonNode = comparisonOperation();
+            TokenTreeNode comparisonNode = comparisonOperation();
             comparisonNode.add(tempNode);
             comparisonNode.add(expression());
             return comparisonNode;
@@ -773,18 +784,18 @@ public class CMMParser {
     }
 
     /**
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree expression() {
+    private final TokenTreeNode expression() {
         // 记录term生成的结点
-        TokenTree tempNode = term();
+        TokenTreeNode tempNode = term();
 
         // 如果下一个token为加号或减号
         while (currentToken != null
                 && (currentToken.getContent().equals(ConstValues.PLUS) || currentToken
                 .getContent().equals(ConstValues.MINUS))) {
             // addOperation
-            TokenTree addNode = addOperation();
+            TokenTreeNode addNode = addOperation();
             addNode.add(tempNode);
             tempNode = addNode;
             tempNode.add(term());
@@ -793,18 +804,18 @@ public class CMMParser {
     }
 
     /**
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree term() {
+    private final TokenTreeNode term() {
         // 记录factor生成的结点
-        TokenTree tempNode = factor();
+        TokenTreeNode tempNode = factor();
 
         // 如果下一个token为乘号或除号
         while (currentToken != null
                 && (currentToken.getContent().equals(ConstValues.TIMES) || currentToken
                 .getContent().equals(ConstValues.DIVIDE))) {
             // mulOperation
-            TokenTree mulNode = mulOperation();
+            TokenTreeNode mulNode = mulOperation();
             mulNode.add(tempNode);
             tempNode = mulNode;
             tempNode.add(factor());
@@ -813,31 +824,31 @@ public class CMMParser {
     }
 
     /**
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree factor() {
+    private final TokenTreeNode factor() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         if (currentToken != null && currentToken.getKind().equals("整数")) {
-            tempNode = new TokenTree("整数", currentToken.getContent(),
+            tempNode = new TokenTreeNode("整数", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
         } else if (currentToken != null && currentToken.getKind().equals("实数")) {
-            tempNode = new TokenTree("实数", currentToken.getContent(),
+            tempNode = new TokenTreeNode("实数", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.TRUE)) {
-            tempNode = new TokenTree("布尔值", currentToken.getContent(),
+            tempNode = new TokenTreeNode("布尔值", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.FALSE)) {
-            tempNode = new TokenTree("布尔值", currentToken.getContent(),
+            tempNode = new TokenTreeNode("布尔值", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
         } else if (currentToken != null && currentToken.getKind().equals("标识符")) {
-            tempNode = new TokenTree("标识符", currentToken.getContent(),
+            tempNode = new TokenTreeNode("标识符", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
             if (currentToken != null
@@ -855,12 +866,12 @@ public class CMMParser {
             } else { // 报错
                 String error = " 算式因子缺少右括号\")\"" + "\n";
                 error(error);
-                return new TokenTree(ConstValues.ERROR + "算式因子缺少右括号\")\"");
+                return new TokenTreeNode(ConstValues.ERROR + "算式因子缺少右括号\")\"");
             }
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.DQ)) { // 匹配双引号
             nextToken();
-            tempNode = new TokenTree("字符串", currentToken.getContent(),
+            tempNode = new TokenTreeNode("字符串", currentToken.getContent(),
                     currentToken.getLine());
             nextToken();
             // 匹配另外一个双引号
@@ -872,7 +883,7 @@ public class CMMParser {
                     && !currentToken.getContent().equals(ConstValues.SEMICOLON)) {
                 nextToken();
             }
-            return new TokenTree(ConstValues.ERROR + "算式因子存在错误");
+            return new TokenTreeNode(ConstValues.ERROR + "算式因子存在错误");
         }
         return tempNode;
     }
@@ -880,18 +891,18 @@ public class CMMParser {
     /**
      * array操作
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree array() {
+    private final TokenTreeNode array() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.LBRACKET)) {
             nextToken();
         } else {
             String error = " 缺少左中括号\"[\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "缺少左中括号\"[\"");
+            return new TokenTreeNode(ConstValues.ERROR + "缺少左中括号\"[\"");
         }
         // 调用expression函数匹配表达式
         tempNode = expression();
@@ -901,7 +912,7 @@ public class CMMParser {
         } else { // 报错
             String error = " 缺少右中括号\"]\"" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "缺少右中括号\"]\"");
+            return new TokenTreeNode(ConstValues.ERROR + "缺少右中括号\"]\"");
         }
         return tempNode;
     }
@@ -909,25 +920,25 @@ public class CMMParser {
     /**
      * add语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree addOperation() {
+    private final TokenTreeNode addOperation() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.PLUS)) {
-            tempNode = new TokenTree("运算符", ConstValues.PLUS, currentToken
+            tempNode = new TokenTreeNode("运算符", ConstValues.PLUS, currentToken
                     .getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.MINUS)) {
-            tempNode = new TokenTree("运算符", ConstValues.MINUS, currentToken
+            tempNode = new TokenTreeNode("运算符", ConstValues.MINUS, currentToken
                     .getLine());
             nextToken();
         } else { // 报错
             String error = " 加减符号出错" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "加减符号出错");
+            return new TokenTreeNode(ConstValues.ERROR + "加减符号出错");
         }
         return tempNode;
     }
@@ -935,25 +946,25 @@ public class CMMParser {
     /**
      * mul语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree mulOperation() {
+    private final TokenTreeNode mulOperation() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.TIMES)) {
-            tempNode = new TokenTree("运算符", ConstValues.TIMES, currentToken
+            tempNode = new TokenTreeNode("运算符", ConstValues.TIMES, currentToken
                     .getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.DIVIDE)) {
-            tempNode = new TokenTree("运算符", ConstValues.DIVIDE, currentToken
+            tempNode = new TokenTreeNode("运算符", ConstValues.DIVIDE, currentToken
                     .getLine());
             nextToken();
         } else { // 报错
             String error = " 乘除符号出错" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "乘除符号出错");
+            return new TokenTreeNode(ConstValues.ERROR + "乘除符号出错");
         }
         return tempNode;
     }
@@ -962,36 +973,395 @@ public class CMMParser {
      * 比较
      * comparison语句
      *
-     * @return TokenTree
+     * @return TokenTreeNode
      */
-    private final TokenTree comparisonOperation() {
+    private final TokenTreeNode comparisonOperation() {
         // 保存要返回的结点
-        TokenTree tempNode = null;
+        TokenTreeNode tempNode = null;
         if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.LT)) {
-            tempNode = new TokenTree("运算符", ConstValues.LT, currentToken.getLine());
+            tempNode = new TokenTreeNode("运算符", ConstValues.LT, currentToken.getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.GT)) {
-            tempNode = new TokenTree("运算符", ConstValues.GT, currentToken.getLine());
+            tempNode = new TokenTreeNode("运算符", ConstValues.GT, currentToken.getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.EQUAL)) {
-            tempNode = new TokenTree("运算符", ConstValues.EQUAL, currentToken
+            tempNode = new TokenTreeNode("运算符", ConstValues.EQUAL, currentToken
                     .getLine());
             nextToken();
         } else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.NOTEQUAL)) {
-            tempNode = new TokenTree("运算符", ConstValues.NOTEQUAL, currentToken
+            tempNode = new TokenTreeNode("运算符", ConstValues.NOTEQUAL, currentToken
                     .getLine());
             nextToken();
         } else { // 报错
             String error = " 比较运算符出错" + "\n";
             error(error);
-            return new TokenTree(ConstValues.ERROR + "比较运算符出错");
+            return new TokenTreeNode(ConstValues.ERROR + "比较运算符出错");
         }
         return tempNode;
     }
 
 
+    /**
+     * 获取TreeNode List
+     * @param tokenList
+     * @return
+     */
+    public static LinkedList<TokenList> getTreeNodeList(LinkedList<Token> tokenList){
+        treeNodeList = new LinkedList<TokenList>();
+        iterator = tokenList.listIterator();
+        while (iterator.hasNext()) {
+            treeNodeList.add(getStmt());
+        }
+        return treeNodeList;
+    }
+    /**
+     * 获取项TreeNode
+     */
+    private static TokenList getTerm(){
+        TokenList node = new TokenList(TokenList.EXP);
+        node.setDataType(Token.TERM_EXP);
+        if (iterator.hasNext()) {
+            TokenList expNode = new TokenList(TokenList.FACTOR);
+            switch (getNextTokenType()) {
+                case Token.LITERAL_INT:
+                case Token.LITERAL_REAL:
+                    expNode.setLeft(getLitreal());
+                    break;
+                case Token.LPARENT:
+                    consumeNextToken(Token.LPARENT);
+                    expNode = getExp();
+                    consumeNextToken(Token.RPARENT);
+                    break;
+                case Token.MINUS:
+                    expNode.setDataType(Token.MINUS);
+                    current = iterator.next();
+                    expNode.setLeft(getTerm());
+                    break;
+                case Token.PLUS:
+                    current = iterator.next();
+                    expNode.setLeft(getTerm());
+                    break;
+                default:
+                    //返回的不是expNode
+                    return variableName();
+            }
+            return expNode;
+        }
+        TokenList leftNode = getFactor();
+        if (checkNextTokenType(Token.MUL, Token.DIV)) {
+            node.setLeft(leftNode);
+            node.setMiddle(multiplyOp());
+            node.setRight(getTerm());
+        } else {
+            return leftNode;
+        }
+        return node;
+    }
+
+    /**
+     * 因子
+     */
+    private static TokenList getFactor(){
+        if (iterator.hasNext()) {
+            TokenList expNode = new TokenList(TokenList.FACTOR);
+            switch (getNextTokenType()) {
+                case Token.LITERAL_INT:
+                case Token.LITERAL_REAL:
+                    expNode.setLeft(getLitreal());
+                    break;
+                case Token.LPARENT:
+                    consumeNextToken(Token.LPARENT);
+                    expNode = getExp();
+                    consumeNextToken(Token.RPARENT);
+                    break;
+                case Token.MINUS:
+                    expNode.setDataType(Token.MINUS);
+                    current = iterator.next();
+                    expNode.setLeft(getTerm());
+                    break;
+                case Token.PLUS:
+                    current = iterator.next();
+                    expNode.setLeft(getTerm());
+                    break;
+                default:
+                    //返回的不是expNode
+                    return variableName();
+            }
+            return expNode;
+        }
+        return null;
+    }
+
+    private static TokenList getLitreal(){
+        if (iterator.hasNext()) {
+            current = iterator.next();
+            int type = current.getType();
+            TokenList node = new TokenList(TokenList.LITREAL);
+            node.setDataType(type);
+            node.setValue(current.getValue());
+            if (type == Token.LITERAL_INT || type == Token.LITERAL_REAL) {
+                return node;
+            } else {
+                // continue execute until throw
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 逻辑运算符
+     */
+    private static TokenList logicalOp(){
+        if (iterator.hasNext()) {
+            current = iterator.next();
+            int type = current.getType();
+            if (type == Token.EQ
+                    || type == Token.GET
+                    || type == Token.GT
+                    || type == Token.LET
+                    || type == Token.LT
+                    || type == Token.NEQ) {
+                TokenList node = new TokenList(TokenList.OP);
+                node.setDataType(type);
+                return node;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 加减运算符
+
+     */
+    private static TokenList addtiveOp(){
+        if (iterator.hasNext()) {
+            current = iterator.next();
+            int type = current.getType();
+            if (type == Token.PLUS || type == Token.MINUS) {
+                TokenList node = new TokenList(TokenList.OP);
+                node.setDataType(type);
+                return node;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 乘除运算符
+     */
+    private static TokenList multiplyOp(){
+        if (iterator.hasNext()) {
+            current = iterator.next();
+            int type = current.getType();
+            if (type == Token.MUL || type == Token.DIV) {
+                TokenList node = new TokenList(TokenList.OP);
+                node.setDataType(type);
+                return node;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 变量名,可能是单个的变量,也可能是数组的一个元素
+     */
+    private static TokenList variableName(){
+        TokenList node = new TokenList(TokenList.VAR);
+        if (checkNextTokenType(Token.ID)) {
+            current = iterator.next();
+            node.setValue(current.getValue());
+        } else {
+        }
+        if (getNextTokenType() == Token.LBRACKET) {
+            consumeNextToken(Token.LBRACKET);
+            node.setLeft(getExp());
+            consumeNextToken(Token.RBRACKET);
+        }
+        return node;
+    }
+
+    /**
+     * 消耗掉下一个token,要求必须是type类型,消耗之后current值将停在最后消耗的token上
+     */
+    private static void consumeNextToken(int type) {
+        if (iterator.hasNext()) {
+            current = iterator.next();
+            if (current.getType() == type) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * 检查下一个token的类型是否和type中的每一个元素相同,调用此函数current位置不会移动
+     */
+    private static boolean checkNextTokenType(int ... type) {
+        if (iterator.hasNext()) {
+            int nextType = iterator.next().getType();
+            iterator.previous();
+            for (int each : type) {
+                if (nextType == each) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取下一个token的type,如果没有下一个token,则返回{@link Token#NULL}
+     */
+    private static int getNextTokenType() {
+        if (iterator.hasNext()) {
+            int type = iterator.next().getType();
+            iterator.previous();
+            return type;
+        }
+        return Token.NULL;
+    }
+
+    /**
+     * 获取表达式Tree
+     */
+    private static TokenList getExp(){
+        TokenList node = new TokenList(TokenList.EXP);
+        node.setDataType(Token.LOGIC_EXP);
+        TokenList leftNode = addtiveExp();
+        if (checkNextTokenType(Token.EQ, Token.NEQ, Token.GT, Token.GET, Token.LT, Token.LET)) {
+            node.setLeft(leftNode);
+            node.setMiddle(logicalOp());
+            node.setRight(addtiveExp());
+        } else {
+            return leftNode;
+        }
+        return node;
+    }
+
+    /**
+     * 获取多项式Tree
+     */
+    private static TokenList addtiveExp(){
+        TokenList node = new TokenList(TokenList.EXP);
+        node.setDataType(Token.ADDTIVE_EXP);
+        TokenList leftNode = getTerm();
+        if (checkNextTokenType(Token.PLUS)) {
+            node.setLeft(leftNode);
+            node.setMiddle(addtiveOp());
+            node.setRight(addtiveExp());
+        } else if (checkNextTokenType(Token.MINUS)) {
+            node.setLeft(leftNode);
+            TokenList opnode = new TokenList(TokenList.OP);
+            opnode.setDataType(Token.PLUS);
+            node.setMiddle(opnode);
+            node.setRight(addtiveExp());
+        } else {
+            return leftNode;
+        }
+        return node;
+    }
+    /**
+     *获取TreeNode
+     */
+    private static TokenList getStmt(){
+        switch (getNextTokenType()) {
+            case Token.IF:
+            {
+                TokenList node = new TokenList(TokenList.IF_STMT);
+                consumeNextToken(Token.IF);
+                consumeNextToken(Token.LPARENT);
+                node.setLeft(getExp());
+                consumeNextToken(Token.RPARENT);
+                node.setMiddle(getStmt());
+                if (getNextTokenType() == Token.ELSE) {
+                    consumeNextToken(Token.ELSE);
+                    node.setRight(getStmt());
+                }
+                return node;
+            }
+            case Token.WHILE: {
+                TokenList node = new TokenList(TokenList.WHILE_STMT);
+                consumeNextToken(Token.WHILE);
+                consumeNextToken(Token.LPARENT);
+                node.setLeft(getExp());
+                consumeNextToken(Token.RPARENT);
+                node.setMiddle(getStmt());
+                return node;
+            }
+            case Token.READ:
+            {
+                TokenList node = new TokenList(TokenList.READ_STMT);
+                consumeNextToken(Token.READ);
+                node.setLeft(variableName());
+                consumeNextToken(Token.SEMI);
+                return node;
+            }
+            case Token.WRITE:{
+                TokenList node = new TokenList(TokenList.WRITE_STMT);
+                consumeNextToken(Token.WRITE);
+                node.setLeft(getExp());
+                consumeNextToken(Token.SEMI);
+                return node;
+            }
+            case Token.INT:
+            case Token.REAL: {
+                TokenList node = new TokenList(TokenList.DECLARE_STMT);
+                TokenList varNode = new TokenList(TokenList.VAR);
+                if (checkNextTokenType(Token.INT, Token.REAL)) {
+                    current = iterator.next();
+                    int type = current.getType();
+                    if (type == Token.INT) {
+                        varNode.setDataType(Token.INT);
+                    } else {//type == Token.REAL
+                        varNode.setDataType(Token.REAL);
+                    }
+                } else {
+                }
+                if (checkNextTokenType(Token.ID)) {
+                    current = iterator.next();
+                    varNode.setValue(current.getValue());
+                } else {
+                }
+                if (getNextTokenType() == Token.ASSIGN) {
+                    consumeNextToken(Token.ASSIGN);
+                    node.setMiddle(getExp());
+                } else if (getNextTokenType() == Token.LBRACKET) {
+                    consumeNextToken(Token.LBRACKET);
+                    varNode.setLeft(getExp());
+                    consumeNextToken(Token.RBRACKET);
+                }
+                consumeNextToken(Token.SEMI);
+                node.setLeft(varNode);
+                return node;
+            }
+            case Token.LBRACE:
+            {
+                TokenList node = new TokenList(TokenList.NULL);
+                TokenList header = node;
+                TokenList temp = null;
+                consumeNextToken(Token.LBRACE);
+                while (getNextTokenType() != Token.RBRACE) {//允许语句块中没有语句
+                    temp = getStmt();
+                    node.setNext(temp);
+                    node = temp;
+                }
+                consumeNextToken(Token.RBRACE);
+                return header;
+            }
+            case Token.ID:
+            {
+                TokenList node = new TokenList(TokenList.ASSIGN_STMT);
+                node.setLeft(variableName());
+                consumeNextToken(Token.ASSIGN);
+                node.setMiddle(getExp());
+                consumeNextToken(Token.SEMI);
+                return node;
+            }
+            default:
+        }
+        return null;
+    }
 }

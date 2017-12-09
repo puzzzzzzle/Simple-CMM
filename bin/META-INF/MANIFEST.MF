@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: zhangtao.iss2015.Main
+Main-Class: zhangtao.iss2015.gui.Main
 

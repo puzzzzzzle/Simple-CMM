@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
@@ -76,10 +77,10 @@ public class Lexer {
      * @param lineNum 当前行号
      * @return 返回分析一行得到的TreeNode根节点
      */
-    private TokenTree executeLine(String cmmText, int lineNum) {
+    private TokenTreeNode executeLine(String cmmText, int lineNum) {
         // 创建当前行根结点
         String content = "第" + lineNum + "行： " + cmmText;
-        TokenTree node = new TokenTree(content);
+        TokenTreeNode node = new TokenTreeNode(content);
         // 词法分析每行结束的标志
         cmmText += "\n";
         int length = cmmText.length();
@@ -99,7 +100,7 @@ public class Lexer {
                             // 分隔符
                             if (isSeparator(ch)) {
                                 state = 0;
-                                node.add(new TokenTree("分隔符 ： " + ch));
+                                node.add(new TokenTreeNode("分隔符 ： " + ch));
                                 tokens.add(new Token(lineNum, i + 1, "分隔符", String
                                         .valueOf(ch)));
                                 displayTokens.add(new Token(lineNum, i + 1, "分隔符",
@@ -144,7 +145,7 @@ public class Lexer {
                             else if (String.valueOf(ch).equals(ConstValues.DQ)) {
                                 begin = i + 1;
                                 state = 10;
-                                node.add(new TokenTree("分隔符 ： " + ch));
+                                node.add(new TokenTreeNode("分隔符 ： " + ch));
                                 tokens.add(new Token(lineNum, begin, "分隔符",
                                         ConstValues.DQ));
                                 displayTokens.add(new Token(lineNum, begin, "分隔符",
@@ -176,7 +177,7 @@ public class Lexer {
                             }
                             break;
                         case 1:
-                            node.add(new TokenTree("运算符 ： " + ConstValues.PLUS));
+                            node.add(new TokenTreeNode("运算符 ： " + ConstValues.PLUS));
                             tokens.add(new Token(lineNum, i, "运算符", ConstValues.PLUS));
                             displayTokens.add(new Token(lineNum, i, "运算符",
                                     ConstValues.PLUS));
@@ -189,7 +190,7 @@ public class Lexer {
                             if (temp.equals("整数") || temp.equals("标识符")
                                     || temp.equals("实数") || c.equals(")")
                                     || c.equals("]")) {
-                                node.add(new TokenTree("运算符 ： " + ConstValues.MINUS));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.MINUS));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.MINUS));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -210,12 +211,12 @@ public class Lexer {
                                 errorInfo += "\t错误:第 " + lineNum + " 行,第 " + i
                                         + " 列：" + "运算符\"" + ConstValues.TIMES
                                         + "\"使用错误  \n";
-                                node.add(new TokenTree(ConstValues.ERROR + "运算符\""
+                                node.add(new TokenTreeNode(ConstValues.ERROR + "运算符\""
                                         + ConstValues.TIMES + "\"使用错误"));
                                 displayTokens.add(new Token(lineNum, i, "错误",
                                         cmmText.substring(i - 1, i + 1)));
                             } else {
-                                node.add(new TokenTree("运算符 ： " + ConstValues.TIMES));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.TIMES));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.TIMES));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -226,7 +227,7 @@ public class Lexer {
                             break;
                         case 4:
                             if (ch == '/') {
-                                node.add(new TokenTree("单行注释 //"));
+                                node.add(new TokenTreeNode("单行注释 //"));
                                 displayTokens.add(new Token(lineNum, i, "单行注释符号",
                                         "//"));
                                 begin = i + 1;
@@ -235,13 +236,13 @@ public class Lexer {
                                 i = length - 2;
                                 state = 0;
                             } else if (ch == '*') {
-                                node.add(new TokenTree("多行注释 /*"));
+                                node.add(new TokenTreeNode("多行注释 /*"));
                                 displayTokens.add(new Token(lineNum, i, "多行注释开始符号",
                                         "/*"));
                                 begin = i + 1;
                                 isNotation = true;
                             } else {
-                                node.add(new TokenTree("运算符 ： " + ConstValues.DIVIDE));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.DIVIDE));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.DIVIDE));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -252,7 +253,7 @@ public class Lexer {
                             break;
                         case 5:
                             if (ch == '=') {
-                                node.add(new TokenTree("运算符 ： " + ConstValues.EQUAL));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.EQUAL));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.EQUAL));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -260,7 +261,7 @@ public class Lexer {
                                 state = 0;
                             } else {
                                 state = 0;
-                                node.add(new TokenTree("运算符 ： " + ConstValues.ASSIGN));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.ASSIGN));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.ASSIGN));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -270,7 +271,7 @@ public class Lexer {
                             break;
                         case 6:
                             if (ch == '>') {
-                                node.add(new TokenTree("运算符 ： " + ConstValues.NOTEQUAL));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.NOTEQUAL));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.NOTEQUAL));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -278,7 +279,7 @@ public class Lexer {
                                 state = 0;
                             } else {
                                 state = 0;
-                                node.add(new TokenTree("运算符 ： " + ConstValues.LT));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.LT));
                                 tokens
                                         .add(new Token(lineNum, i, "运算符",
                                                 ConstValues.LT));
@@ -294,13 +295,13 @@ public class Lexer {
                                 end = i;
                                 String id = cmmText.substring(begin, end);
                                 if (isKey(id)) {
-                                    node.add(new TokenTree("关键字 ： " + id));
+                                    node.add(new TokenTreeNode("关键字 ： " + id));
                                     tokens.add(new Token(lineNum, begin + 1, "关键字",
                                             id));
                                     displayTokens.add(new Token(lineNum, begin + 1,
                                             "关键字", id));
                                 } else if (matchID(id)) {
-                                    node.add(new TokenTree("标识符 ： " + id));
+                                    node.add(new TokenTreeNode("标识符 ： " + id));
                                     tokens.add(new Token(lineNum, begin + 1, "标识符",
                                             id));
                                     displayTokens.add(new Token(lineNum, begin + 1,
@@ -309,7 +310,7 @@ public class Lexer {
                                     errorNum++;
                                     errorInfo += "\t错误:第 " + lineNum + " 行,第 "
                                             + (begin + 1) + " 列：" + id + "是非法标识符\n";
-                                    node.add(new TokenTree(ConstValues.ERROR + id
+                                    node.add(new TokenTreeNode(ConstValues.ERROR + id
                                             + "是非法标识符"));
                                     displayTokens.add(new Token(lineNum, begin + 1,
                                             "错误", id));
@@ -326,7 +327,7 @@ public class Lexer {
                                     errorNum++;
                                     errorInfo += "\t错误:第 " + lineNum + " 行,第 "
                                             + i + " 列：" + "数字格式错误或者标志符错误\n";
-                                    node.add(new TokenTree(ConstValues.ERROR
+                                    node.add(new TokenTreeNode(ConstValues.ERROR
                                             + "数字格式错误或者标志符错误"));
                                     displayTokens.add(new Token(lineNum, i, "错误",
                                             cmmText.substring(begin, find(begin,
@@ -337,7 +338,7 @@ public class Lexer {
                                     String id = cmmText.substring(begin, end);
                                     if (!id.contains(".")) {
                                         if (matchInteger(id)) {
-                                            node.add(new TokenTree("整数    ： " + id));
+                                            node.add(new TokenTreeNode("整数    ： " + id));
                                             tokens.add(new Token(lineNum,
                                                     begin + 1, "整数", id));
                                             displayTokens.add(new Token(lineNum,
@@ -347,14 +348,14 @@ public class Lexer {
                                             errorInfo += "\t错误:第 " + lineNum
                                                     + " 行,第 " + (begin + 1) + " 列："
                                                     + id + "是非法整数\n";
-                                            node.add(new TokenTree(ConstValues.ERROR
+                                            node.add(new TokenTreeNode(ConstValues.ERROR
                                                     + id + "是非法整数"));
                                             displayTokens.add(new Token(lineNum,
                                                     begin + 1, "错误", id));
                                         }
                                     } else {
                                         if (matchReal(id)) {
-                                            node.add(new TokenTree("实数    ： " + id));
+                                            node.add(new TokenTreeNode("实数    ： " + id));
                                             tokens.add(new Token(lineNum,
                                                     begin + 1, "实数", id));
                                             displayTokens.add(new Token(lineNum,
@@ -364,7 +365,7 @@ public class Lexer {
                                             errorInfo += "\t错误:第 " + lineNum
                                                     + " 行,第 " + (begin + 1) + " 列："
                                                     + id + "是非法实数\n";
-                                            node.add(new TokenTree(ConstValues.ERROR
+                                            node.add(new TokenTreeNode(ConstValues.ERROR
                                                     + id + "是非法实数"));
                                             displayTokens.add(new Token(lineNum,
                                                     begin + 1, "错误", id));
@@ -376,7 +377,7 @@ public class Lexer {
                             }
                             break;
                         case 9:
-                            node.add(new TokenTree("运算符 ： " + ConstValues.GT));
+                            node.add(new TokenTreeNode("运算符 ： " + ConstValues.GT));
                             tokens.add(new Token(lineNum, i, "运算符", ConstValues.GT));
                             displayTokens.add(new Token(lineNum, i, "运算符",
                                     ConstValues.GT));
@@ -387,12 +388,12 @@ public class Lexer {
                             if (ch == '"') {
                                 end = i;
                                 String string = cmmText.substring(begin, end);
-                                node.add(new TokenTree("字符串 ： " + string));
+                                node.add(new TokenTreeNode("字符串 ： " + string));
                                 tokens.add(new Token(lineNum, begin + 1, "字符串",
                                         string));
                                 displayTokens.add(new Token(lineNum, begin + 1,
                                         "字符串", string));
-                                node.add(new TokenTree("分隔符 ： " + ConstValues.DQ));
+                                node.add(new TokenTreeNode("分隔符 ： " + ConstValues.DQ));
                                 tokens.add(new Token(lineNum, end + 1, "分隔符",
                                         ConstValues.DQ));
                                 displayTokens.add(new Token(lineNum, end + 1,
@@ -404,14 +405,14 @@ public class Lexer {
                                 errorInfo += "\t错误:第 " + lineNum + " 行,第 "
                                         + (begin + 1) + " 列：" + "字符串： " + string.trim()
                                         + "  缺少引号  \n";
-                                node.add(new TokenTree(ConstValues.ERROR + "字符串： "
+                                node.add(new TokenTreeNode(ConstValues.ERROR + "字符串： "
                                         + string.trim() + "  缺少引号  \n"));
                                 displayTokens.add(new Token(lineNum, i + 1, "错误",
                                         string));
                             }
                         case 11:
                             if (ch == '=') {
-                                node.add(new TokenTree("运算符 ： " + ConstValues.NOTEQUAL));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.NOTEQUAL));
                                 tokens.add(new Token(lineNum, i, "运算符",
                                         ConstValues.NOTEQUAL));
                                 displayTokens.add(new Token(lineNum, i, "运算符",
@@ -419,7 +420,7 @@ public class Lexer {
                                 state = 0;
                             } else {
                                 state = 0;
-                                node.add(new TokenTree("运算符 ： " + ConstValues.NOT));
+                                node.add(new TokenTreeNode("运算符 ： " + ConstValues.NOT));
                                 tokens
                                         .add(new Token(lineNum, i, "运算符",
                                                 ConstValues.NOT));
@@ -434,7 +435,7 @@ public class Lexer {
                         errorNum++;
                         errorInfo += "\t错误:第 " + lineNum + " 行,第 "
                                 + (i + 1) + " 列：" + "\"" + ch + "\"是不可识别符号  \n";
-                        node.add(new TokenTree(ConstValues.ERROR + "\"" + ch
+                        node.add(new TokenTreeNode(ConstValues.ERROR + "\"" + ch
                                 + "\"是不可识别符号"));
                         if (state == 0)
                             displayTokens.add(new Token(lineNum, i + 1, "错误",
@@ -445,7 +446,7 @@ public class Lexer {
                 if (ch == '*') {
                     state = 3;
                 } else if (ch == '/' && state == 3) {
-                    node.add(new TokenTree("多行注释 */"));
+                    node.add(new TokenTreeNode("多行注释 */"));
                     displayTokens.add(new Token(lineNum, begin + 1, "注释",
                             cmmText.substring(begin, i - 1)));
                     displayTokens.add(new Token(lineNum, i, "多行注释结束符号", "*/"));
@@ -482,12 +483,12 @@ public class Lexer {
      * @param cmmText CMM程序文本
      * @return 分析生成的TreeNode
      */
-    public TokenTree parse(String cmmText) {
+    public TokenTreeNode parse(String cmmText) {
         prepare();
         StringReader stringReader = new StringReader(cmmText);
         String eachLine = "";
         int lineNum = 1;
-        TokenTree root = new TokenTree("PROGRAM");
+        TokenTreeNode root = new TokenTreeNode("PROGRAM");
         reader = new BufferedReader(stringReader);
         while (eachLine != null) {
             try {
@@ -495,8 +496,8 @@ public class Lexer {
                 if (eachLine != null) {
                     if (isNotation() && !eachLine.contains("*/")) {
                         eachLine += "\n";
-                        TokenTree temp = new TokenTree(eachLine);
-                        temp.add(new TokenTree("多行注释"));
+                        TokenTreeNode temp = new TokenTreeNode(eachLine);
+                        temp.add(new TokenTreeNode("多行注释"));
                         displayTokens.add(new Token(lineNum, 1, "注释", eachLine
                                 .substring(0, eachLine.length() - 1)));
                         displayTokens.add(new Token(lineNum,
@@ -652,5 +653,206 @@ public class Lexer {
                 return i - 1;
         }
         return str.length();
+    }
+
+    /**
+     * 获取TokenList
+     */
+    public static LinkedList<Token> getTokenList(BufferedReader br) throws IOException {
+        lineNo = 1;
+        mBufferedReader = br;
+        LinkedList<Token> tokenList = new LinkedList<Token>();
+        StringBuilder sb = new StringBuilder();
+        readChar();
+        while (currentInt != -1) {
+            //消耗空白字符
+            if (currentChar == '\n'
+                    || currentChar == '\r'
+                    || currentChar == '\t'
+                    || currentChar == '\f'
+                    || currentChar == ' ') {
+                readChar();
+                continue;
+            }
+            //简单特殊符号
+            switch (currentChar) {
+                case ';':
+                    tokenList.add(new Token(Token.SEMI, lineNo));
+                    readChar();
+                    continue;
+                case '+':
+                    tokenList.add(new Token(Token.PLUS, lineNo));
+                    readChar();
+                    continue;
+                case '-':
+                    tokenList.add(new Token(Token.MINUS, lineNo));
+                    readChar();
+                    continue;
+                case '*':
+                    tokenList.add(new Token(Token.MUL, lineNo));
+                    readChar();
+                    continue;
+                case '(':
+                    tokenList.add(new Token(Token.LPARENT, lineNo));
+                    readChar();
+                    continue;
+                case ')':
+                    tokenList.add(new Token(Token.RPARENT, lineNo));
+                    readChar();
+                    continue;
+                case '[':
+                    tokenList.add(new Token(Token.LBRACKET, lineNo));
+                    readChar();
+                    continue;
+                case ']':
+                    tokenList.add(new Token(Token.RBRACKET, lineNo));
+                    readChar();
+                    continue;
+                case '{':
+                    tokenList.add(new Token(Token.LBRACE, lineNo));
+                    readChar();
+                    continue;
+                case '}':
+                    tokenList.add(new Token(Token.RBRACE, lineNo));
+                    readChar();
+                    continue;
+                    // no default:
+            }
+            //复合特殊符号
+            if (currentChar == '/') {
+                readChar();
+                if (currentChar == '*') {//多行注释
+//                    tokenList.add(new Token(Token.LCOM, lineNo));
+                    readChar();
+                    while (true) {//使用死循环消耗多行注释内字符
+                        if (currentChar == '*') {//如果是*,那么有可能是多行注释结束的地方
+                            readChar();
+                            if (currentChar == '/') {//多行注释结束符号
+//                                tokenList.add(new Token(Token.RCOM, lineNo));
+                                readChar();
+                                break;
+                            }
+                        } else {//如果不是*就继续读下一个,相当于忽略了这个字符
+                            readChar();
+                        }
+                    }
+                    continue;
+                } else if (currentChar == '/') {//单行注释
+//                    tokenList.add(new Token(Token.SCOM, lineNo));
+                    while (currentChar != '\n') {//消耗这一行之后的内容
+                        readChar();
+                    }
+                    continue;
+                } else {//是除号
+                    tokenList.add(new Token(Token.DIV, lineNo));
+                    continue;
+                }
+            } else if (currentChar == '=') {
+                readChar();
+                if (currentChar == '=') {
+                    tokenList.add(new Token(Token.EQ, lineNo));
+                    readChar();
+                } else {
+                    tokenList.add(new Token(Token.ASSIGN, lineNo));
+                }
+                continue;
+            } else if (currentChar == '>') {
+                readChar();
+                if (currentChar == '=') {
+                    tokenList.add(new Token(Token.GET, lineNo));
+                    readChar();
+                } else {
+                    tokenList.add(new Token(Token.GT, lineNo));
+                }
+                continue;
+            } else if (currentChar == '<') {
+                readChar();
+                if (currentChar == '=') {
+                    tokenList.add(new Token(Token.LET, lineNo));
+                    readChar();
+                } else if (currentChar == '>') {
+                    tokenList.add(new Token(Token.NEQ, lineNo));
+                    readChar();
+                } else {
+                    tokenList.add(new Token(Token.LT, lineNo));
+                }
+                continue;
+            } else if (currentChar == '!') {
+                readChar();
+                if (currentChar == '=') {
+                    tokenList.add(new Token(Token.NEQ, lineNo));
+                    readChar();
+                }
+                continue;
+            }
+            //数字
+            if (currentChar >= '0' && currentChar <= '9') {
+                boolean isReal = false;//是否小数
+                while ((currentChar >= '0' && currentChar <= '9') || currentChar == '.') {
+                    if (currentChar == '.') {
+                        if (isReal) {
+                            break;
+                        } else {
+                            isReal = true;
+                        }
+                    }
+                    sb.append(currentChar);
+                    readChar();
+                }
+                if (isReal) {
+                    tokenList.add(new Token(Token.LITERAL_REAL, sb.toString(), lineNo));
+                } else {
+                    tokenList.add(new Token(Token.LITERAL_INT, sb.toString(), lineNo));
+                }
+                sb.delete(0, sb.length());
+                continue;
+            }
+            //字符组成的标识符,包括保留字和ID
+            if ((currentChar >= 'a' && currentChar <= 'z') || currentChar == '_') {
+                //取剩下的可能是的字符
+                while ((currentChar >= 'a' && currentChar <= 'z')
+                        || (currentChar >= 'A' && currentChar <= 'Z')
+                        || currentChar == '_'
+                        || (currentChar >= '0' && currentChar <= '9')) {
+                    sb.append(currentChar);
+                    readChar();
+                }
+                Token token = new Token(lineNo);
+                String sbString = sb.toString();
+                if (sbString.equals("if")) {
+                    token.setType(Token.IF);
+                } else if (sbString.equals("else")) {
+                    token.setType(Token.ELSE);
+                } else if (sbString.equals("while")) {
+                    token.setType(Token.WHILE);
+                } else if (sbString.equals("read")) {
+                    token.setType(Token.READ);
+                } else if (sbString.equals("write")) {
+                    token.setType(Token.WRITE);
+                } else if (sbString.equals("int")) {
+                    token.setType(Token.INT);
+                } else if (sbString.equals("real")) {
+                    token.setType(Token.REAL);
+                } else {
+                    token.setType(Token.ID);
+                    token.setValue(sbString);
+                }
+                sb.delete(0, sb.length());
+                tokenList.add(token);
+                continue;
+            }
+            readChar();
+        }
+        return tokenList;
+    }
+
+    /**
+     * 这个方法也会统计换行,但是方法本身不会改变字符流的读取
+     */
+    private static void readChar() throws IOException {
+        currentChar = (char) (currentInt = mBufferedReader.read());
+        if (currentChar == '\n') {
+            lineNo++;
+        }
     }
 }

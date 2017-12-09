@@ -9,15 +9,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
-import zhangtao.iss2015.lexer.TokenTree;
+import zhangtao.iss2015.lexer.TokenTreeNode;
 import zhangtao.iss2015.praser.CMMParser;
+import zhangtao.iss2015.semantic.CMMSemanticAnalysis;
+import zhangtao.iss2015.semantic.CodeGenerater;
+import zhangtao.iss2015.semantic.FourCode;
+import zhangtao.iss2015.semantic.SymbolTable;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 
 public class Controller implements Initializable {
 
@@ -25,9 +29,11 @@ public class Controller implements Initializable {
     public Button LexButton;
     public Button PraserButton;
     public Button RunButton;
+
     public TextArea CodeText;
-    public TextArea ErrorOutput;
+    public TextArea StateOutput;
     public TextArea PrecessOutput;
+    public TextArea FourText;
 
     private Stage stage = null;
 
@@ -41,7 +47,7 @@ public class Controller implements Initializable {
         init();
     }
 
-    private void init(){
+    private void init() {
         OpenButton.setOnAction(e -> {
             File file = showFileSelector("CMM 文件");
             if (file == null) {
@@ -55,34 +61,35 @@ public class Controller implements Initializable {
             try {
                 text = readFromFile(file);
             } catch (FileNotFoundException e1) {
-                showErrorDialog("ERROR","文件读取错误","不是文本文件或文件不存在！");
+                showErrorDialog("ERROR", "文件读取错误", "不是文本文件或文件不存在！");
             }
             CodeText.textProperty().setValue(text);
         });
-        LexButton.setOnAction(e->{
+        LexButton.setOnAction(e -> {
             ArrayList<Token> result = null;
-            StringBuilder lexText= new StringBuilder();
+            StringBuilder lexText = new StringBuilder();
             Lexer lexer = new Lexer();
             if (CodeText.textProperty().get().equals("")) {
                 lexText.append("请确认输入CMM程序不为空！");
             } else {
-                TokenTree root = lexer.parse((CodeText.textProperty().get()));
+                TokenTreeNode root = lexer.parse((CodeText.textProperty().get()));
                 lexText.append("**********词法分析结果**********\n");
                 lexText.append(lexer.getErrorInfo());
                 lexText.append("该程序中共有" + lexer.getErrorNum() + "个词法错误！\n");
                 result = lexer.getDisplayTokens();
-                ErrorOutput.textProperty().setValue(lexText.toString());
+                StateOutput.textProperty().setValue(lexText.toString());
             }
         });
-        PraserButton.setOnAction(e->{
+
+        PraserButton.setOnAction(e -> {
             StringBuilder out = new StringBuilder();
-            TokenTree result = null;
+            TokenTreeNode result = null;
             CMMParser parser = null;
             Lexer lexer = new Lexer();
             if (CodeText.textProperty().get().equals("")) {
                 out.append("请确认输入CMM程序不为空！");
             } else {
-                TokenTree lexRoot = lexer.parse(CodeText.textProperty().get());
+                TokenTreeNode lexRoot = lexer.parse(CodeText.textProperty().get());
                 if (lexer.getErrorNum() != 0) {
                     out.append("**********词法分析失败**********\n");
                     out.append(lexer.getErrorInfo());
@@ -94,11 +101,59 @@ public class Controller implements Initializable {
                     out.append("**********语法分析结果**********\n");
                     out.append(parser.getErrorInfo());
                     out.append("该程序中共有" + parser.getErrorNum() + "个语法错误！\n");
-                    ErrorOutput.textProperty().setValue(out.toString());
+                    StateOutput.textProperty().setValue(out.toString());
                 }
             }
         });
+        RunButton.setOnAction(e -> {
+            StringBuilder out = new StringBuilder();
+            TokenTreeNode result = null;
+            CMMParser parser = null;
+            Lexer lexer = new Lexer();
+            if (CodeText.textProperty().get() == null || CodeText.textProperty().get().equals("")) {
+                out.append("请确认输入CMM程序不为空！");
+            } else {
+                TokenTreeNode lexRoot = lexer.parse(CodeText.textProperty().get());
+                if (lexer.getErrorNum() != 0) {
+                    out.append("**********词法分析失败**********\n");
+                    out.append(lexer.getErrorInfo());
+                    out.append("该程序中共有" + lexer.getErrorNum() + "个词法错误！\n");
+                    StateOutput.textProperty().setValue(out.toString());
+                    return;
+                }
+                parser = new CMMParser(lexer.getTokens());
+                TokenTreeNode node = result = parser.execute();
+                if (parser.getErrorNum() != 0) {
+                    out.append("**********语法分析失败**********\n");
+                    out.append(parser.getErrorInfo());
+                    out.append("该程序中共有" + parser.getErrorNum() + "个语法错误！\n");
+                    StateOutput.textProperty().setValue(out.toString());
+                    return;
+                }
+                StateOutput.textProperty().setValue("**********语法分析成功，开始语义分析**********\n");
+                generateCode();
+                CMMSemanticAnalysis semanticAnalysis = new CMMSemanticAnalysis(node, this);
+                semanticAnalysis.start();
+            }
+        });
     }
+
+
+    //生成中间代码
+    public void generateCode() {
+        String text = CodeText.textProperty().get();
+        LinkedList<FourCode> codes;
+        SymbolTable symbolTable = SymbolTable.getSymbolTable();
+        symbolTable.newTable();
+        codes = CodeGenerater.generateCode(text);
+        symbolTable.deleteTable();
+        StringBuilder sb = new StringBuilder();
+        for (FourCode code : codes) {
+            sb.append(code.toString() + "\r\n");
+        }
+        FourText.textProperty().setValue(sb.toString());
+    }
+
     /**
      * 错误提示框
      *
@@ -106,7 +161,7 @@ public class Controller implements Initializable {
      * @param head
      * @param body
      */
-    void showErrorDialog(String title, String head, String body) {
+    public void showErrorDialog(String title, String head, String body) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(head);
@@ -120,12 +175,13 @@ public class Controller implements Initializable {
      * @param title
      * @return
      */
-    File showFileSelector(String title) {
+    private File showFileSelector(String title) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(stage);
         return file;
     }
+
     /**
      * 输入框
      *
@@ -134,7 +190,7 @@ public class Controller implements Initializable {
      * @param body
      * @return
      */
-    String inputTextDialog(String title, String head, String body) {
+    public String inputTextDialog(String title, String head, String body) {
         TextInputDialog dialog = new TextInputDialog("-1");
         dialog.setTitle(title);
         dialog.setHeaderText(head);
@@ -145,7 +201,7 @@ public class Controller implements Initializable {
         return res[0];
     }
 
-    String readFromFile(File file) throws FileNotFoundException {
+    private String readFromFile(File file) throws FileNotFoundException {
         String result = null;
         try (Scanner scanner = new Scanner(
                 new BufferedInputStream(
@@ -155,11 +211,15 @@ public class Controller implements Initializable {
                 )
         )) {
             StringBuilder stringBuilder = new StringBuilder();
-            while (scanner.hasNextLine()){
-                stringBuilder.append(scanner.nextLine()+"\n");
+            while (scanner.hasNextLine()) {
+                stringBuilder.append(scanner.nextLine() + "\n");
             }
             result = stringBuilder.toString();
         }
         return result;
+    }
+
+    public void writeToConsole(String s) {
+        PrecessOutput.textProperty().setValue(PrecessOutput.textProperty().get() + "\n" + s);
     }
 }

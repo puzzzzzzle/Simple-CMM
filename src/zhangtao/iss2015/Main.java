@@ -3,7 +3,7 @@ package zhangtao.iss2015;
 import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
 import zhangtao.iss2015.lexer.TokenTree;
-import zhangtao.iss2015.praser1.CMMParser;
+import zhangtao.iss2015.praser.CMMParser;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,17 +12,18 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         //参数判断
-//        if (args.length != 1) {
-//            System.out.println("参数错误！");
-//            return;
-//        }
+        if (args.length != 1) {
+            System.out.println("参数错误！");
+            return;
+        }
 //        //System.in获取文件信息
 //        Scanner scanner1 = new Scanner(System.in);
 //        String name = scanner1.nextLine();
-        args = new String[1];
+        //预制文件信息
+//        args = new String[1];
 //        args[0]= "test8_阶乘.cmm";
 //        args[0]= "error2_array.cmm";
-        args[0] = "test1_变量声明.cmm";
+//        args[0] = "test1_变量声明.cmm";
 //        args[0]="error3_comment.cmm";
 
         if (!new File(args[0]).exists()) {
@@ -51,7 +52,7 @@ public class Main {
 //        ArrayList<Token> result = lex(stringBuilder.toString(), System.out);
 //        System.out.println("**********打印已获取的tokens**********");
 //        result.forEach(n -> System.out.print(n.getKind()+"\t:\t"+n.getContent() + "\n"));
-        parser(stringBuilder.toString(), System.out);
+        TokenTree root = parser(stringBuilder.toString(), System.out);
     }
 
     /**

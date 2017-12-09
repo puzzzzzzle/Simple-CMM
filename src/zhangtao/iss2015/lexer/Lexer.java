@@ -572,9 +572,7 @@ public class Lexer {
      * @return
      */
     private static boolean isLetter(char c) {
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
-            return true;
-        return false;
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
     }
 
     /**
@@ -584,9 +582,7 @@ public class Lexer {
      * @return
      */
     private static boolean isDigit(char c) {
-        if (c >= '0' && c <= '9')
-            return true;
-        return false;
+        return c >= '0' && c <= '9';
     }
 
     /**
@@ -596,10 +592,7 @@ public class Lexer {
      * @return
      */
     private static boolean matchInteger(String input) {
-        if (input.matches("^-?\\d+$") && !input.matches("^-?0{1,}\\d+$"))
-            return true;
-        else
-            return false;
+        return input.matches("^-?\\d+$") && !input.matches("^-?0{1,}\\d+$");
     }
 
     /**
@@ -609,11 +602,8 @@ public class Lexer {
      * @return
      */
     private static boolean matchReal(String input) {
-        if (input.matches("^(-?\\d+)(\\.\\d+)+$")
-                && !input.matches("^(-?0{2,}+)(\\.\\d+)+$"))
-            return true;
-        else
-            return false;
+        return input.matches("^(-?\\d+)(\\.\\d+)+$")
+                && !input.matches("^(-?0{2,}+)(\\.\\d+)+$");
     }
 
     /**
@@ -623,11 +613,8 @@ public class Lexer {
      * @return
      */
     private static boolean matchID(String input) {
-        if (input.matches("^\\w+$") && !input.endsWith("_")
-                && input.substring(0, 1).matches("[A-Za-z]"))
-            return true;
-        else
-            return false;
+        return input.matches("^\\w+$") && !input.endsWith("_")
+                && input.substring(0, 1).matches("[A-Za-z]");
     }
 
     /**
@@ -637,14 +624,12 @@ public class Lexer {
      * @return
      */
     private static boolean isKey(String str) {
-        if (str.equals(ConstValues.IF) || str.equals(ConstValues.ELSE)
+        return str.equals(ConstValues.IF) || str.equals(ConstValues.ELSE)
                 || str.equals(ConstValues.WHILE) || str.equals(ConstValues.READ)
                 || str.equals(ConstValues.WRITE) || str.equals(ConstValues.INT)
                 || str.equals(ConstValues.DOUBLE) || str.equals(ConstValues.BOOL)
                 || str.equals(ConstValues.STRING) || str.equals(ConstValues.TRUE)
-                || str.equals(ConstValues.FALSE) || str.equals(ConstValues.FOR))
-            return true;
-        return false;
+                || str.equals(ConstValues.FALSE) || str.equals(ConstValues.FOR);
     }
 
     /**

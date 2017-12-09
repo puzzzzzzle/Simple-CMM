@@ -49,6 +49,20 @@ public class ConstValues {
 
 
 
-    public static final String KEYCHAR = "关键字";
+    public static final String KEYWORD= "关键字";
+    public static final String SEPARTOR = "分隔符";
+    public static final String SPACE = "空白符";
+    public static final String NTAG = "换行符";
+    public static final String RTAG = "回车符";
+    public static final String TTag = "制表符";
+    public static final String OPERATOR = "运算符";
+    public static final String INTNUM = "整数";
+    public static final String FLOAT = "实数";
+    public static final String TAG = "标识符";
+
+
+
+
+
 
 }

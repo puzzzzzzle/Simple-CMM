@@ -54,13 +54,13 @@
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="154.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="324.0" minHeight="10.0" prefHeight="320.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="154.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="324.0" minHeight="10.0" prefHeight="312.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="四元式：" />
+                              <Button fx:id="FourCodeButton" mnemonicParsing="false" text="四元式" />
                            </children>
                         </HBox>
                         <TextArea fx:id="FourText" prefHeight="200.0" prefWidth="200.0" promptText="四元式" GridPane.rowIndex="1" />

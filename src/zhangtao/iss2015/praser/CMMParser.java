@@ -34,8 +34,6 @@ public class CMMParser {
     private static ListIterator<Token> iterator = null;
 
 
-
-
     public CMMParser(List<Token> tokens) {
         this.tokens = tokens;
         if (tokens.size() != 0)
@@ -148,8 +146,8 @@ public class CMMParser {
         if (currentToken != null
                 &&
                 ((currentToken.getContent().equals(ConstValues.INT)
-                        || currentToken.getContent().equals(ConstValues.DOUBLE) || currentToken
-                        .getContent().equals(ConstValues.BOOL))
+                        || currentToken.getContent().equals(ConstValues.DOUBLE)
+                        || currentToken.getContent().equals(ConstValues.BOOL))
                         || currentToken.getContent().equals(ConstValues.STRING))
                 ) {
             tempNode = declareStatement();
@@ -275,12 +273,11 @@ public class CMMParser {
                         && !currentToken.getContent().equals(ConstValues.COMMA)) {
                     String error = " 声明语句出错,标识符后出现不正确的token" + "\n";
                     error(error);
-                    root
-                            .add(new TokenTreeNode(ConstValues.ERROR
-                                    + "声明语句出错,标识符后出现不正确的token"));
+                    root.add(new TokenTreeNode(ConstValues.ERROR
+                            + "声明语句出错,标识符后出现不正确的token"));
                     nextToken();
                 }
-            } else { // 报错
+            }  else { // 报错
                 String error = " 声明语句中标识符出错" + "\n";
                 error(error);
                 root.add(new TokenTreeNode(ConstValues.ERROR + "声明语句中标识符出错"));
@@ -300,6 +297,7 @@ public class CMMParser {
     }
 
     //todo:for
+
     /**
      * for语句
      *
@@ -1010,10 +1008,11 @@ public class CMMParser {
 
     /**
      * 获取TreeNode List
+     *
      * @param tokenList
      * @return
      */
-    public static LinkedList<TokenList> getTreeNodeList(LinkedList<Token> tokenList){
+    public static LinkedList<TokenList> getTreeNodeList(LinkedList<Token> tokenList) {
         treeNodeList = new LinkedList<TokenList>();
         iterator = tokenList.listIterator();
         while (iterator.hasNext()) {
@@ -1021,10 +1020,11 @@ public class CMMParser {
         }
         return treeNodeList;
     }
+
     /**
      * 获取项TreeNode
      */
-    private static TokenList getTerm(){
+    private static TokenList getTerm() {
         TokenList node = new TokenList(TokenList.EXP);
         node.setDataType(Token.TERM_EXP);
         if (iterator.hasNext()) {
@@ -1068,7 +1068,7 @@ public class CMMParser {
     /**
      * 因子
      */
-    private static TokenList getFactor(){
+    private static TokenList getFactor() {
         if (iterator.hasNext()) {
             TokenList expNode = new TokenList(TokenList.FACTOR);
             switch (getNextTokenType()) {
@@ -1099,7 +1099,7 @@ public class CMMParser {
         return null;
     }
 
-    private static TokenList getLitreal(){
+    private static TokenList getLitreal() {
         if (iterator.hasNext()) {
             current = iterator.next();
             int type = current.getType();
@@ -1118,7 +1118,7 @@ public class CMMParser {
     /**
      * 逻辑运算符
      */
-    private static TokenList logicalOp(){
+    private static TokenList logicalOp() {
         if (iterator.hasNext()) {
             current = iterator.next();
             int type = current.getType();
@@ -1138,9 +1138,8 @@ public class CMMParser {
 
     /**
      * 加减运算符
-
      */
-    private static TokenList addtiveOp(){
+    private static TokenList addtiveOp() {
         if (iterator.hasNext()) {
             current = iterator.next();
             int type = current.getType();
@@ -1156,7 +1155,7 @@ public class CMMParser {
     /**
      * 乘除运算符
      */
-    private static TokenList multiplyOp(){
+    private static TokenList multiplyOp() {
         if (iterator.hasNext()) {
             current = iterator.next();
             int type = current.getType();
@@ -1172,7 +1171,7 @@ public class CMMParser {
     /**
      * 变量名,可能是单个的变量,也可能是数组的一个元素
      */
-    private static TokenList variableName(){
+    private static TokenList variableName() {
         TokenList node = new TokenList(TokenList.VAR);
         if (checkNextTokenType(Token.ID)) {
             current = iterator.next();
@@ -1202,7 +1201,7 @@ public class CMMParser {
     /**
      * 检查下一个token的类型是否和type中的每一个元素相同,调用此函数current位置不会移动
      */
-    private static boolean checkNextTokenType(int ... type) {
+    private static boolean checkNextTokenType(int... type) {
         if (iterator.hasNext()) {
             int nextType = iterator.next().getType();
             iterator.previous();
@@ -1230,7 +1229,7 @@ public class CMMParser {
     /**
      * 获取表达式Tree
      */
-    private static TokenList getExp(){
+    private static TokenList getExp() {
         TokenList node = new TokenList(TokenList.EXP);
         node.setDataType(Token.LOGIC_EXP);
         TokenList leftNode = addtiveExp();
@@ -1247,7 +1246,7 @@ public class CMMParser {
     /**
      * 获取多项式Tree
      */
-    private static TokenList addtiveExp(){
+    private static TokenList addtiveExp() {
         TokenList node = new TokenList(TokenList.EXP);
         node.setDataType(Token.ADDTIVE_EXP);
         TokenList leftNode = getTerm();
@@ -1266,14 +1265,14 @@ public class CMMParser {
         }
         return node;
     }
+
     /**
-     *获取TreeNode
+     * 获取TreeNode
      */
-    private static TokenList getStmt(){
-        int a  =getNextTokenType();
+    private static TokenList getStmt() {
+        int a = getNextTokenType();
         switch (a) {
-            case Token.IF:
-            {
+            case Token.IF: {
                 TokenList node = new TokenList(TokenList.IF_STMT);
                 consumeNextToken(Token.IF);
                 consumeNextToken(Token.LPARENT);
@@ -1295,8 +1294,7 @@ public class CMMParser {
                 node.setMiddle(getStmt());
                 return node;
             }
-            case Token.READ:
-            {
+            case Token.READ: {
                 TokenList node = new TokenList(TokenList.READ_STMT);
                 consumeNextToken(Token.READ);
                 //todo:debug
@@ -1306,7 +1304,7 @@ public class CMMParser {
                 consumeNextToken(Token.SEMI);
                 return node;
             }
-            case Token.WRITE:{
+            case Token.WRITE: {
                 TokenList node = new TokenList(TokenList.WRITE_STMT);
                 consumeNextToken(Token.WRITE);
                 node.setLeft(getExp());
@@ -1344,8 +1342,34 @@ public class CMMParser {
                 node.setLeft(varNode);
                 return node;
             }
-            case Token.LBRACE:
-            {
+            case Token.BOOL: {
+                TokenList node = new TokenList(TokenList.DECLARE_STMT);
+                TokenList varNode = new TokenList(TokenList.VAR);
+                if (checkNextTokenType(Token.BOOL)) {
+                    current = iterator.next();
+                    int type = current.getType();
+                    varNode.setDataType(type);
+
+                } else {
+                }
+                if (checkNextTokenType(Token.ID)) {
+                    current = iterator.next();
+                    varNode.setValue(current.getValue());
+                } else {
+                }
+                if (getNextTokenType() == Token.ASSIGN) {
+                    consumeNextToken(Token.ASSIGN);
+                    node.setMiddle(getExp());
+                } else if (getNextTokenType() == Token.LBRACKET) {
+                    consumeNextToken(Token.LBRACKET);
+                    varNode.setLeft(getExp());
+                    consumeNextToken(Token.RBRACKET);
+                }
+                consumeNextToken(Token.SEMI);
+                node.setLeft(varNode);
+                return node;
+            }
+            case Token.LBRACE: {
                 TokenList node = new TokenList(TokenList.NULL);
                 TokenList header = node;
                 TokenList temp = null;
@@ -1358,8 +1382,7 @@ public class CMMParser {
                 consumeNextToken(Token.RBRACE);
                 return header;
             }
-            case Token.ID:
-            {
+            case Token.ID: {
                 TokenList node = new TokenList(TokenList.ASSIGN_STMT);
                 node.setLeft(variableName());
                 consumeNextToken(Token.ASSIGN);

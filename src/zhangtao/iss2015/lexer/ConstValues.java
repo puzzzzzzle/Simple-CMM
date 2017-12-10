@@ -13,11 +13,11 @@ public class ConstValues {
     public static final String IF = "if"; //*
     public static final String ELSE = "else";//*
 
-    public static final String BOOL = "bool"; //-
-    public static final String STRING = "string"; //-
-    public static final String TRUE = "true"; //-
-    public static final String FALSE = "false"; //-
-    //数组--
+    public static final String BOOL = "bool"; //+-
+    public static final String STRING = "string"; //+-
+    public static final String TRUE = "true"; //*
+    public static final String FALSE = "false"; //*
+    //数组-
 
     //数组
 //    public static final String FOR = "for"; //放弃

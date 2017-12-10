@@ -34,6 +34,7 @@ public class Controller implements Initializable {
     public TextArea StateOutput;
     public TextArea PrecessOutput;
     public TextArea FourText;
+    public Button FourCodeButton;
 
     private Stage stage = null;
 
@@ -146,11 +147,54 @@ public class Controller implements Initializable {
                     out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
                     StateOutput.textProperty().setValue(out.toString());
                     PrecessOutput.textProperty().setValue("语意分析失败");
-                    return;
-                }else {
-                    generateCode();
                 }
             }
+        });
+        FourCodeButton.setOnAction(e->{
+            PrecessOutput.textProperty().setValue("");
+            FourText.textProperty().setValue("");
+            StateOutput.textProperty().setValue("");
+
+            StringBuilder out = new StringBuilder();
+            TokenTreeNode result = null;
+            CMMParser parser = null;
+            Lexer lexer = new Lexer();
+            if (CodeText.textProperty().get() == null || CodeText.textProperty().get().equals("")) {
+                out.append("请确认输入CMM程序不为空！");
+            } else {
+                TokenTreeNode lexRoot = lexer.parse(CodeText.textProperty().get());
+                if (lexer.getErrorNum() != 0) {
+                    out.append("**********词法分析失败**********\n");
+                    out.append(lexer.getErrorInfo());
+                    out.append("该程序中共有" + lexer.getErrorNum() + "个词法错误！\n");
+                    StateOutput.textProperty().setValue(out.toString());
+                    PrecessOutput.textProperty().setValue("词法分析失败");
+
+                    return;
+                }
+                parser = new CMMParser(lexer.getTokens());
+                TokenTreeNode node = parser.execute();
+                if (parser.getErrorNum() != 0) {
+                    out.append("**********语法分析失败**********\n");
+                    out.append(parser.getErrorInfo());
+                    out.append("该程序中共有" + parser.getErrorNum() + "个语法错误！\n");
+                    StateOutput.textProperty().setValue(out.toString());
+                    PrecessOutput.textProperty().setValue("语法分析失败");
+                    return;
+                }
+                StateOutput.textProperty().setValue("**********语法分析成功，开始语义分析**********\n");
+                CMMSemanticAnalysis semanticAnalysis = new CMMSemanticAnalysis(node, this);
+                semanticAnalysis.start();
+                if (semanticAnalysis.getErrorNum() != 0) {
+                    out.append("**********语意分析失败**********\n");
+                    out.append(semanticAnalysis.getErrorInfo());
+                    out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
+                    StateOutput.textProperty().setValue(out.toString());
+                    PrecessOutput.textProperty().setValue("语意分析失败");
+                    return;
+                }
+            }
+            generateCode();
         });
     }
 

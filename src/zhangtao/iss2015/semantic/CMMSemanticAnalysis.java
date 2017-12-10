@@ -69,20 +69,7 @@ public class CMMSemanticAnalysis{
 	 * @return 返回用户输入内容的字符串形式
 	 */
 	public synchronized String readInput(){
-	    //todo:input
         String result = controller.inputTextDialog("输入","输入","输入");
-//        wait();
-//		String result = null;
-//		try {
-//			while (userInput == null) {
-//				wait();
-//			}
-//		} catch (InterruptedException ie) {
-//			ie.printStackTrace();
-//		}
-//		result = userInput;
-//		userInput = null;
-//		return result;
         return result;
 	}
 
@@ -111,15 +98,6 @@ public class CMMSemanticAnalysis{
 			} else if (content.equals(ConstValues.ASSIGN)) {
 				forAssign(currentNode);
 			}
-			//todo:for
-//			else if (content.equals(ConstValues.FOR)) {
-//				// 进入for循环语句，改变作用域
-//				level++;
-//				forFor(currentNode);
-//				// 输出for循环语句，改变作用域并更新符号表
-//				level--;
-//				table.update(level);
-//			}
 			else if (content.equals(ConstValues.IF)) {
 				// 进入if语句，改变作用域
 				level++;
@@ -236,7 +214,7 @@ public class CMMSemanticAnalysis{
 									return;
 								}
 							}
-						} else if (content.equals(ConstValues.DOUBLE)) { // 声明real型变量
+						} else if (content.equals(ConstValues.DOUBLE)) { // 声明double型变量
 							if (matchInteger(value)) {
 								element.setRealValue(String.valueOf(Double
 										.parseDouble(value)));

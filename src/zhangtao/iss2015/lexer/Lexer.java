@@ -128,7 +128,6 @@ public class Lexer {
                             else if (ch == '>')
                                 state = 9;
                             else if (ch == '!') {
-//                                begin = i;
                                 state = 11;
                             }
                             // 关键字或者标识符
@@ -410,6 +409,7 @@ public class Lexer {
                                 displayTokens.add(new Token(lineNum, i + 1, "错误",
                                         string));
                             }
+                            break;
                         case 11:
                             if (ch == '=') {
                                 node.add(new TokenTreeNode("运算符 ： " + ConstValues.NOTEQUAL));
@@ -659,6 +659,7 @@ public class Lexer {
      * 获取TokenList
      */
     public static LinkedList<Token> getTokenList(BufferedReader br) throws IOException {
+        //todo : getTokenList
         lineNo = 1;
         mBufferedReader = br;
         LinkedList<Token> tokenList = new LinkedList<Token>();
@@ -833,6 +834,9 @@ public class Lexer {
                     token.setType(Token.INT);
                 } else if (sbString.equals("double")) {
                     token.setType(Token.DOUBLE);
+                }
+                else if (sbString.equals("bool")) {
+                    token.setType(Token.BOOL);
                 } else {
                     token.setType(Token.ID);
                     token.setValue(sbString);

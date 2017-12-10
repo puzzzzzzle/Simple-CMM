@@ -22,24 +22,7 @@ public class CodeGenerater {
     private static LinkedList<FourCode> codes;
     private static SymbolTable symbolTable;
     
-    public static LinkedList<FourCode> generateCode(String filename) {
-        mLine = -1;//代码编号从0开始
-        mLevel = 0;
-        codes = new LinkedList<FourCode>();
-        try {
-            LinkedList<TokenList> nodeList = getNodeList(getTokenList(filename));
-            symbolTable = SymbolTable.getSymbolTable();
-            symbolTable.newTable();
-            CodeGenerater generator = new CodeGenerater();
-            for (TokenList node : nodeList) {
-                generator.interpret(node);
-            }
-            symbolTable.deleteTable();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return codes;
-   }
+
     
     private void interpret(TokenList node) {
         while (true) {
@@ -323,7 +306,24 @@ public class CodeGenerater {
         sr.close();
         return tokenList;
     }
-
+    public static LinkedList<FourCode> generateCode(String text) {
+        mLine = -1;//代码编号从0开始
+        mLevel = 0;
+        codes = new LinkedList<FourCode>();
+        try {
+            LinkedList<TokenList> nodeList = getNodeList(getTokenList(text));
+            symbolTable = SymbolTable.getSymbolTable();
+            symbolTable.newTable();
+            CodeGenerater generator = new CodeGenerater();
+            for (TokenList node : nodeList) {
+                generator.interpret(node);
+            }
+            symbolTable.deleteTable();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return codes;
+    }
     public static LinkedList<TokenList> getNodeList(LinkedList<Token> tokenList){
         LinkedList<TokenList> nodeList = CMMParser.getTreeNodeList(tokenList);
         return nodeList;

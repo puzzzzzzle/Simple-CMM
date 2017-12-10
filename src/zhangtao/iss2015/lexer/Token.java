@@ -28,7 +28,7 @@ public class Token {
     public static final int WRITE = 5;
     // int
     public static final int INT = 6;
-    // real
+    // double
     public static final int DOUBLE = 7;
     // +
     public static final int PLUS = 8;
@@ -69,7 +69,7 @@ public class Token {
     public static final int ID = 29;
     // int型字面值
     public static final int LITERAL_INT = 30;
-    // real型字面值
+    // double型字面值
     public static final int LITERAL_REAL = 31;
     // 逻辑表达式
     public static final int LOGIC_EXP = 32;
@@ -77,6 +77,9 @@ public class Token {
     public static final int ADDTIVE_EXP = 33;
     // 项
     public static final int TERM_EXP = 34;
+    //bool
+    public static final int BOOL = 35;
+
     private int type;
     /*
      * 如果一个token需要值,则使用这个存储,比如ID,LITERAL_INT,LITERAL_REAL,LITERAL_BOOL
@@ -172,70 +175,6 @@ public class Token {
         this.lineNo = lineNo;
     }
 
-    public String toStringWithLine() {
-        switch (type) {
-            case IF:
-                return "LINE." + this.lineNo + ": IF";
-            case ELSE:
-                return "LINE." + this.lineNo + ": ELSE";
-            case WHILE:
-                return "LINE." + this.lineNo + ": WHILE";
-            case READ:
-                return "LINE." + this.lineNo + ": READ";
-            case WRITE:
-                return "LINE." + this.lineNo + ": WRITE";
-            case INT:
-                return "LINE." + this.lineNo + ": INT";
-            case DOUBLE:
-                return "LINE." + this.lineNo + ": DOUBLE";
-            case PLUS:
-                return "LINE." + this.lineNo + ": +";// return "PLUS";
-            case MINUS:
-                return "LINE." + this.lineNo + ": -";// return "MINUS";
-            case MUL:
-                return "LINE." + this.lineNo + ": *";// return "MUL";
-            case DIV:
-                return "LINE." + this.lineNo + ": /";// return "DIV";
-            case ASSIGN:
-                return "LINE." + this.lineNo + ": =";// return "ASSIGN";
-            case LT:
-                return "LINE." + this.lineNo + ": <";// return "LT";
-            case EQ:
-                return "LINE." + this.lineNo + ": ==";// return "EQ";
-            case NEQ:
-                return "LINE." + this.lineNo + ": <>";// return "NEQ";
-            case LPARENT:
-                return "LINE." + this.lineNo + ": (";// return "LPARENT";
-            case RPARENT:
-                return "LINE." + this.lineNo + ": )";// return "RPARENT";
-            case SEMI:
-                return "LINE." + this.lineNo + ": ;";// return "SEMI";
-            case LBRACE:
-                return "LINE." + this.lineNo + ": {";// return "LBRACE";
-            case RBRACE:
-                return "LINE." + this.lineNo + ": }";// return "RBRACE";
-            // case LCOM: return "LCOM";
-            // case RCOM: return "RCOM";
-            // case SCOM: return "SCOM";
-            case LBRACKET:
-                return "LINE." + this.lineNo + ": [";// return "LBRACKET";
-            case RBRACKET:
-                return "LINE." + this.lineNo + ": ]";// return "RBRACKET";
-            case LET:
-                return "LINE." + this.lineNo + ": <=";// return "LET";
-            case GT:
-                return "LINE." + this.lineNo + ": >";// return "GT";
-            case GET:
-                return "LINE." + this.lineNo + ": >=";// return "GET";
-            case ID:// return "ID";
-            case LITERAL_INT:// return "LITERAL_INT";
-            case LITERAL_REAL:
-                return "LINE." + this.lineNo + ": " + this.value;// return
-            // "LITERAL_REAL";
-            default:
-                return "LINE." + this.lineNo + ": UNKNOWN";
-        }
-    }
 
     @Override
     public String toString() {

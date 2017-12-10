@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
 
+/**
+ * 存放符号表项
+ */
 public class SymbolTable {
-	// 存放SymbolTableElement
-	private Vector<SymbolTableElement> symbolTableVactor = new Vector<>();
+	private Vector<SymbolTableElement> tableElementVector = new Vector<>();
 	private static final String TEMP_PREFIX = "*temp";
 
 	private static SymbolTable symbolTable = new SymbolTable();
@@ -15,12 +17,12 @@ public class SymbolTable {
 	private ArrayList<Symbol> symbolList;
 	
 	/**
-	 * 根据索引查找SymbolTableElement对象
+	 * 根据索引查找符号表项
 	 * @param index 提供的索引
 	 * @return 返回SymbolTableElement对象
 	 */
 	public SymbolTableElement get(int index) {
-		return symbolTableVactor.get(index);
+		return tableElementVector.get(index);
 	}
 
 	/**
@@ -31,7 +33,7 @@ public class SymbolTable {
 	 */
 	public SymbolTableElement getAllLevel(String name, int level) {
 		while (level > -1) {
-			for (SymbolTableElement element : symbolTableVactor) {
+			for (SymbolTableElement element : tableElementVector) {
 				if (element.getName().equals(name) && element.getLevel() == level) {
 					return element;
 				}
@@ -42,13 +44,13 @@ public class SymbolTable {
 	}
 
 	/**
-	 * 根据SymbolTableElement对象的名字对当前作用域查找
-	 * @param name SymbolTableElement名字
-	 * @param level SymbolTableElement作用域
-	 * @return 如果存在,则返回SymbolTableElement对象;否则返回null
+	 * 根据名字对当前作用域查找
+	 * @param name 名字
+	 * @param level 作用域
+	 * @return 如果存在,则返回;否则返回null
 	 */
 	public SymbolTableElement getCurrentLevel(String name, int level) {
-		for (SymbolTableElement element : symbolTableVactor) {
+		for (SymbolTableElement element : tableElementVector) {
 			if (element.getName().equals(name) && element.getLevel() == level) {
 				return element;
 			}
@@ -57,50 +59,28 @@ public class SymbolTable {
 	}
 
 	/**
-	 * 向symbolTable中添加SymbolTableElement对象,放在末尾
+	 * 向symbolTable中添加对象
 	 * @param element 要添加的元素
-	 * @return 如果添加成功则返回true,否则返回false
+	 * @return
 	 */
 	public boolean add(SymbolTableElement element) {
-		return symbolTableVactor.add(element);
+		return tableElementVector.add(element);
 	}
 
-	/**
-	 * 在symbolTable中指定的索引处添加SymbolTableElement对象
-	 * @param index 制定的索引
-	 * @param element 要添加的元素
-	 */
-	public void add(int index, SymbolTableElement element) {
-		symbolTableVactor.add(index, element);
-	}
 
 	/**
-	 * 从symbolTable中移除指定索引处的元素
-	 * @param index 指定的索引
+	 * 移除指定索引处的元素
+	 * @param index
 	 */
 	public void remove(int index) {
-		symbolTableVactor.remove(index);
+		tableElementVector.remove(index);
 	}
 
 	/**
-	 * 从symbolTable中移除指定名字和作用域的元素
-	 * @param name  指定的名字
-	 * @param level  指定的作用域
-	 */
-	public void remove(String name, int level) {
-		for (int i = 0; i < size(); i++) {
-			if (get(i).getName().equals(name) && get(i).getLevel() == level) {
-				remove(i);
-				return;
-			}
-		}
-	}
-
-	/**
-	 * 清空symbolTable中的元素,将其大小设为0
+	 * 清空symbolTable中的元素
 	 */
 	public void removeAll() {
-		symbolTableVactor.clear();
+		tableElementVector.clear();
 	}
 
 	/**
@@ -119,13 +99,18 @@ public class SymbolTable {
 	 * @return 返回对象中元素的个数
 	 */
 	public int size() {
-		return symbolTableVactor.size();
+		return tableElementVector.size();
 	}
 
+
+	// getter
 	public static SymbolTable getSymbolTable() {
 		return symbolTable;
 	}
 
+    /**
+     * 创建新表
+     */
 	public void newTable() {
 		symbolList = new ArrayList<>();
 		tempNames = new LinkedList<>();
@@ -178,6 +163,11 @@ public class SymbolTable {
 		return getSymbol(name).getType();
 	}
 
+    /**
+     * getter
+     * @param name
+     * @return
+     */
 	private Symbol getSymbol(String name) {
 		for (Symbol s : symbolList) {
 			if (s.getName().equals(name)) {

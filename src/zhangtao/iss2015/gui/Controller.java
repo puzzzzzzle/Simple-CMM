@@ -9,11 +9,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
-import zhangtao.iss2015.lexer.TokenTreeNode;
+import zhangtao.iss2015.praser.TokenTreeNode;
 import zhangtao.iss2015.praser.CMMParser;
-import zhangtao.iss2015.semantic.Semantic;
 import zhangtao.iss2015.semantic.CodeGenerater;
 import zhangtao.iss2015.semantic.FourCodeItem;
+import zhangtao.iss2015.semantic.Semantic;
 import zhangtao.iss2015.semantic.SymbolTable;
 
 import java.io.BufferedInputStream;
@@ -23,8 +23,12 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
-public class Controller implements Initializable {
+/**
+ * GUI控制器
+ */
+public class Controller implements Initializable, GUIOuterController {
 
+    //xml中的控件
     public Button OpenButton;
     public Button LexButton;
     public Button PraserButton;
@@ -42,13 +46,22 @@ public class Controller implements Initializable {
         this.stage = stage;
     }
 
+    /**
+     * 初始化
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("init");
         init();
     }
 
+    /**
+     * 初始化
+     */
     private void init() {
+        //打开按钮
         OpenButton.setOnAction(e -> {
             File file = showFileSelector("CMM 文件");
             if (file == null) {
@@ -66,6 +79,7 @@ public class Controller implements Initializable {
             }
             CodeText.textProperty().setValue(text);
         });
+        //词法分析按钮
         LexButton.setOnAction(e -> {
             ArrayList<Token> result = null;
             StringBuilder lexText = new StringBuilder();
@@ -82,6 +96,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //语法分析按钮
         PraserButton.setOnAction(e -> {
             StringBuilder out = new StringBuilder();
             TokenTreeNode result = null;
@@ -106,6 +121,7 @@ public class Controller implements Initializable {
                 }
             }
         });
+        //运行按钮
         RunButton.setOnAction(e -> {
             PrecessOutput.textProperty().setValue("");
             FourText.textProperty().setValue("");
@@ -147,12 +163,13 @@ public class Controller implements Initializable {
                     out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
                     StateOutput.textProperty().setValue(out.toString());
                     PrecessOutput.textProperty().setValue("语意分析失败");
-                }else {
-                    StateOutput.textProperty().setValue(StateOutput.textProperty().get()+"**********程序正常结束**********\n");
+                } else {
+                    StateOutput.textProperty().setValue(StateOutput.textProperty().get() + "**********程序正常结束**********\n");
                 }
             }
         });
-        FourCodeButton.setOnAction(e->{
+        //四元式解析按钮
+        FourCodeButton.setOnAction(e -> {
             PrecessOutput.textProperty().setValue("");
             FourText.textProperty().setValue("");
             StateOutput.textProperty().setValue("");
@@ -202,7 +219,7 @@ public class Controller implements Initializable {
 
 
     //生成中间代码
-    public void generateCode() {
+    private void generateCode() {
         String text = CodeText.textProperty().get();
         LinkedList<FourCodeItem> codes;
         SymbolTable symbolTable = SymbolTable.getSymbolTable();
@@ -223,6 +240,7 @@ public class Controller implements Initializable {
      * @param head
      * @param body
      */
+    @Override
     public void showErrorDialog(String title, String head, String body) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -252,6 +270,7 @@ public class Controller implements Initializable {
      * @param body
      * @return
      */
+    @Override
     public String inputTextDialog(String title, String head, String body) {
         TextInputDialog dialog = new TextInputDialog("-1");
         dialog.setTitle(title);
@@ -281,10 +300,11 @@ public class Controller implements Initializable {
         return result;
     }
 
+    @Override
     public void writeToConsole(String s) {
-        if(PrecessOutput.textProperty().get().equals("")){
+        if (PrecessOutput.textProperty().get().equals("")) {
             PrecessOutput.textProperty().setValue(s);
-        }else {
+        } else {
             PrecessOutput.textProperty().setValue(PrecessOutput.textProperty().get() + "\n" + s);
 
         }

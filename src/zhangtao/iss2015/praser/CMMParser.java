@@ -3,7 +3,6 @@ package zhangtao.iss2015.praser;
 
 import zhangtao.iss2015.lexer.ConstValues;
 import zhangtao.iss2015.lexer.Token;
-import zhangtao.iss2015.lexer.TokenTreeNode;
 import zhangtao.iss2015.semantic.TokenList;
 
 import java.util.LinkedList;

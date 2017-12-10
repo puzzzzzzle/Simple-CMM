@@ -2,19 +2,13 @@ package zhangtao.iss2015.semantic;
 
 
 /**
- * 用于存储符号表中符号对应的值,包括int real 以及数组符号对应的值
+ * 用于存储符号表中符号对应的值,包括int double 以及数组符号对应的值
  */
 public class Value {
-    
-    /**
-     * 存储值对象的类型,常量存储在Symbol中
-     */
+    //存储值对象的类型,常量存储在Symbol中
     private int mType;
-    
     private int mInt;
     private double mReal;
-    private int[] mArrayInt;
-    private double[] mArrayReal;
     
     /**
      * 创建一个type型值对象
@@ -39,9 +33,6 @@ public class Value {
     public int getType() {
         return mType;
     }
-    public void setType(int mType) {
-        this.mType = mType;
-    }
     public int getInt() {
         return mInt;
     }
@@ -53,26 +44,6 @@ public class Value {
     }
     public void setReal(double mReal) {
         this.mReal = mReal;
-    }
-    public int[] getArrayInt() {
-        return mArrayInt;
-    }
-    public void setArrayInt(int[] mArrayInt) {
-        this.mArrayInt = mArrayInt;
-    }
-    public double[] getArrayReal() {
-        return mArrayReal;
-    }
-    public void setArrayReal(double[] mArrayReal) {
-        this.mArrayReal = mArrayReal;
-    }
-    
-    public void initArray(int dim) {
-        if (mType == Symbol.ARRAY_INT) {
-            mArrayInt = new int[dim];
-        } else {
-            mArrayReal = new double[dim];
-        }
     }
     
     public Value PLUS(Value value) {
@@ -256,7 +227,6 @@ public class Value {
             return rv;
         }
 		return value;
-        
     }
 
     @Override

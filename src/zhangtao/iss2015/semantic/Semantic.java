@@ -1,10 +1,8 @@
 package zhangtao.iss2015.semantic;
 
-import zhangtao.iss2015.gui.Controller;
+import zhangtao.iss2015.gui.GUIOuterController;
 import zhangtao.iss2015.lexer.ConstValues;
-import zhangtao.iss2015.lexer.TokenTreeNode;
-
-import javax.swing.*;
+import zhangtao.iss2015.praser.TokenTreeNode;
 import java.math.BigDecimal;
 
 
@@ -12,66 +10,25 @@ import java.math.BigDecimal;
  * CMM语义分析器
  */
 public class Semantic {
-	// 语义分析时的符号表
+    public Semantic(TokenTreeNode root, GUIOuterController controller) {
+        this.root = root;
+        this.controller=controller;
+    }
+
+    // GUI 中传进来的来的UI控制器
+    private GUIOuterController controller = null;
+
+    // 语义分析信息
+    // 符号表
 	private SymbolTable table = new SymbolTable();
-	// 语法分析得到的抽象语法树 
+	// 抽象语法树
 	private TokenTreeNode root;
-	// 语义分析错误信息 
+	// 错误信息
 	private String errorInfo = "";
-	// 语义分析错误个数 
+	// 错误个数
 	private int errorNum = 0;
-	// 语义分析标识符作用域 
+	// 标识符作用域
 	private int level = 0;
-
-	Controller controller = null;
-
-	public Semantic(TokenTreeNode root, Controller controller) {
-		this.root = root;
-		this.controller=controller;
-	}
-
-	public void error(String error, int line) {
-		errorNum++;
-		String s = ConstValues.ERROR + "第 " + line + " 行：" + error + "\n";
-		errorInfo += s;
-	}
-
-	/**
-	 * 识别正确的整数：排除多个零的情况
-	 * 
-	 * @param input 要识别的字符串
-	 * @return 布尔值
-	 */
-	private static boolean matchInteger(String input) {
-		if (input.matches("^-?\\d+$") && !input.matches("^-?0{1,}\\d+$"))
-			return true;
-		else
-			return false;
-	}
-
-	/**
-	 * 识别正确的浮点数：排除00.000的情况
-	 * @param input 要识别的字符串
-	 * @return 布尔值
-	 */
-	private static boolean matchReal(String input) {
-		if (input.matches("^(-?\\d+)(\\.\\d+)+$")
-				&& !input.matches("^(-?0{2,}+)(\\.\\d+)+$"))
-			return true;
-		else
-			return false;
-	}
-
-
-	/**
-	 * 读取用户输入
-	 * 
-	 * @return 返回用户输入内容的字符串形式
-	 */
-	public synchronized String readInput(){
-        String result = controller.inputTextDialog("输入","输入","输入");
-        return result;
-	}
 
 	/**
 	 * 进程运行时执行的方法
@@ -81,11 +38,9 @@ public class Semantic {
 		table.removeAll();
 		statement(root);
 	}
-
 	/**
-	 * 语义分析主方法
-	 * 
-	 * @param root 根结点
+	 * 语义分析
+	 * @param root
 	 */
 	private void statement(TokenTreeNode root) {
 		for (int i = 0; i < root.getChildCount(); i++) {
@@ -94,38 +49,81 @@ public class Semantic {
 			if (content.equals(ConstValues.INT) || content.equals(ConstValues.DOUBLE)
 					|| content.equals(ConstValues.BOOL)
 					|| content.equals(ConstValues.STRING)) {
-				forDeclare(currentNode);
+				processDeclare(currentNode);
 			} else if (content.equals(ConstValues.ASSIGN)) {
-				forAssign(currentNode);
+				processAssign(currentNode);
 			}
 			else if (content.equals(ConstValues.IF)) {
 				// 进入if语句，改变作用域
 				level++;
-				forIf(currentNode);
+				processIf(currentNode);
 				//输出if语句，改变作用域并更新符号表
 				level--;
 				table.update(level);
 			} else if (content.equals(ConstValues.WHILE)) {
 				// 进入while语句，改变作用域
 				level++;
-				forWhile(currentNode);
+				processWhile(currentNode);
 				//输出while语句，改变作用域并更新符号表
 				level--;
 				table.update(level);
 			} else if (content.equals(ConstValues.READ)) {
-				forRead(currentNode.getChildAt(0));
+				processRead(currentNode.getChildAt(0));
 			} else if (content.equals(ConstValues.WRITE)) {
-				forWrite(currentNode.getChildAt(0));
+				processWrite(currentNode.getChildAt(0));
 			}
 		}
 	}
+    /**
+     * 语义分析错误处理方法
+     * @param error 错误信息
+     * @param line 错误位置
+     */
+    public void error(String error, int line) {
+        errorNum++;
+        String s = ConstValues.ERROR + "第 " + line + " 行：" + error + "\n";
+        errorInfo += s;
+    }
+    /**
+     * 识别整数
+     * @param input
+     * @return
+     */
+    private static boolean matchInteger(String input) {
+        if (input.matches("^-?\\d+$") && !input.matches("^-?0+\\d+$"))
+            return true;
+        else
+            return false;
+    }
 
+    /**
+     * 识别浮点数
+     * @param input
+     * @return
+     */
+    private static boolean matchReal(String input) {
+        if (input.matches("^(-?\\d+)(\\.\\d+)+$")
+                && !input.matches("^(-?0{2,}+)(\\.\\d+)+$"))
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * 读取用户输入
+     * @return 返回用户输入内容的字符串形式
+     */
+    public synchronized String readInput(){
+        //调用Controller
+        String result = controller.inputTextDialog("输入","输入","输入");
+        return result;
+    }
 	/**
 	 * 分析declare语句
-	 * 
-	 * @param root 根结点
+	 * @param root
 	 */
-	private void forDeclare(TokenTreeNode root) {
+	private void processDeclare(TokenTreeNode root) {
 		// 结点显示的内容,即声明变量的类型int real bool string
 		String content = root.getContent();
 		int index = 0;
@@ -153,14 +151,14 @@ public class Semantic {
 								element.setRealValue(String.valueOf(Double
 										.parseDouble(value)));
 							} else if (matchReal(value)) {
-								String error = "不能将浮点数赋值给整型变量";
+								String error = "无法将浮点数赋值给整型变量";
 								error(error, valueNode.getLineNum());
 							} else if (value.equals("true")
 									|| value.equals("false")) {
-								String error = "不能把" + value + "赋值给整型变量";
+								String error = "无法把" + value + "赋值给整型变量";
 								error(error, valueNode.getLineNum());
 							} else if (valueNode.getNodeKind().equals("字符串")) {
-								String error = "不能将字符串赋值给整型变量";
+								String error = "无法将字符串赋值给整型变量";
 								error(error, valueNode.getLineNum());
 							} else if (valueNode.getNodeKind().equals("标识符")) {
 								if (checkID(valueNode, level)) {
@@ -176,17 +174,17 @@ public class Semantic {
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.DOUBLE)) {
-										String error = "不能将浮点型变量赋值给整型变量";
+										String error = "无法将浮点型变量赋值给整型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.BOOL)) {
-										String error = "不能将布尔型变量赋值给整型变量";
+										String error = "无法将布尔型变量赋值给整型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.STRING)) {
-										String error = "不能将字符串变量赋值给整型变量";
+										String error = "无法将字符串变量赋值给整型变量";
 										error(error, valueNode.getLineNum());
 									}
 								} else {
@@ -196,7 +194,7 @@ public class Semantic {
 									|| value.equals(ConstValues.MINUS)
 									|| value.equals(ConstValues.TIMES)
 									|| value.equals(ConstValues.DIVIDE)) {
-								String result = forExpression(valueNode);
+								String result = processExpression(valueNode);
 								if (result != null) {
 									if (matchInteger(result)) {
 										element.setIntValue(result);
@@ -204,7 +202,7 @@ public class Semantic {
 												.valueOf(Double
 														.parseDouble(result)));
 									} else if (matchReal(result)) {
-										String error = "不能将浮点数赋值给整型变量";
+										String error = "无法将浮点数赋值给整型变量";
 										error(error, valueNode.getLineNum());
 										return;
 									} else {
@@ -222,10 +220,10 @@ public class Semantic {
 								element.setRealValue(value);
 							} else if (value.equals("true")
 									|| value.equals("false")) {
-								String error = "不能将" + value + "赋值给浮点型变量";
+								String error = "无法将" + value + "赋值给浮点型变量";
 								error(error, valueNode.getLineNum());
 							} else if (valueNode.getNodeKind().equals("字符串")) {
-								String error = "不能将字符串给浮点型变量";
+								String error = "无法将字符串给浮点型变量";
 								error(error, valueNode.getLineNum());
 							} else if (valueNode.getNodeKind().equals("标识符")) {
 								if (checkID(valueNode, level)) {
@@ -242,12 +240,12 @@ public class Semantic {
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.BOOL)) {
-										String error = "不能将布尔型变量赋值给浮点型变量";
+										String error = "无法将布尔型变量赋值给浮点型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.STRING)) {
-										String error = "不能将字符串变量赋值给浮点型变量";
+										String error = "无法将字符串变量赋值给浮点型变量";
 										error(error, valueNode.getLineNum());
 									}
 								} else {
@@ -257,7 +255,7 @@ public class Semantic {
 									|| value.equals(ConstValues.MINUS)
 									|| value.equals(ConstValues.TIMES)
 									|| value.equals(ConstValues.DIVIDE)) {
-								String result = forExpression(valueNode);
+								String result = processExpression(valueNode);
 								if (result != null) {
 									if (matchInteger(result)) {
 										element.setRealValue(String
@@ -272,14 +270,14 @@ public class Semantic {
 							}
 						} else if (content.equals(ConstValues.STRING)) { // 声明string型变量
 							if (matchInteger(value)) {
-								String error = "不能将整数赋值给字符串型变量";
+								String error = "无法将整数赋值给字符串型变量";
 								error(error, valueNode.getLineNum());
 							} else if (matchReal(value)) {
-								String error = "不能将浮点数赋值给字符串型变量";
+								String error = "无法将浮点数赋值给字符串型变量";
 								error(error, valueNode.getLineNum());
 							} else if (value.equals("true")
 									|| value.equals("false")) {
-								String error = "不能将" + value + "赋值给字符串型变量";
+								String error = "无法将" + value + "赋值给字符串型变量";
 								error(error, valueNode.getLineNum());
 							} else if (valueNode.getNodeKind().equals("字符串")) {
 								element.setStringValue(value);
@@ -288,17 +286,17 @@ public class Semantic {
 									if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.INT)) {
-										String error = "不能将整数赋值给字符串型变量";
+										String error = "无法将整数赋值给字符串型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.DOUBLE)) {
-										String error = "不能将浮点数赋值给字符串型变量";
+										String error = "无法将浮点数赋值给字符串型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.BOOL)) {
-										String error = "不能将布尔型变量赋值给字符串型变量";
+										String error = "无法将布尔型变量赋值给字符串型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
@@ -312,7 +310,7 @@ public class Semantic {
 									|| value.equals(ConstValues.MINUS)
 									|| value.equals(ConstValues.TIMES)
 									|| value.equals(ConstValues.DIVIDE)) {
-								String error = "不能将算术表达式赋值给字符串型变量";
+								String error = "无法将算术表达式赋值给字符串型变量";
 								error(error, valueNode.getLineNum());
 							}
 						} else { // 声明bool型变量
@@ -324,13 +322,13 @@ public class Semantic {
 								else
 									element.setStringValue("true");
 							} else if (matchReal(value)) {
-								String error = "不能将浮点数赋值给布尔型变量";
+								String error = "无法将浮点数赋值给布尔型变量";
 								error(error, valueNode.getLineNum());
 							} else if (value.equals("true")
 									|| value.equals("false")) {
 								element.setStringValue(value);
 							} else if (valueNode.getNodeKind().equals("字符串")) {
-								String error = "不能将字符串给布尔型变量";
+								String error = "无法将字符串给布尔型变量";
 								error(error, valueNode.getLineNum());
 							} else if (valueNode.getNodeKind().equals("标识符")) {
 								if (checkID(valueNode, level)) {
@@ -348,7 +346,7 @@ public class Semantic {
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.DOUBLE)) {
-										String error = "不能将浮点型变量赋值给布尔型变量";
+										String error = "无法将浮点型变量赋值给布尔型变量";
 										error(error, valueNode.getLineNum());
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
@@ -363,7 +361,7 @@ public class Semantic {
 									} else if (table.getAllLevel(
 											valueNode.getContent(), level)
 											.getKind().equals(ConstValues.STRING)) {
-										String error = "不能将字符串变量赋值给布尔型变量";
+										String error = "无法将字符串变量赋值给布尔型变量";
 										error(error, valueNode.getLineNum());
 									}
 								} else {
@@ -373,7 +371,7 @@ public class Semantic {
 									|| value.equals(ConstValues.NOTEQUAL)
 									|| value.equals(ConstValues.LT)
 									|| value.equals(ConstValues.GT)) {
-								boolean result = forCondition(valueNode);
+								boolean result = processCondition(valueNode);
 								if (result) {
 									element.setStringValue("true");
 								} else {
@@ -421,7 +419,7 @@ public class Semantic {
 							|| sizeValue.equals(ConstValues.MINUS)
 							|| sizeValue.equals(ConstValues.TIMES)
 							|| sizeValue.equals(ConstValues.DIVIDE)) {
-						sizeValue = forExpression(temp.getChildAt(0));
+						sizeValue = processExpression(temp.getChildAt(0));
 						if (sizeValue != null) {
 							if (matchInteger(sizeValue)) {
 								int i = Integer.parseInt(sizeValue);
@@ -458,19 +456,17 @@ public class Semantic {
 	}
 
 	/**
-	 * 分析assign语句
-	 * 
+	 * assign语句
 	 * @param root
-	 *            语法树中assign语句结点
 	 */
-	private void forAssign(TokenTreeNode root) {
+	private void processAssign(TokenTreeNode root) {
 		// 赋值语句左半部分
 		TokenTreeNode node1 = root.getChildAt(0);
 		// 赋值语句左半部分标识符
 		String node1Value = node1.getContent();
 		if (table.getAllLevel(node1Value, level) != null) {
 			if (node1.getChildCount() != 0) {
-				String s = forArray(node1.getChildAt(0), table.getAllLevel(
+				String s = processArray(node1.getChildAt(0), table.getAllLevel(
 						node1Value, level).getArrayElementsNum());
 				if (s != null)
 					node1Value += "@" + s;
@@ -505,7 +501,7 @@ public class Semantic {
 		} else if (node2Kind.equals("标识符")) { // 标识符
 			if (checkID(node2, level)) {
 				if (node2.getChildCount() != 0) {
-					String s = forArray(node2.getChildAt(0), table.getAllLevel(
+					String s = processArray(node2.getChildAt(0), table.getAllLevel(
 							node2Value, level).getArrayElementsNum());
 					if (s != null)
 						node2Value += "@" + s;
@@ -529,7 +525,7 @@ public class Semantic {
 				|| node2Value.equals(ConstValues.MINUS)
 				|| node2Value.equals(ConstValues.TIMES)
 				|| node2Value.equals(ConstValues.DIVIDE)) { // 表达式
-			String result = forExpression(node2);
+			String result = processExpression(node2);
 			if (result != null) {
 				if (matchInteger(result))
 					node2Kind = "int";
@@ -543,7 +539,7 @@ public class Semantic {
 				|| node2Value.equals(ConstValues.NOTEQUAL)
 				|| node2Value.equals(ConstValues.LT)
 				|| node2Value.equals(ConstValues.GT)) { // 逻辑表达式
-			boolean result = forCondition(node2);
+			boolean result = processCondition(node2);
 			node2Kind = "bool";
 			value = String.valueOf(result);
 		}
@@ -553,15 +549,15 @@ public class Semantic {
 				table.getAllLevel(node1Value, level).setRealValue(
 						String.valueOf(Double.parseDouble(value)));
 			} else if (node2Kind.equals(ConstValues.DOUBLE)) {
-				String error = "不能将浮点数赋值给整型变量";
+				String error = "无法将浮点数赋值给整型变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.BOOL)) {
-				String error = "不能将布尔值赋值给整型变量";
+				String error = "无法将布尔值赋值给整型变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.STRING)) {
-				String error = "不能将字符串给整型变量";
+				String error = "无法将字符串给整型变量";
 				error(error, node1.getLineNum());
 				return;
 			}
@@ -572,11 +568,11 @@ public class Semantic {
 			} else if (node2Kind.equals(ConstValues.DOUBLE)) {
 				table.getAllLevel(node1Value, level).setRealValue(value);
 			} else if (node2Kind.equals(ConstValues.BOOL)) {
-				String error = "不能将布尔值赋值给浮点型变量";
+				String error = "无法将布尔值赋值给浮点型变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.STRING)) {
-				String error = "不能将字符串给浮点型变量";
+				String error = "无法将字符串给浮点型变量";
 				error(error, node1.getLineNum());
 				return;
 			}
@@ -588,27 +584,27 @@ public class Semantic {
 				else
 					table.getAllLevel(node1Value, level).setStringValue("true");
 			} else if (node2Kind.equals(ConstValues.DOUBLE)) {
-				String error = "不能将浮点数赋值给布尔型变量";
+				String error = "无法将浮点数赋值给布尔型变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.BOOL)) {
 				table.getAllLevel(node1Value, level).setStringValue(value);
 			} else if (node2Kind.equals(ConstValues.STRING)) {
-				String error = "不能将字符串赋值给布尔型变量";
+				String error = "无法将字符串赋值给布尔型变量";
 				error(error, node1.getLineNum());
 				return;
 			}
 		} else if (node1Kind.equals(ConstValues.STRING)) {
 			if (node2Kind.equals(ConstValues.INT)) {
-				String error = "不能将整数赋值给字符串变量";
+				String error = "无法将整数赋值给字符串变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.DOUBLE)) {
-				String error = "不能将浮点数赋值给字符串变量";
+				String error = "无法将浮点数赋值给字符串变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.BOOL)) {
-				String error = "不能将布尔变量赋值给字符串变量";
+				String error = "无法将布尔变量赋值给字符串变量";
 				error(error, node1.getLineNum());
 				return;
 			} else if (node2Kind.equals(ConstValues.STRING)) {
@@ -617,18 +613,17 @@ public class Semantic {
 		}
 	}
 	/**
-	 * 分析if语句
-	 * 
+	 * if语句
 	 * @param root  语法树中if语句结点
 	 */
-	private void forIf(TokenTreeNode root) {
+	private void processIf(TokenTreeNode root) {
 		int count = root.getChildCount();
 		// 根结点Condition
 		TokenTreeNode conditionNode = root.getChildAt(0);
 		// 根结点Statements
 		TokenTreeNode statementNode = root.getChildAt(1);
 		// 条件为真
-		if (forCondition(conditionNode.getChildAt(0))) {
+		if (processCondition(conditionNode.getChildAt(0))) {
 			statement(statementNode);
 		} else if (count == 3) { // 条件为假且有else语句
 			TokenTreeNode elseNode = root.getChildAt(2);
@@ -642,16 +637,15 @@ public class Semantic {
 	}
 
 	/**
-	 * 分析while语句
-	 * 
-	 * @param root  语法树中while语句结点
+	 * while语句
+	 * @param root
 	 */
-	private void forWhile(TokenTreeNode root) {
+	private void processWhile(TokenTreeNode root) {
 		// 根结点Condition
 		TokenTreeNode conditionNode = root.getChildAt(0);
 		// 根结点Statements
 		TokenTreeNode statementNode = root.getChildAt(1);
-		while (forCondition(conditionNode.getChildAt(0))) {
+		while (processCondition(conditionNode.getChildAt(0))) {
 			statement(statementNode);
 			level--;
 			table.update(level);
@@ -661,11 +655,9 @@ public class Semantic {
 
 	/**
 	 * 分析read语句
-	 * 
-	 * @param root 语法树中read语句结点
+	 * @param root
 	 */
-	private void forRead(TokenTreeNode root) {
-//		CompilerFrame.consoleArea.setText("");
+	private void processRead(TokenTreeNode root) {
 		// 要读取的变量的名称
 		String idName = root.getContent();
 		// 查找变量
@@ -673,7 +665,7 @@ public class Semantic {
 		// 判断变量是否已经声明
 		if (element != null) {
 			if (root.getChildCount() != 0) {
-				String s = forArray(root.getChildAt(0), element
+				String s = processArray(root.getChildAt(0), element
 						.getArrayElementsNum());
 				if (s != null) {
 					idName += "@" + s;
@@ -688,7 +680,7 @@ public class Semantic {
 					table.getAllLevel(idName, level).setRealValue(
 							String.valueOf(Double.parseDouble(value)));
 				} else { // 报错
-					String error = "不能将\"" + value + "\"赋值给变量" + idName;
+					String error = "无法将\"" + value + "\"赋值给变量" + idName;
 					controller.showErrorDialog("ERROR","输入错误",error);
 				}
 			} else if (element.getKind().equals(ConstValues.DOUBLE)) {
@@ -698,7 +690,7 @@ public class Semantic {
 					table.getAllLevel(idName, level).setRealValue(
 							String.valueOf(Double.parseDouble(value)));
 				} else { // 报错
-					String error = "不能将\"" + value + "\"赋值给变量" + idName;
+					String error = "无法将\"" + value + "\"赋值给变量" + idName;
 					controller.showErrorDialog("ERROR","输入错误",error);
 				}
 			} else if (element.getKind().equals(ConstValues.BOOL)) {
@@ -708,7 +700,7 @@ public class Semantic {
 					table.getAllLevel(idName, level).setStringValue("false");
 				} else if(value.equals("0")) { // 报错
 					table.getAllLevel(idName, level).setStringValue("false");
-					String error = "不能将\"" + value + "\"赋值给变量" + idName;
+					String error = "无法将\"" + value + "\"赋值给变量" + idName;
 				}else {
 					table.getAllLevel(idName, level).setStringValue("true");
 				}
@@ -721,12 +713,10 @@ public class Semantic {
 		}
 	}
 	/**
-	 * 分析write语句
-	 * 
-	 * @param root  语法树中write语句结点
+	 * write语句
+	 * @param root
 	 */
-	private void forWrite(TokenTreeNode root) {
-
+	private void processWrite(TokenTreeNode root) {
 		//todo:write
 		// 结点显示的内容
 		String content = root.getContent();
@@ -739,7 +729,7 @@ public class Semantic {
 		} else if (kind.equals("标识符")) { // 标识符
 			if (checkID(root, level)) {
 				if (root.getChildCount() != 0) {
-					String s = forArray(root.getChildAt(0), table.getAllLevel(
+					String s = processArray(root.getChildAt(0), table.getAllLevel(
 							content, level).getArrayElementsNum());
 					if (s != null)
 						content += "@" + s;
@@ -749,10 +739,8 @@ public class Semantic {
 				SymbolTableElement temp = table.getAllLevel(content, level);
 				if (temp.getKind().equals(ConstValues.INT)) {
                     controller.writeToConsole(temp.getIntValue());
-
 				} else if (temp.getKind().equals(ConstValues.DOUBLE)) {
                     controller.writeToConsole(temp.getRealValue());
-
 				} else {
                     controller.writeToConsole(temp.getStringValue());
 				}
@@ -763,7 +751,7 @@ public class Semantic {
 				|| content.equals(ConstValues.MINUS)
 				|| content.equals(ConstValues.TIMES)
 				|| content.equals(ConstValues.DIVIDE)) { // 表达式
-			String value = forExpression(root);
+			String value = processExpression(root);
 			if (value != null) {
                 controller.writeToConsole(value);
 			}
@@ -771,12 +759,11 @@ public class Semantic {
 	}
 
 	/**
-	 * 分析if和while语句的条件
-	 * 
+	 * if和while语句的条件
 	 * @param root 根节点
 	 * @return 返回计算结果
 	 */
-	private boolean forCondition(TokenTreeNode root) {
+	private boolean processCondition(TokenTreeNode root) {
 		// > < <> == true false 布尔变量
 		String content = root.getContent();
 		if (content.equals(ConstValues.TRUE)) {
@@ -786,7 +773,7 @@ public class Semantic {
 		} else if (root.getNodeKind().equals("标识符")) {
 			if (checkID(root, level)) {
 				if (root.getChildCount() != 0) {
-					String s = forArray(root.getChildAt(0), table.getAllLevel(
+					String s = processArray(root.getChildAt(0), table.getAllLevel(
 							content, level).getArrayElementsNum());
 					if (s != null)
 						content += "@" + s;
@@ -800,7 +787,7 @@ public class Semantic {
 					else
 						return false;
 				} else { // 报错
-					String error = "不能将变量" + content + "作为判断条件";
+					String error = "无法将变量" + content + "作为判断条件";
 					error(error, root.getLineNum());
 				}
 			} else {
@@ -819,7 +806,7 @@ public class Semantic {
 				} else if (kind.equals("标识符")) { // 标识符
 					if (checkID(root.getChildAt(i), level)) {
 						if (root.getChildAt(i).getChildCount() != 0) {
-							String s = forArray(root.getChildAt(i)
+							String s = processArray(root.getChildAt(i)
 									.getChildAt(0), table.getAllLevel(
 									tempContent, level).getArrayElementsNum());
 							if (s != null)
@@ -841,7 +828,7 @@ public class Semantic {
 						|| tempContent.equals(ConstValues.MINUS)
 						|| tempContent.equals(ConstValues.TIMES)
 						|| tempContent.equals(ConstValues.DIVIDE)) { // 表达式
-					String result = forExpression(root.getChildAt(i));
+					String result = processExpression(root.getChildAt(i));
 					if (result != null)
 						results[i] = result;
 					else
@@ -871,12 +858,11 @@ public class Semantic {
 	}
 
 	/**
-	 * 分析表达式
-	 * 
-	 * @param root 根节点
-	 * @return 返回计算结果
+	 * 表达式
+	 * @param root
+	 * @return
 	 */
-	private String forExpression(TokenTreeNode root) {
+	private String processExpression(TokenTreeNode root) {
 		boolean isInt = true;
 		// + -
 		String content = root.getContent();
@@ -894,7 +880,7 @@ public class Semantic {
 			} else if (kind.equals("标识符")) { // 标识符
 				if (checkID(tempNode, level)) {
 					if (tempNode.getChildCount() != 0) {
-						String s = forArray(tempNode.getChildAt(0), table
+						String s = processArray(tempNode.getChildAt(0), table
 								.getAllLevel(tempContent, level)
 								.getArrayElementsNum());
 						if (s != null)
@@ -917,7 +903,7 @@ public class Semantic {
 					|| tempContent.equals(ConstValues.MINUS)
 					|| tempContent.equals(ConstValues.TIMES)
 					|| tempContent.equals(ConstValues.DIVIDE)) { // 表达式
-				String result = forExpression(root.getChildAt(i));
+				String result = processExpression(root.getChildAt(i));
 				if (result != null) {
 					results[i] = result;
 					if (matchReal(result))
@@ -956,18 +942,17 @@ public class Semantic {
 
 	/**
 	 * array
-	 * 
-	 * @param root  根结点
+	 * @param root
 	 * @param arraySize  数组大小
-	 * @return 出错返回null
+	 * @return
 	 */
-	private String forArray(TokenTreeNode root, int arraySize) {
+	private String processArray(TokenTreeNode root, int arraySize) {
 		if (root.getNodeKind().equals("整数")) {
 			int i = Integer.parseInt(root.getContent());
 			if (i > -1 && i < arraySize) {
 				return root.getContent();
 			} else if (i < 0) {
-				String error = "数组下标不能为负值";
+				String error = "数组下标无法为负值";
 				error(error, root.getLineNum());
 				return null;
 			} else {
@@ -985,7 +970,7 @@ public class Semantic {
 					if (i > -1 && i < arraySize) {
 						return temp.getIntValue();
 					} else if (i < 0) {
-						String error = "数组下标不能为负值";
+						String error = "数组下标无法为负值";
 						error(error, root.getLineNum());
 						return null;
 					} else {
@@ -1005,14 +990,14 @@ public class Semantic {
 				|| root.getContent().equals(ConstValues.MINUS)
 				|| root.getContent().equals(ConstValues.TIMES)
 				|| root.getContent().equals(ConstValues.DIVIDE)) { // 表达式
-			String result = forExpression(root);
+			String result = processExpression(root);
 			if (result != null) {
 				if (matchInteger(result)) {
 					int i = Integer.parseInt(result);
 					if (i > -1 && i < arraySize) {
 						return result;
 					} else if (i < 0) {
-						String error = "数组下标不能为负值";
+						String error = "数组下标无法为负值";
 						error(error, root.getLineNum());
 						return null;
 					} else {
@@ -1033,10 +1018,9 @@ public class Semantic {
 
 	/**
 	 * 核查字符串是否声明和初始化
-	 * 
-	 * @param root 字符串结点
-	 * @param level 字符串作用域
-	 * @return 如果声明且初始化则返回true,否则返回false
+	 * @param root
+	 * @param level
+	 * @return
 	 */
 	private boolean checkID(TokenTreeNode root, int level) {
 		// 标识符名称
@@ -1048,7 +1032,7 @@ public class Semantic {
 			return false;
 		} else {
 			if (root.getChildCount() != 0) {
-				String tempString = forArray(root.getChildAt(0), table
+				String tempString = processArray(root.getChildAt(0), table
 						.getAllLevel(idName, level).getArrayElementsNum());
 				if (tempString != null)
 					idName += "@" + tempString;
@@ -1067,13 +1051,10 @@ public class Semantic {
 			}
 		}
 	}
-
 	public String getErrorInfo() {
 		return errorInfo;
 	}
 	public int getErrorNum() {
 		return errorNum;
 	}
-
-
 }

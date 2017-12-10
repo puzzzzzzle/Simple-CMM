@@ -1,7 +1,7 @@
 package zhangtao.iss2015.semantic;
 
 /**
- * 定义symbolTable中元素的信息
+ * symbolTable中的元素项
  */
 public class SymbolTableElement {
     // 元素名字
@@ -43,32 +43,12 @@ public class SymbolTableElement {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getKind() {
         return kind;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public int getLineNum() {
-        return lineNum;
-    }
-
-    public void setLineNum(int lineNum) {
-        this.lineNum = lineNum;
-    }
-
     public int getLevel() {
         return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     public String getIntValue() {
@@ -106,6 +86,4 @@ public class SymbolTableElement {
     public String toString() {
         return name + "_" + kind + "_" + level + "_" + arrayElementsNum;
     }
-
-
 }

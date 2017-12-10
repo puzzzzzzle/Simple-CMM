@@ -1,134 +1,127 @@
 package zhangtao.iss2015.semantic;
 
-/**
- * 用于生成四元式
- */
-
 
 import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
 import zhangtao.iss2015.praser.CMMParser;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.LinkedList;
-
-
+/**
+ * 生成四元式
+ */
 public class CodeGenerater {
-    
     private static int mLevel;
     private static int mLine;
     private static LinkedList<FourCodeItem> codes;
     private static SymbolTable symbolTable;
-    
 
-    
     private void interpret(TokenList node) {
         while (true) {
             switch (node.getType()) {
-            case TokenList.IF_STMT:
-                interpretIfStmt(node);
-                break;
-            case TokenList.WHILE_STMT:
-            {
-                int jmpline = mLine + 1;
-                FourCodeItem falsejmp = new FourCodeItem(FourCodeItem.JMP, interpretExp(node.getLeft()), null, null);
-                codes.add(falsejmp);
-                mLine++;
-                codes.add(new FourCodeItem(FourCodeItem.IN, null, null, null));
-                mLine++;
-                mLevel++;
-                interpret(node.getMiddle());
-                SymbolTable.getSymbolTable().deregister(mLevel);
-                mLevel--;
-                codes.add(new FourCodeItem(FourCodeItem.OUT, null, null, null));
-                mLine++;
-                codes.add(new FourCodeItem(FourCodeItem.JMP, null, null, jmpline + ""));
-                mLine++;
-                falsejmp.setForth(String.valueOf(mLine + 1));
-                break;
-            }
-            case TokenList.READ_STMT:
-            {
-                String varname = null;
-                int type = symbolTable.getSymbolType(node.getLeft().getValue());
-                switch (type) {
-                case Symbol.SINGLE_INT:
-                case Symbol.SINGLE_REAL:
-                    codes.add(new FourCodeItem(FourCodeItem.READ, null, null, node.getLeft().getValue()));
-                    mLine++;
+                case TokenList.IF_STMT:
+                    interpretIfStmt(node);
                     break;
-                case Symbol.ARRAY_INT:
-                case Symbol.ARRAY_REAL:
-                    codes.add(new FourCodeItem(FourCodeItem.READ, null, null, node.getLeft().getValue() + "[" + interpretExp(node.getLeft().getLeft()) + "]"));
+                case TokenList.WHILE_STMT:
+                {
+                    int jmpline = mLine + 1;
+                    FourCodeItem falsejmp = new FourCodeItem(FourCodeItem.JMP, interpretExp(node.getLeft()), null, null);
+                    codes.add(falsejmp);
                     mLine++;
+                    codes.add(new FourCodeItem(FourCodeItem.IN, null, null, null));
+                    mLine++;
+                    mLevel++;
+                    interpret(node.getMiddle());
+                    SymbolTable.getSymbolTable().deregister(mLevel);
+                    mLevel--;
+                    codes.add(new FourCodeItem(FourCodeItem.OUT, null, null, null));
+                    mLine++;
+                    codes.add(new FourCodeItem(FourCodeItem.JMP, null, null, jmpline + ""));
+                    mLine++;
+                    falsejmp.setForth(String.valueOf(mLine + 1));
                     break;
-                case Symbol.TEMP:
-                default:
-                   
                 }
-                break;
-            }
-            case TokenList.WRITE_STMT:
-                codes.add(new FourCodeItem(FourCodeItem.WRITE, null, null, interpretExp(node.getLeft())));
-                mLine++;
-                break;
-            case TokenList.DECLARE_STMT:
-            {
-                SymbolTable table = SymbolTable.getSymbolTable();
-                TokenList var = node.getLeft();
-                if (var.getLeft() == null) {//单值
-                    String value = null;
-                    if (node.getMiddle() != null) {
-                        value = interpretExp(node.getMiddle());
+                case TokenList.READ_STMT:
+                {
+                    String varname = null;
+                    int type = symbolTable.getSymbolType(node.getLeft().getValue());
+                    switch (type) {
+                        case Symbol.SINGLE_INT:
+                        case Symbol.SINGLE_REAL:
+                            codes.add(new FourCodeItem(FourCodeItem.READ, null, null, node.getLeft().getValue()));
+                            mLine++;
+                            break;
+                        case Symbol.ARRAY_INT:
+                        case Symbol.ARRAY_REAL:
+                            codes.add(new FourCodeItem(FourCodeItem.READ, null, null, node.getLeft().getValue() + "[" + interpretExp(node.getLeft().getLeft()) + "]"));
+                            mLine++;
+                            break;
+                        case Symbol.TEMP:
+                        default:
+
                     }
-                    if (var.getDataType() == Token.INT) {
-                        codes.add(new FourCodeItem(FourCodeItem.INT, value, null, var.getValue()));
-                        mLine++;
-                        Symbol symbol = new Symbol(var.getValue(), Symbol.SINGLE_INT, mLevel);
-                        table.register(symbol);
-                    } else if (var.getDataType() == Token.DOUBLE) {
-                        codes.add(new FourCodeItem(FourCodeItem.REAL, value, null, var.getValue()));
-                        mLine++;
-                        Symbol symbol = new Symbol(var.getValue(), Symbol.SINGLE_REAL, mLevel);
-                        table.register(symbol);
-                    }
-                } else {
-                    String len = interpretExp(var.getLeft());
-                    if (var.getDataType() == Token.INT) {
-                        codes.add(new FourCodeItem(FourCodeItem.INT, null, len, var.getValue()));
-                        mLine++;
-                        Symbol symbol = new Symbol(var.getValue(), Symbol.ARRAY_INT, mLevel);
-                        table.register(symbol);
+                    break;
+                }
+                case TokenList.WRITE_STMT:
+                    codes.add(new FourCodeItem(FourCodeItem.WRITE, null, null, interpretExp(node.getLeft())));
+                    mLine++;
+                    break;
+                case TokenList.DECLARE_STMT:
+                {
+                    SymbolTable table = SymbolTable.getSymbolTable();
+                    TokenList var = node.getLeft();
+                    if (var.getLeft() == null) {//单值
+                        String value = null;
+                        if (node.getMiddle() != null) {
+                            value = interpretExp(node.getMiddle());
+                        }
+                        if (var.getDataType() == Token.INT) {
+                            codes.add(new FourCodeItem(FourCodeItem.INT, value, null, var.getValue()));
+                            mLine++;
+                            Symbol symbol = new Symbol(var.getValue(), Symbol.SINGLE_INT, mLevel);
+                            table.register(symbol);
+                        } else if (var.getDataType() == Token.DOUBLE) {
+                            codes.add(new FourCodeItem(FourCodeItem.REAL, value, null, var.getValue()));
+                            mLine++;
+                            Symbol symbol = new Symbol(var.getValue(), Symbol.SINGLE_REAL, mLevel);
+                            table.register(symbol);
+                        }
                     } else {
-                        codes.add(new FourCodeItem(FourCodeItem.REAL, null, len, var.getValue()));
-                        mLine++;
-                        Symbol symbol = new Symbol(var.getValue(), Symbol.ARRAY_REAL, mLevel);
-                        table.register(symbol);
+                        String len = interpretExp(var.getLeft());
+                        if (var.getDataType() == Token.INT) {
+                            codes.add(new FourCodeItem(FourCodeItem.INT, null, len, var.getValue()));
+                            mLine++;
+                            Symbol symbol = new Symbol(var.getValue(), Symbol.ARRAY_INT, mLevel);
+                            table.register(symbol);
+                        } else {
+                            codes.add(new FourCodeItem(FourCodeItem.REAL, null, len, var.getValue()));
+                            mLine++;
+                            Symbol symbol = new Symbol(var.getValue(), Symbol.ARRAY_REAL, mLevel);
+                            table.register(symbol);
+                        }
                     }
-                }
 
-                break;
-            }
-            case TokenList.ASSIGN_STMT:
-            {
-                String value = interpretExp(node.getMiddle());
-
-                TokenList var = node.getLeft();
-                if (var.getLeft() == null) {//单值
-                    codes.add(new FourCodeItem(FourCodeItem.ASSIGN, value, null, var.getValue()));
-                    mLine++;
-                } else {
-                    String index = interpretExp(var.getLeft());
-    
-                    codes.add(new FourCodeItem(FourCodeItem.ASSIGN, value, null, var.getValue() + "[" + index + "]"));
-                    mLine++;
+                    break;
                 }
-                break;
-            }
-            default:
-                break;
+                case TokenList.ASSIGN_STMT:
+                {
+                    String value = interpretExp(node.getMiddle());
+
+                    TokenList var = node.getLeft();
+                    if (var.getLeft() == null) {//单值
+                        codes.add(new FourCodeItem(FourCodeItem.ASSIGN, value, null, var.getValue()));
+                        mLine++;
+                    } else {
+                        String index = interpretExp(var.getLeft());
+
+                        codes.add(new FourCodeItem(FourCodeItem.ASSIGN, value, null, var.getValue() + "[" + index + "]"));
+                        mLine++;
+                    }
+                    break;
+                }
+                default:
+                    break;
             }
             symbolTable.clearTempNames();
             if (node.getNext() != null) {
@@ -138,17 +131,19 @@ public class CodeGenerater {
             }
         }
     }
-    
+
     private void interpretIfStmt(TokenList node){
         if (node.getType() == TokenList.IF_STMT) {
-            //条件跳转 jmp 条件  null 目标  条件为假时跳转
+            /**
+             * 条件跳转 jmp 条件  null 目标  条件为假时跳转
+             */
             FourCodeItem falsejmp = new FourCodeItem(FourCodeItem.JMP, interpretExp(node.getLeft()), null, null);
             codes.add(falsejmp);
             mLine++;
             codes.add(new FourCodeItem(FourCodeItem.IN, null, null, null));
             mLine++;
             mLevel++;
-            interpret(node.getMiddle()); 
+            interpret(node.getMiddle());
             SymbolTable.getSymbolTable().deregister(mLevel);
             mLevel--;
             codes.add(new FourCodeItem(FourCodeItem.OUT, null, null, null));
@@ -172,17 +167,17 @@ public class CodeGenerater {
             }
         }
     }
-    
+
     private String interpretExp(TokenList node) {
         if (node.getType() == TokenList.EXP) {
             switch (node.getDataType()) {
-            case Token.LOGIC_EXP:
-                return interpretLogicExp(node);
-            case Token.ADDTIVE_EXP:
-                return interpretAddtiveExp(node);
-            case Token.TERM_EXP:
-                return interpretTermExp(node);
-            default:
+                case Token.LOGIC_EXP:
+                    return interpretLogicExp(node);
+                case Token.ADDTIVE_EXP:
+                    return interpretAddtiveExp(node);
+                case Token.TERM_EXP:
+                    return interpretTermExp(node);
+                default:
             }
         } else if (node.getType() == TokenList.FACTOR) {
             if (node.getDataType() == Token.MINUS) {
@@ -210,57 +205,56 @@ public class CodeGenerater {
         } else if (node.getType() == TokenList.LITREAL) {
             return node.getValue();
         }
-		return null;
+        return null;
     }
-    
+
     private String interpretLogicExp(TokenList node) {
         String temp = symbolTable.getTempSymbol().getName();
         switch (node.getMiddle().getDataType()) {
-        case Token.GT:
-            codes.add(new FourCodeItem(FourCodeItem.GT, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
-            break;
-        case Token.GET:
-            codes.add(new FourCodeItem(FourCodeItem.GET, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
-            break;
-        case Token.LT:
-            codes.add(new FourCodeItem(FourCodeItem.LT, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
-            break;
-        case Token.LET:
-            codes.add(new FourCodeItem(FourCodeItem.LET, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
-            break;
-        case Token.EQ:
-            codes.add(new FourCodeItem(FourCodeItem.EQ, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
-            break;
-        case Token.NEQ:
-            codes.add(new FourCodeItem(FourCodeItem.NEQ, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
-            break;
-        default:
+            case Token.GT:
+                codes.add(new FourCodeItem(FourCodeItem.GT, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            case Token.GET:
+                codes.add(new FourCodeItem(FourCodeItem.GET, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            case Token.LT:
+                codes.add(new FourCodeItem(FourCodeItem.LT, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            case Token.LET:
+                codes.add(new FourCodeItem(FourCodeItem.LET, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            case Token.EQ:
+                codes.add(new FourCodeItem(FourCodeItem.EQ, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            case Token.NEQ:
+                codes.add(new FourCodeItem(FourCodeItem.NEQ, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            default:
         }
         mLine++;
         return temp;
     }
-    
+
     private String interpretAddtiveExp(TokenList node){
         String temp = symbolTable.getTempSymbol().getName();
         switch (node.getMiddle().getDataType()) {
-        case Token.PLUS:
-            codes.add(new FourCodeItem(FourCodeItem.PLUS, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+            case Token.PLUS:
+                codes.add(new FourCodeItem(FourCodeItem.PLUS, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
 
-            break;
-        case Token.MINUS:
-            codes.add(new FourCodeItem(FourCodeItem.MINUS, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
+                break;
+            case Token.MINUS:
+                codes.add(new FourCodeItem(FourCodeItem.MINUS, interpretExp(node.getLeft()), interpretExp(node.getRight()), temp));
 
-            break;
-        default:
+                break;
+            default:
         }
         mLine++;
         return temp;
     }
-    
+
     /**
      * 修正存储结构带来的整数乘除法从右往左的计算错误
      * 注意term的Tree left一定是factor
-     * @param node
      */
     private String interpretTermExp(TokenList node){
         String opcode = getOpcode(node.getMiddle().getDataType());
@@ -289,18 +283,18 @@ public class CodeGenerater {
         }
         return temp1;
     }
-    
+
     private String getOpcode(int op) {
         if (op == Token.MUL) {
             return FourCodeItem.MUL;
-        } else {//Token.DIV
+        } else {
             return FourCodeItem.DIV;
         }
-    }  
-    
+    }
+
     public static LinkedList<Token> getTokenList(String filestr) throws IOException {
         StringReader sr = new StringReader(filestr);
-    	BufferedReader br = new BufferedReader(sr);
+        BufferedReader br = new BufferedReader(sr);
         LinkedList<Token> tokenList = Lexer.getTokenList(br);
         br.close();
         sr.close();
@@ -328,5 +322,4 @@ public class CodeGenerater {
         LinkedList<TokenList> nodeList = CMMParser.getTreeNodeList(tokenList);
         return nodeList;
     }
-
 }

@@ -1,4 +1,4 @@
-package zhangtao.iss2015.lexer;
+package zhangtao.iss2015.praser;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -54,9 +54,7 @@ public class TokenTreeNode extends DefaultMutableTreeNode {
 
     /**
      * 为该结点添加孩子结点
-     *
-     * @param childNode
-     *            要添加的孩子结点
+     * @param childNode 要添加的孩子结点
      */
     public void add(TokenTreeNode childNode) {
         super.add(childNode);

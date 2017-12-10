@@ -5,18 +5,23 @@ package zhangtao.iss2015.lexer;
  */
 public class ConstValues {
     // 保留字
-    public static final String READ = "read";
-    public static final String WRITE = "write";
-    public static final String WHILE = "while";
-    public static final String IF = "if";
-    public static final String ELSE = "else";
-    public static final String INT = "int";
-    public static final String DOUBLE = "double";
-    public static final String BOOL = "bool";
-    public static final String STRING = "string";
-    public static final String TRUE = "true";
-    public static final String FALSE = "false";
-    public static final String FOR = "for";
+    public static final String READ = "read"; //*
+    public static final String WRITE = "write"; //*
+    public static final String WHILE = "while"; //*
+    public static final String INT = "int"; //*
+    public static final String DOUBLE = "double"; //*
+    public static final String IF = "if"; //*
+    public static final String ELSE = "else";//*
+
+    public static final String BOOL = "bool"; //-
+    public static final String STRING = "string"; //-
+    public static final String TRUE = "true"; //-
+    public static final String FALSE = "false"; //-
+    //数组--
+
+    //数组
+//    public static final String FOR = "for"; //放弃
+
     // 运算符
     public static final String PLUS = "+";
     public static final String MINUS = "-";

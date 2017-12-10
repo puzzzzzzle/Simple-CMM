@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 /**
  * CMM语义分析器
  */
-public class CMMSemanticAnalysis extends Thread {
+public class CMMSemanticAnalysis{
 	// 语义分析时的符号表
 	private SymbolTable table = new SymbolTable();
 	// 语法分析得到的抽象语法树 
@@ -89,7 +89,7 @@ public class CMMSemanticAnalysis extends Thread {
 	/**
 	 * 进程运行时执行的方法
 	 */
-	public void run() {
+	public void start() {
 		//todo:run
 		table.removeAll();
 		statement(root);
@@ -110,14 +110,17 @@ public class CMMSemanticAnalysis extends Thread {
 				forDeclare(currentNode);
 			} else if (content.equals(ConstValues.ASSIGN)) {
 				forAssign(currentNode);
-			} else if (content.equals(ConstValues.FOR)) {
-				// 进入for循环语句，改变作用域
-				level++;
-				forFor(currentNode);
-				// 输出for循环语句，改变作用域并更新符号表
-				level--;
-				table.update(level);
-			}  else if (content.equals(ConstValues.IF)) {
+			}
+			//todo:for
+//			else if (content.equals(ConstValues.FOR)) {
+//				// 进入for循环语句，改变作用域
+//				level++;
+//				forFor(currentNode);
+//				// 输出for循环语句，改变作用域并更新符号表
+//				level--;
+//				table.update(level);
+//			}
+			else if (content.equals(ConstValues.IF)) {
 				// 进入if语句，改变作用域
 				level++;
 				forIf(currentNode);

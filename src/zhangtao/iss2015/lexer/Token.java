@@ -29,7 +29,7 @@ public class Token {
     // int
     public static final int INT = 6;
     // real
-    public static final int REAL = 7;
+    public static final int DOUBLE = 7;
     // +
     public static final int PLUS = 8;
     // -
@@ -186,8 +186,8 @@ public class Token {
                 return "LINE." + this.lineNo + ": WRITE";
             case INT:
                 return "LINE." + this.lineNo + ": INT";
-            case REAL:
-                return "LINE." + this.lineNo + ": REAL";
+            case DOUBLE:
+                return "LINE." + this.lineNo + ": DOUBLE";
             case PLUS:
                 return "LINE." + this.lineNo + ": +";// return "PLUS";
             case MINUS:
@@ -252,8 +252,8 @@ public class Token {
                 return "WRITE";
             case INT:
                 return "INT";
-            case REAL:
-                return "REAL";
+            case DOUBLE:
+                return "DOUBLE";
             case PLUS:
                 return "+";// return "PLUS";
             case MINUS:

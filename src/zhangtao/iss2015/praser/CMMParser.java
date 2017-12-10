@@ -159,11 +159,12 @@ public class CMMParser {
             tempNode = assignStatement(false);
         }
 
-        // For循环语句
-        else if (currentToken != null
-                && currentToken.getContent().equals(ConstValues.FOR)) {
-            tempNode = forStatement();
-        }
+        //todo:for
+//        // For循环语句
+//        else if (currentToken != null
+//                && currentToken.getContent().equals(ConstValues.FOR)) {
+//            tempNode = forStatement();
+//        }
         // If条件语句
         else if (currentToken != null
                 && currentToken.getContent().equals(ConstValues.IF)) {
@@ -298,6 +299,7 @@ public class CMMParser {
         return root;
     }
 
+    //todo:for
     /**
      * for语句
      *
@@ -772,8 +774,9 @@ public class CMMParser {
         if (currentToken != null
                 && (currentToken.getContent().equals(ConstValues.EQUAL)
                 || currentToken.getContent().equals(ConstValues.NOTEQUAL)
-                || currentToken.getContent().equals(ConstValues.LT) || currentToken
-                .getContent().equals(ConstValues.GT))) {
+                || currentToken.getContent().equals(ConstValues.LT)
+                || currentToken.getContent().equals(ConstValues.GT)
+        )) {
             TokenTreeNode comparisonNode = comparisonOperation();
             comparisonNode.add(tempNode);
             comparisonNode.add(expression());
@@ -1267,7 +1270,8 @@ public class CMMParser {
      *获取TreeNode
      */
     private static TokenList getStmt(){
-        switch (getNextTokenType()) {
+        int a  =getNextTokenType();
+        switch (a) {
             case Token.IF:
             {
                 TokenList node = new TokenList(TokenList.IF_STMT);
@@ -1295,7 +1299,10 @@ public class CMMParser {
             {
                 TokenList node = new TokenList(TokenList.READ_STMT);
                 consumeNextToken(Token.READ);
-                node.setLeft(variableName());
+                //todo:debug
+//                node.setLeft(variableName());
+                node.setLeft(getExp());
+
                 consumeNextToken(Token.SEMI);
                 return node;
             }
@@ -1307,16 +1314,16 @@ public class CMMParser {
                 return node;
             }
             case Token.INT:
-            case Token.REAL: {
+            case Token.DOUBLE: {
                 TokenList node = new TokenList(TokenList.DECLARE_STMT);
                 TokenList varNode = new TokenList(TokenList.VAR);
-                if (checkNextTokenType(Token.INT, Token.REAL)) {
+                if (checkNextTokenType(Token.INT, Token.DOUBLE)) {
                     current = iterator.next();
                     int type = current.getType();
                     if (type == Token.INT) {
                         varNode.setDataType(Token.INT);
-                    } else {//type == Token.REAL
-                        varNode.setDataType(Token.REAL);
+                    } else {//type == Token.DOUBLE
+                        varNode.setDataType(Token.DOUBLE);
                     }
                 } else {
                 }

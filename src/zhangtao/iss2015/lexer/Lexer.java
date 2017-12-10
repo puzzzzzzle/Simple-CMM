@@ -630,7 +630,7 @@ public class Lexer {
                 || str.equals(ConstValues.WRITE) || str.equals(ConstValues.INT)
                 || str.equals(ConstValues.DOUBLE) || str.equals(ConstValues.BOOL)
                 || str.equals(ConstValues.STRING) || str.equals(ConstValues.TRUE)
-                || str.equals(ConstValues.FALSE) || str.equals(ConstValues.FOR);
+                || str.equals(ConstValues.FALSE);
     }
 
     /**
@@ -831,8 +831,8 @@ public class Lexer {
                     token.setType(Token.WRITE);
                 } else if (sbString.equals("int")) {
                     token.setType(Token.INT);
-                } else if (sbString.equals("real")) {
-                    token.setType(Token.REAL);
+                } else if (sbString.equals("double")) {
+                    token.setType(Token.DOUBLE);
                 } else {
                     token.setType(Token.ID);
                     token.setValue(sbString);

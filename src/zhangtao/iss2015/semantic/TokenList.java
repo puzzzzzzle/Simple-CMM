@@ -50,7 +50,7 @@ public class TokenList {
     public static final int EXP = 7;
     /**
      * 变量
-     * datatype存放变量类型Token.INT 和 REAL
+     * datatype存放变量类型Token.INT 和 DOUBLE
      * value存放变量名
      * left:
      * 在声明语句中变量的left值代表变量长度exp,在其他的调用中变量的left代表变量索引值exp,若为null,则说明是单个的变量,不是数组
@@ -86,7 +86,7 @@ public class TokenList {
     private TokenList mMiddle;
     private TokenList mRight;
     /**
-     * {@link TokenList#getType()}为{@link TokenList#VAR}时存储变量类型,具体定义在{@link Token}中INT / REAL?????
+     * {@link TokenList#getType()}为{@link TokenList#VAR}时存储变量类型,具体定义在{@link Token}中INT / DOUBLE?????
      * {@link TokenList#getType()}为{@link TokenList#OP}时存储操作符类型,具体定义在{@link Token}中 LT GT ......
      * {@link TokenList#getType()}为{@link TokenList#EXP}时表示复合表达式
      * {@link TokenList#getType()}为{@link TokenList#FACTOR}表示因子,mDataType处存储表达式的前置符号,具体定义在{@link Token}

@@ -105,7 +105,7 @@ public class CodeGenerater {
                         mLine++;
                         Symbol symbol = new Symbol(var.getValue(), Symbol.SINGLE_INT, mLevel);
                         table.register(symbol);
-                    } else if (var.getDataType() == Token.REAL) {
+                    } else if (var.getDataType() == Token.DOUBLE) {
                         codes.add(new FourCode(FourCode.REAL, value, null, var.getValue()));
                         mLine++;
                         Symbol symbol = new Symbol(var.getValue(), Symbol.SINGLE_REAL, mLevel);

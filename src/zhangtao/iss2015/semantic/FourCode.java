@@ -25,7 +25,7 @@ public class FourCode {
     public static final String IN = "in";
     public static final String OUT = "out";
     public static final String INT = "int";
-    public static final String REAL = "real";
+    public static final String REAL = "double";
     public static final String ASSIGN = "assign";
     public static final String PLUS = "+";
     public static final String MINUS = "-";
@@ -36,7 +36,7 @@ public class FourCode {
     public static final String GET = ">=";
     public static final String LET = "<=";
     public static final String EQ = "==";
-    public static final String NEQ = "<>";
+    public static final String NEQ = "!=";
     
     private String first;
     private String second;

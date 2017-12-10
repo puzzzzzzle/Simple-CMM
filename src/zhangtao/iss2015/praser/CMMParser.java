@@ -206,55 +206,56 @@ public class CMMParser {
      * @return TokenTreeNode
      */
     private final TokenTreeNode declareProcess(TokenTreeNode root) {
-        //数组开始
-        if (currentToken.getContent().equals(ConstValues.LBRACKET)) {
-//            System.out.println("[");
-//            if (currentToken != null
-//                    && currentToken.getContent().equals(ConstValues.LBRACKET)) {
-//                idNode.add(array());
-//            } else
-            // 保存要返回的结点
-            TokenTreeNode tempNode = null;
-            nextToken();
-            if (currentToken.getKind().equals("整数")) {
-                String num = currentToken.getContent();
-                nextToken();
-                if (currentToken.getContent().equals(ConstValues.RBRACKET)) {
-//                    TokenTreeNode idNode = new TokenTreeNode("数组标识符", currentToken.getContent(),
-//                            currentToken.getLine());
-//                    root.add(idNode);
-                    nextToken();
-                    if (currentToken.getKind().equals("标识符")) {
-                        TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
-                                currentToken.getLine());
-                        idNode.setArraySize(Integer.parseInt(num));
-                        root.add(idNode);
-                    } else {
-                        String error = " 数组声明失败，不是标识符\"" + "\n";
-                        error(error);
-                        jumpToNextStatement();
-                        return new TokenTreeNode(ConstValues.ERROR + "数组声明失败，不是标识符\"]\"");
-                    }
-                    nextToken();
-                    if (!currentToken.getContent().equals(ConstValues.SEMICOLON)) {
-                        String error = " 数组一次只能声明一个，且不能赋值\"" + "\n";
-                        error(error);
-                        jumpToNextStatement();
-                        return new TokenTreeNode(ConstValues.ERROR + "数组一次只能声明一个，且不能赋值\"]\"");
-                    }
-                } else {
-                    String error = " 缺少右中括号\"]\"" + "\n";
-                    error(error);
-                    jumpToNextStatement();
-                    return new TokenTreeNode(ConstValues.ERROR + "缺少右中括号\"]\"");
-                }
-            } else {
-                String error = "数组中必须用整数来初始化" + "\n";
-                error(error);
-                jumpToNextStatement();
-                return new TokenTreeNode(ConstValues.ERROR + "数组中必须为整数来初始化\"]\"");
-            }
-        } else {
+//        //数组开始
+//        if (currentToken.getContent().equals(ConstValues.LBRACKET)) {
+////            System.out.println("[");
+////            if (currentToken != null
+////                    && currentToken.getContent().equals(ConstValues.LBRACKET)) {
+////                idNode.add(array());
+////            } else
+//            // 保存要返回的结点
+//            TokenTreeNode tempNode = null;
+//            nextToken();
+//            if (currentToken.getKind().equals("整数")) {
+//                String num = currentToken.getContent();
+//                nextToken();
+//                if (currentToken.getContent().equals(ConstValues.RBRACKET)) {
+////                    TokenTreeNode idNode = new TokenTreeNode("数组标识符", currentToken.getContent(),
+////                            currentToken.getLine());
+////                    root.add(idNode);
+//                    nextToken();
+//                    if (currentToken.getKind().equals("标识符")) {
+//                        TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
+//                                currentToken.getLine());
+//                        idNode.setArraySize(Integer.parseInt(num));
+//                        root.add(idNode);
+//                    } else {
+//                        String error = " 数组声明失败，不是标识符\"" + "\n";
+//                        error(error);
+//                        jumpToNextStatement();
+//                        return new TokenTreeNode(ConstValues.ERROR + "数组声明失败，不是标识符\"]\"");
+//                    }
+//                    nextToken();
+//                    if (!currentToken.getContent().equals(ConstValues.SEMICOLON)) {
+//                        String error = " 数组一次只能声明一个，且不能赋值\"" + "\n";
+//                        error(error);
+//                        jumpToNextStatement();
+//                        return new TokenTreeNode(ConstValues.ERROR + "数组一次只能声明一个，且不能赋值\"]\"");
+//                    }
+//                } else {
+//                    String error = " 缺少右中括号\"]\"" + "\n";
+//                    error(error);
+//                    jumpToNextStatement();
+//                    return new TokenTreeNode(ConstValues.ERROR + "缺少右中括号\"]\"");
+//                }
+//            } else {
+//                String error = "数组中必须用整数来初始化" + "\n";
+//                error(error);
+//                jumpToNextStatement();
+//                return new TokenTreeNode(ConstValues.ERROR + "数组中必须为整数来初始化\"]\"");
+//            }
+//        } else {
+
             if (currentToken != null && currentToken.getKind().equals("标识符")) {
                 TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
                         currentToken.getLine());
@@ -263,10 +264,28 @@ public class CMMParser {
                 // 处理array的情况
                 if (currentToken != null
                         && currentToken.getContent().equals(ConstValues.LBRACKET)) {
-                    String error = " 数组声明语句出错，数组大小应在关键字后面" + "\n";
-                    error(error);
-                    root.add(new TokenTreeNode(ConstValues.ERROR + "数组应在关键字后申明大小"));
-                    jumpToNextStatement();
+//                    String error = " 数组声明语句出错，数组大小应在关键字后面" + "\n";
+//                    error(error);
+//                    root.add(new TokenTreeNode(ConstValues.ERROR + "数组应在关键字后申明大小"));
+//                    jumpToNextStatement();
+                    //todo array
+                    // 处理array的情况
+                    {
+                        if (currentToken != null
+                                && currentToken.getContent().equals(ConstValues.LBRACKET)) {
+                            idNode.add(array());
+                        } else if (currentToken != null
+                                && !currentToken.getContent().equals(ConstValues.ASSIGN)
+                                && !currentToken.getContent().equals(ConstValues.SEMICOLON)
+                                && !currentToken.getContent().equals(ConstValues.COMMA)) {
+                            String error = " 声明语句出错,标识符后出现不正确的token" + "\n";
+                            error(error);
+                            root
+                                    .add(new TokenTreeNode(ConstValues.ERROR
+                                            + "声明语句出错,标识符后出现不正确的token"));
+                            nextToken();
+                        }
+                    }
                 } else if (currentToken != null
                         && !currentToken.getContent().equals(ConstValues.ASSIGN)
                         && !currentToken.getContent().equals(ConstValues.SEMICOLON)
@@ -292,12 +311,84 @@ public class CMMParser {
                 nextToken();
                 assignNode.add(condition());
             }
+//        }
+        return root;
+
+//        TokenTreeNode declareNode = new TokenTreeNode("关键字", currentToken.getContent(),
+//                currentToken.getLine());
+//        nextToken();
+//        // declare_aid
+//        declareNode = declare_aid(declareNode);
+//        // 处理同时声明多个变量的情况
+//        String next = null;
+//        while (currentToken != null) {
+//            next = currentToken.getContent();
+//            if (next.equals(ConstValues.COMMA)) {
+//                nextToken();
+//                declareNode = declare_aid(declareNode);
+//            } else {
+//                break;
+//            }
+//            if (currentToken != null)
+//                next = currentToken.getContent();
+//        }
+//        // 匹配分号;
+//        if (currentToken != null
+//                && currentToken.getContent().equals(ConstValues.SEMICOLON)) {
+//            nextToken();
+//        } else { // 报错
+//            String error = " 声明语句缺少分号\";\"" + "\n";
+//            error(error);
+//            declareNode.add(new TokenTreeNode(ConstValues.ERROR + "声明语句缺少分号\";\""));
+//        }
+//        return declareNode;
+    }
+    /**
+     * declare_aid: (ID|ID array)(ASSIGN expression)?;
+     *
+     * @param root
+     *            根结点
+     * @return TreeNode
+     */
+    private final TokenTreeNode declare_aid(TokenTreeNode root) {
+        if (currentToken != null && currentToken.getKind().equals("标识符")) {
+            TokenTreeNode idNode = new TokenTreeNode("标识符", currentToken.getContent(),
+                    currentToken.getLine());
+            root.add(idNode);
+            nextToken();
+            // 处理array的情况
+            if (currentToken != null
+                    && currentToken.getContent().equals(ConstValues.LBRACKET)) {
+                idNode.add(array());
+            } else if (currentToken != null
+                    && !currentToken.getContent().equals(ConstValues.ASSIGN)
+                    && !currentToken.getContent().equals(ConstValues.SEMICOLON)
+                    && !currentToken.getContent().equals(ConstValues.COMMA)) {
+                String error = " 声明语句出错,标识符后出现不正确的token" + "\n";
+                error(error);
+                root
+                        .add(new TokenTreeNode(ConstValues.ERROR
+                                + "声明语句出错,标识符后出现不正确的token"));
+                nextToken();
+            }
+        } else { // 报错
+            String error = " 声明语句中标识符出错" + "\n";
+            error(error);
+            root.add(new TokenTreeNode(ConstValues.ERROR + "声明语句中标识符出错"));
+            nextToken();
+        }
+        // 匹配赋值符号=
+        if (currentToken != null
+                && currentToken.getContent().equals(ConstValues.ASSIGN)) {
+            TokenTreeNode assignNode = new TokenTreeNode("分隔符", ConstValues.ASSIGN,
+                    currentToken.getLine());
+            root.add(assignNode);
+            nextToken();
+            assignNode.add(condition());
         }
         return root;
     }
-
     //todo:for
-
     /**
      * for语句
      *

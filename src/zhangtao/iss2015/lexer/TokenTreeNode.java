@@ -12,24 +12,6 @@ public class TokenTreeNode extends DefaultMutableTreeNode {
     private String content;
     //当前结点所在行号
     private int lineNum;
-    //如果是数组的话，它的大小,或操作符中，操作单元的位置
-    private int arraySize=-1;
-
-    public int getArraySize() {
-        return arraySize;
-    }
-
-    public void setArraySize(int arraySize) {
-        this.arraySize = arraySize;
-    }
-
-
-
-    public TokenTreeNode() {
-        super();
-        nodeKind = "";
-        content = "";
-    }
 
     public TokenTreeNode(String content) {
         super(content);
@@ -37,11 +19,6 @@ public class TokenTreeNode extends DefaultMutableTreeNode {
         nodeKind = "";
     }
 
-    public TokenTreeNode(String kind, String content) {
-        super(content);
-        this.content = content;
-        nodeKind = kind;
-    }
 
     public TokenTreeNode(String kind, String content, int lineNum) {
         super(content);

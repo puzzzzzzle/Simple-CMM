@@ -4,12 +4,12 @@ package zhangtao.iss2015.semantic;
  * 
  * 四元式
  */
-public class FourCode {
+public class FourCodeItem {
     /**
      * jmp 条件  null 目标  是条件为假时跳转到目标
      * jmp null null 目标  无条件跳转到目标, 超过语句数,则程序结束
      * assign 元素 null 目标
-     * int/real null 元素个数/null 变量名
+     * int/double null 元素个数/null 变量名
      * read/write null null 元素
      * in null null null 进入语句块
      * out null null null 出语句块
@@ -44,7 +44,7 @@ public class FourCode {
     private String forth;
     
     
-    public FourCode(String first, String second, String third, String forth) {
+    public FourCodeItem(String first, String second, String third, String forth) {
         super();
         this.first = first;
         this.second = second;
@@ -52,56 +52,33 @@ public class FourCode {
         this.forth = forth;
     }
 
-    
-
+    /**
+     * getter and setter
+     */
     public String getFirst() {
         return first;
     }
-
-
-
     public void setFirst(String first) {
         this.first = first;
     }
-
-
-
     public String getSecond() {
         return second;
     }
-
-
-
     public void setSecond(String second) {
         this.second = second;
     }
-
-
-
     public String getThird() {
         return third;
     }
-
-
-
     public void setThird(String third) {
         this.third = third;
     }
-
-
-
     public String getForth() {
         return forth;
     }
-
-
-
     public void setForth(String forth) {
         this.forth = forth;
     }
-
-
-
     @Override
     public String toString() {
         return String.format("(%s, %s, %s, %s)", first, second, third, forth);

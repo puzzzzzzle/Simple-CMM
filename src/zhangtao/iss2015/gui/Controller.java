@@ -11,9 +11,9 @@ import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
 import zhangtao.iss2015.lexer.TokenTreeNode;
 import zhangtao.iss2015.praser.CMMParser;
-import zhangtao.iss2015.semantic.CMMSemanticAnalysis;
+import zhangtao.iss2015.semantic.Semantic;
 import zhangtao.iss2015.semantic.CodeGenerater;
-import zhangtao.iss2015.semantic.FourCode;
+import zhangtao.iss2015.semantic.FourCodeItem;
 import zhangtao.iss2015.semantic.SymbolTable;
 
 import java.io.BufferedInputStream;
@@ -139,7 +139,7 @@ public class Controller implements Initializable {
                     return;
                 }
                 StateOutput.textProperty().setValue("**********语法分析成功，开始语义分析**********\n");
-                CMMSemanticAnalysis semanticAnalysis = new CMMSemanticAnalysis(node, this);
+                Semantic semanticAnalysis = new Semantic(node, this);
                 semanticAnalysis.start();
                 if (semanticAnalysis.getErrorNum() != 0) {
                     out.append("**********语意分析失败**********\n");
@@ -147,6 +147,8 @@ public class Controller implements Initializable {
                     out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
                     StateOutput.textProperty().setValue(out.toString());
                     PrecessOutput.textProperty().setValue("语意分析失败");
+                }else {
+                    StateOutput.textProperty().setValue(StateOutput.textProperty().get()+"**********程序正常结束**********\n");
                 }
             }
         });
@@ -183,7 +185,7 @@ public class Controller implements Initializable {
                     return;
                 }
                 StateOutput.textProperty().setValue("**********语法分析成功，开始语义分析**********\n");
-                CMMSemanticAnalysis semanticAnalysis = new CMMSemanticAnalysis(node, this);
+                Semantic semanticAnalysis = new Semantic(node, this);
                 semanticAnalysis.start();
                 if (semanticAnalysis.getErrorNum() != 0) {
                     out.append("**********语意分析失败**********\n");
@@ -202,13 +204,13 @@ public class Controller implements Initializable {
     //生成中间代码
     public void generateCode() {
         String text = CodeText.textProperty().get();
-        LinkedList<FourCode> codes;
+        LinkedList<FourCodeItem> codes;
         SymbolTable symbolTable = SymbolTable.getSymbolTable();
         symbolTable.newTable();
         codes = CodeGenerater.generateCode(text);
         symbolTable.deleteTable();
         StringBuilder sb = new StringBuilder();
-        for (FourCode code : codes) {
+        for (FourCodeItem code : codes) {
             sb.append(code.toString() + "\r\n");
         }
         FourText.textProperty().setValue(sb.toString());
@@ -280,6 +282,11 @@ public class Controller implements Initializable {
     }
 
     public void writeToConsole(String s) {
-        PrecessOutput.textProperty().setValue(PrecessOutput.textProperty().get() + "\n" + s);
+        if(PrecessOutput.textProperty().get().equals("")){
+            PrecessOutput.textProperty().setValue(s);
+        }else {
+            PrecessOutput.textProperty().setValue(PrecessOutput.textProperty().get() + "\n" + s);
+
+        }
     }
 }

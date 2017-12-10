@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 /**
  * CMM语义分析器
  */
-public class CMMSemanticAnalysis{
+public class Semantic {
 	// 语义分析时的符号表
 	private SymbolTable table = new SymbolTable();
 	// 语法分析得到的抽象语法树 
@@ -25,7 +25,7 @@ public class CMMSemanticAnalysis{
 
 	Controller controller = null;
 
-	public CMMSemanticAnalysis(TokenTreeNode root,Controller controller) {
+	public Semantic(TokenTreeNode root, Controller controller) {
 		this.root = root;
 		this.controller=controller;
 	}
@@ -616,34 +616,6 @@ public class CMMSemanticAnalysis{
 			}
 		}
 	}
-
-	/**
-	 * 分析for语句
-	 * 
-	 * @param root 语法树中for语句结点
-	 */
-	private void forFor(TokenTreeNode root) {
-		// 根结点Initialization
-		TokenTreeNode initializationNode = root.getChildAt(0);
-		// 根结点Condition
-		TokenTreeNode conditionNode = root.getChildAt(1);
-		// 根结点Change
-		TokenTreeNode changeNode = root.getChildAt(2);
-		// 根结点Statements
-		TokenTreeNode statementNode = root.getChildAt(3);
-		// for循环语句初始值
-		forAssign(initializationNode.getChildAt(0));
-		// 条件为真
-		while (forCondition(conditionNode.getChildAt(0))) {
-			statement(statementNode);
-			level--;
-			table.update(level);
-			level++;
-			// for循环执行1次后改变循环条件中的变量
-			forAssign(changeNode.getChildAt(0));
-		}
-	}
-	
 	/**
 	 * 分析if语句
 	 * 
@@ -717,8 +689,7 @@ public class CMMSemanticAnalysis{
 							String.valueOf(Double.parseDouble(value)));
 				} else { // 报错
 					String error = "不能将\"" + value + "\"赋值给变量" + idName;
-					JOptionPane.showMessageDialog(new JPanel(), error, "输入错误",
-							JOptionPane.ERROR_MESSAGE);
+					controller.showErrorDialog("ERROR","输入错误",error);
 				}
 			} else if (element.getKind().equals(ConstValues.DOUBLE)) {
 				if (matchReal(value)) {
@@ -728,18 +699,18 @@ public class CMMSemanticAnalysis{
 							String.valueOf(Double.parseDouble(value)));
 				} else { // 报错
 					String error = "不能将\"" + value + "\"赋值给变量" + idName;
-					JOptionPane.showMessageDialog(new JPanel(), error, "输入错误",
-							JOptionPane.ERROR_MESSAGE);
+					controller.showErrorDialog("ERROR","输入错误",error);
 				}
 			} else if (element.getKind().equals(ConstValues.BOOL)) {
 				if (value.equals("true")) {
 					table.getAllLevel(idName, level).setStringValue("true");
 				} else if (value.equals("false")) {
 					table.getAllLevel(idName, level).setStringValue("false");
-				} else { // 报错
+				} else if(value.equals("0")) { // 报错
+					table.getAllLevel(idName, level).setStringValue("false");
 					String error = "不能将\"" + value + "\"赋值给变量" + idName;
-					JOptionPane.showMessageDialog(new JPanel(), error, "输入错误",
-							JOptionPane.ERROR_MESSAGE);
+				}else {
+					table.getAllLevel(idName, level).setStringValue("true");
 				}
 			} else if (element.getKind().equals(ConstValues.STRING)) {
 				table.getAllLevel(idName, level).setStringValue(value);
@@ -749,7 +720,6 @@ public class CMMSemanticAnalysis{
 			error(error, root.getLineNum());
 		}
 	}
-
 	/**
 	 * 分析write语句
 	 * 
@@ -1101,17 +1071,9 @@ public class CMMSemanticAnalysis{
 	public String getErrorInfo() {
 		return errorInfo;
 	}
-
-	public void setErrorInfo(String errorInfo) {
-		this.errorInfo = errorInfo;
-	}
-
 	public int getErrorNum() {
 		return errorNum;
 	}
 
-	public void setErrorNum(int errorNum) {
-		this.errorNum = errorNum;
-	}
 
 }

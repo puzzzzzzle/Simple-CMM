@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zhangtao.iss2015.gui.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="873.0" styleClass="background" stylesheets="@main_layout_style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zhangtao.iss2015.gui.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -26,8 +27,8 @@
          <children>
             <TextArea fx:id="StateOutput" prefHeight="200.0" prefWidth="200.0" promptText="错误摘要" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextArea fx:id="PrecessOutput" prefHeight="138.0" prefWidth="433.0" promptText="正常输出" GridPane.rowIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="程序输出：" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="状态信息：" GridPane.columnIndex="1" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="程序输出：" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="状态信息：" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <GridPane>
@@ -35,8 +36,8 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="301.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="342.0" minHeight="10.0" prefHeight="338.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="301.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="342.0" minHeight="10.0" prefHeight="327.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <GridPane GridPane.rowIndex="1">
@@ -48,17 +49,17 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextArea fx:id="CodeText" prefHeight="322.0" prefWidth="465.0" promptText="程序文本" />
+                  <TextArea fx:id="CodeText" prefHeight="322.0" prefWidth="465.0" promptText="程序文本" styleClass="background" wrapText="true" />
                   <GridPane GridPane.columnIndex="1">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="154.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="324.0" minHeight="10.0" prefHeight="312.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="154.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="324.0" minHeight="10.0" prefHeight="292.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox opacity="0.7" prefHeight="100.0" prefWidth="200.0" styleClass="background">
                            <children>
                               <Button fx:id="FourCodeButton" mnemonicParsing="false" text="四元式" />
                            </children>
@@ -68,13 +69,16 @@
                   </GridPane>
                </children>
             </GridPane>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox opacity="0.75" prefHeight="100.0" prefWidth="200.0" spacing="10.0" styleClass="background">
                <children>
                   <Button fx:id="OpenButton" mnemonicParsing="false" text="打开" />
                   <Button fx:id="LexButton" mnemonicParsing="false" text="词法分析" />
                   <Button fx:id="PraserButton" mnemonicParsing="false" text="语法分析" />
                   <Button fx:id="RunButton" mnemonicParsing="false" text="运行" />
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </HBox>
          </children>
       </GridPane>

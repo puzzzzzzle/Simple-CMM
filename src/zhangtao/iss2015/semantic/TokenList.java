@@ -117,6 +117,7 @@ public class TokenList {
             break;
         }
     }
+    // getter and setter
     public int getType() {
         return type;
     }

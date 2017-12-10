@@ -31,37 +31,18 @@ public class Symbol {
         this.value = new Value(type);
     }
     
-    /**
-     * 一定要是SINGLE_INT
-     */
-    public Symbol(String name, int type, int level, int value) {
-        this(name, type, level);
-        this.value.setInt(value);
-    }
-    
-    /**
-     * 一定要是SINGLE_REAL
-     */
-    public Symbol(String name, int type, int level, double value) {
-        this(name, type, level);
-        this.value.setReal(value);
-    }
-    
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
-
     public int getType() {
         return type;
     }
-
     public void setType(int type) {
         this.type = type;
     }
-
     public Value getValue() {
         return value;
     }

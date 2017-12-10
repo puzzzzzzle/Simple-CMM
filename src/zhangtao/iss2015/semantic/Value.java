@@ -39,10 +39,6 @@ public class Value {
     public int getType() {
         return mType;
     }
-    /**
-     * 尽量不要中途改变type,除非你明确知道可能发生什么
-     * @param mType
-     */
     public void setType(int mType) {
         this.mType = mType;
     }

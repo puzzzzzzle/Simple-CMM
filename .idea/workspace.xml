@@ -2,20 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f44e9771-c437-4842-b11b-9b69e04704b7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/gui/GUIOuterController.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/error1_ID.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/error2_array.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/error3_comment.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/right.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/right.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test1_变量声明.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test2_一般变量赋值.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test3_数组.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test4_算术运算.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test5_IF-ELSE.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test6_WHILE.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test7_IF-ELSE与WHILE.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test8_阶乘.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test9_数组排序.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wrong.cmm" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/wrong.png" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/zhangtao/iss2015/lexer/Token.class" afterPath="$PROJECT_DIR$/bin/zhangtao/iss2015/lexer/Token.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Lexer.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Lexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Token.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Token.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/CodeGenerater.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/CodeGenerater.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/FourCodeItem.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/FourCodeItem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Symbol.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Symbol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTable.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTableElement.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTableElement.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/TokenList.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/TokenList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Value.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Value.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/TokenTreeNode.java" afterPath="$PROJECT_DIR$/src/zhangtao/iss2015/praser/TokenTreeNode.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,11 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Semantic.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Semantic.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2983">
-              <caret line="157" column="35" lean-forward="true" selection-start-line="157" selection-start-column="35" selection-end-line="157" selection-end-column="35" />
+            <state relative-caret-position="9964">
+              <caret line="963" column="20" lean-forward="false" selection-start-line="963" selection-start-column="20" selection-end-line="963" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -39,100 +49,46 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TokenList.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/TokenList.java">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+            <state relative-caret-position="2774">
+              <caret line="169" column="28" lean-forward="false" selection-start-line="169" selection-start-column="28" selection-end-line="169" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TokenTreeNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/TokenTreeNode.java">
+      <file leaf-file-name="Lexer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Lexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="855">
-              <caret line="55" column="17" lean-forward="false" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
-              <folding>
-                <marker date="1512922276832" expanded="true" signature="281:282" ph="//..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FourCodeItem.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/FourCodeItem.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+            <state relative-caret-position="278">
+              <caret line="249" column="42" lean-forward="false" selection-start-line="249" selection-start-column="42" selection-end-line="249" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Value.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Value.java">
+      <file leaf-file-name="CMMParser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="4" column="9" lean-forward="true" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
-              <folding>
-                <element signature="e#767#768#0" expanded="true" />
-                <element signature="e#795#796#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Symbol.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Symbol.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" column="60" lean-forward="false" selection-start-line="3" selection-start-column="60" selection-end-line="3" selection-end-column="61" />
+            <state relative-caret-position="107">
+              <caret line="313" column="0" lean-forward="false" selection-start-line="313" selection-start-column="0" selection-end-line="313" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SymbolTable.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTable.java">
+      <file leaf-file-name="CMMGUI.fxml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1577">
-              <caret line="93" column="9" lean-forward="true" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
+            <state relative-caret-position="171">
+              <caret line="67" column="32" lean-forward="false" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
               <folding />
             </state>
           </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SymbolTableElement.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTableElement.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="3" column="19" lean-forward="false" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CodeGenerater.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/CodeGenerater.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="323" column="5" lean-forward="false" selection-start-line="323" selection-start-column="5" selection-end-line="323" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CodeGenerater.java" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Documents/Tencent Files/2359173906/FileRecv/CodeGenerater.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
+          <provider editor-type-id="JavaFX-Scene-Builder">
+            <state />
           </provider>
         </entry>
       </file>
@@ -141,8 +97,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -164,6 +120,7 @@
       <find>JOptionPane</find>
       <find>public</find>
       <find>不能</find>
+      <find>R</find>
     </findStrings>
     <replaceStrings>
       <replace>错误</replace>
@@ -177,6 +134,7 @@
       <replace>TokenTreeNode</replace>
       <replace>ConstValues</replace>
       <replace>无法</replace>
+      <replace>r</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -216,11 +174,8 @@
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/Main.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/CMMSemanticAnalysis.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/TokenTree.java" />
-        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Token.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Lexer.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/ConstValues.java" />
-        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java" />
-        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/main_layout_style.css" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/TokenTreeNode.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/CMMSemanticAnalysis.java" />
@@ -234,11 +189,16 @@
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/FourCodeItem.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/GUIController.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/GUIOuterController.java" />
-        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java" />
-        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/TokenList.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/praser/TokenTreeNode.java" />
+        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Token.java" />
         <option value="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/CodeGenerater.java" />
+        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java" />
+        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java" />
+        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml" />
+        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/TestMain.java" />
+        <option value="$PROJECT_DIR$/test9_数组排序.cmm" />
+        <option value="$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java" />
       </list>
     </option>
   </component>
@@ -249,10 +209,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="520" />
-    <option name="y" value="26" />
-    <option name="width" value="1378" />
-    <option name="height" value="780" />
+    <option name="x" value="1" />
+    <option name="y" value="1" />
+    <option name="width" value="1364" />
+    <option name="height" value="736" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -298,100 +258,6 @@
             <path>
               <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
               <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-              <item name="gui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="LexerCompiler_jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-              <item name="gui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-              <item name="lexer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-              <item name="praser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Lexer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Lexer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="zhangtao" type="462c0819:PsiDirectoryNode" />
-              <item name="iss2015" type="462c0819:PsiDirectoryNode" />
-              <item name="semantic" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -602,7 +468,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84450000" />
+    <option name="totallyTimeSpent" value="98461000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -619,26 +485,26 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32901135" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3273906" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3273906" sideWeight="0.49394855" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32090762" sideWeight="0.5030257" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3987034" sideWeight="0.5030257" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32090762" sideWeight="0.4969743" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32090762" sideWeight="0.49092284" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3464448" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3273906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3273906" sideWeight="0.49394855" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3987034" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3987034" sideWeight="0.4969743" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -680,12 +546,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java</url>
-          <line>1403</line>
-          <properties />
-          <option name="timeStamp" value="80" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java</url>
           <line>395</line>
@@ -696,38 +556,20 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java</url>
-          <line>496</line>
-          <properties class="zhangtao.iss2015.praser.CMMParser" method="ifStatement">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="84" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java</url>
           <line>1104</line>
           <properties class="zhangtao.iss2015.praser.CMMParser" method="getTreeNodeList">
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="96" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java</url>
-          <line>1361</line>
-          <properties class="zhangtao.iss2015.praser.CMMParser" method="getStmt">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="97" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java</url>
-          <line>206</line>
-          <properties class="zhangtao.iss2015.praser.CMMParser" method="declareProcess">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="123" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java</url>
+          <line>298</line>
+          <properties />
+          <option name="timeStamp" value="126" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="124" />
+      <option name="time" value="127" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -738,7 +580,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/12.cmm" />
     <entry file="file://$PROJECT_DIR$/11.cmm" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/util/function/Consumer.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -767,13 +608,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/praser1/ParserTree.java" />
-    <entry file="file://$PROJECT_DIR$/error3_comment.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/lang/SuppressWarnings.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-75">
@@ -781,35 +615,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/javax/swing/tree/MutableTreeNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="39" column="47" lean-forward="true" selection-start-line="39" selection-start-column="47" selection-end-line="39" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/javax/swing/tree/TreeNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-326">
-          <caret line="46" column="17" lean-forward="false" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/Main.java" />
-    <entry file="file://$PROJECT_DIR$/error2_array.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="17" lean-forward="false" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/error1_ID.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/right.cmm">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -844,24 +650,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test6_WHILE.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test7_IF-ELSE与WHILE.cmm">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test9_数组排序.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-500">
-          <caret line="0" column="12" lean-forward="true" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -873,35 +665,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/javax/swing/tree/DefaultMutableTreeNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="103" column="25" lean-forward="true" selection-start-line="103" selection-start-column="25" selection-end-line="103" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test2_一般变量赋值.cmm">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="279">
           <caret line="39" column="2" lean-forward="true" selection-start-line="0" selection-start-column="1" selection-end-line="39" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test8_阶乘.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test5_IF-ELSE.cmm">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="5" column="5" lean-forward="false" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -909,7 +676,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -917,36 +683,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
-          <folding>
-            <marker date="1512913722311" expanded="true" signature="3089:4105" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="3129:3266" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="3303:3566" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="3598:4075" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="3704:3912" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="3742:3880" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="4266:4761" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="4292:4651" ph="..." />
-            <marker date="1512913722311" expanded="true" signature="4681:4741" ph="..." />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-24027">
-          <caret line="209" column="58" lean-forward="false" selection-start-line="209" selection-start-column="58" selection-end-line="209" selection-end-column="58" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -958,30 +694,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Lexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="249" column="42" lean-forward="true" selection-start-line="249" selection-start-column="42" selection-end-line="249" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="399">
           <caret line="25" column="42" lean-forward="true" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
           <folding>
-            <element signature="e#780#781#0" expanded="true" />
-            <element signature="e#808#809#0" expanded="true" />
+            <element signature="e#780#781#0" expanded="false" />
+            <element signature="e#808#809#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="47" column="0" lean-forward="true" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -997,15 +717,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Token.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1216">
-          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1013,32 +724,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2983">
-          <caret line="157" column="35" lean-forward="true" selection-start-line="157" selection-start-column="35" selection-end-line="157" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Symbol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="60" lean-forward="false" selection-start-line="3" selection-start-column="60" selection-end-line="3" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1577">
-          <caret line="93" column="9" lean-forward="true" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -1059,39 +744,205 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Value.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="9" lean-forward="true" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
-          <folding>
-            <element signature="e#767#768#0" expanded="true" />
-            <element signature="e#795#796#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Documents/Tencent Files/2359173906/FileRecv/CodeGenerater.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/javax/swing/tree/DefaultMutableTreeNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="88" column="13" lean-forward="false" selection-start-line="88" selection-start-column="13" selection-end-line="88" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/javax/swing/tree/MutableTreeNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="39" column="43" lean-forward="false" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/javax/swing/tree/TreeNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="55" column="37" lean-forward="false" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Token.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="82" column="33" lean-forward="false" selection-start-line="82" selection-start-column="33" selection-end-line="82" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/TokenTreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="55" column="17" lean-forward="false" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
+        <state relative-caret-position="133">
+          <caret line="7" column="57" lean-forward="false" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="57" />
           <folding>
-            <marker date="1512922276832" expanded="true" signature="281:282" ph="//..." />
+            <element signature="e#634#635#0" expanded="false" />
+            <element signature="e#665#666#0" expanded="false" />
+            <element signature="e#713#714#0" expanded="false" />
+            <element signature="e#753#754#0" expanded="false" />
+            <element signature="e#784#785#0" expanded="false" />
+            <element signature="e#814#815#0" expanded="false" />
+            <element signature="e#857#858#0" expanded="false" />
+            <element signature="e#895#896#0" expanded="false" />
+            <element signature="e#929#930#0" expanded="false" />
+            <element signature="e#959#960#0" expanded="false" />
+            <element signature="e#1190#1191#0" expanded="false" />
+            <element signature="e#1226#1227#0" expanded="false" />
+            <element signature="e#1276#1277#0" expanded="false" />
+            <element signature="e#1338#1339#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/SymbolTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="93" column="9" lean-forward="true" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Value.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="22" lean-forward="false" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Symbol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-228">
+          <caret line="3" column="60" lean-forward="false" selection-start-line="3" selection-start-column="60" selection-end-line="3" selection-end-column="61" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/CodeGenerater.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="323" column="5" lean-forward="false" selection-start-line="323" selection-start-column="5" selection-end-line="323" selection-end-column="5" />
+        <state relative-caret-position="213">
+          <caret line="19" column="24" lean-forward="false" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/error3_comment.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/error2_array.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="6" lean-forward="true" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/CMMGUI.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="67" column="32" lean-forward="false" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/error1_ID.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="18" lean-forward="true" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/TestMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="8" lean-forward="false" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/praser/CMMParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="107">
+          <caret line="313" column="0" lean-forward="false" selection-start-line="313" selection-start-column="0" selection-end-line="313" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/lexer/Lexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="249" column="42" lean-forward="false" selection-start-line="249" selection-start-column="42" selection-end-line="249" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test5_IF-ELSE.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="5" column="5" lean-forward="false" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test6_WHILE.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test8_阶乘.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test9_数组排序.cmm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="15" lean-forward="true" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/gui/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2774">
+          <caret line="169" column="28" lean-forward="false" selection-start-line="169" selection-start-column="28" selection-end-line="169" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/zhangtao/iss2015/semantic/Semantic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9964">
+          <caret line="963" column="20" lean-forward="false" selection-start-line="963" selection-start-column="20" selection-end-line="963" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

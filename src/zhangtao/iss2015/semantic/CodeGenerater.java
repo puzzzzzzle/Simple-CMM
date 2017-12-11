@@ -114,7 +114,6 @@ public class CodeGenerater {
                         mLine++;
                     } else {
                         String index = interpretExp(var.getLeft());
-
                         codes.add(new FourCodeItem(FourCodeItem.ASSIGN, value, null, var.getValue() + "[" + index + "]"));
                         mLine++;
                     }

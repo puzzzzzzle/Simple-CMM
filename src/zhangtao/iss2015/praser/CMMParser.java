@@ -1432,33 +1432,33 @@ public class CMMParser {
                 node.setLeft(varNode);
                 return node;
             }
-            case Token.BOOL: {
-                TokenList node = new TokenList(TokenList.DECLARE_STMT);
-                TokenList varNode = new TokenList(TokenList.VAR);
-                if (checkNextTokenType(Token.BOOL)) {
-                    current = iterator.next();
-                    int type = current.getType();
-                    varNode.setDataType(type);
-
-                } else {
-                }
-                if (checkNextTokenType(Token.ID)) {
-                    current = iterator.next();
-                    varNode.setValue(current.getValue());
-                } else {
-                }
-                if (getNextTokenType() == Token.ASSIGN) {
-                    consumeNextToken(Token.ASSIGN);
-                    node.setMiddle(getExp());
-                } else if (getNextTokenType() == Token.LBRACKET) {
-                    consumeNextToken(Token.LBRACKET);
-                    varNode.setLeft(getExp());
-                    consumeNextToken(Token.RBRACKET);
-                }
-                consumeNextToken(Token.SEMI);
-                node.setLeft(varNode);
-                return node;
-            }
+//            case Token.BOOL: {
+//                TokenList node = new TokenList(TokenList.DECLARE_STMT);
+//                TokenList varNode = new TokenList(TokenList.VAR);
+//                if (checkNextTokenType(Token.BOOL)) {
+//                    current = iterator.next();
+//                    int type = current.getType();
+//                    varNode.setDataType(type);
+//
+//                } else {
+//                }
+//                if (checkNextTokenType(Token.ID)) {
+//                    current = iterator.next();
+//                    varNode.setValue(current.getValue());
+//                } else {
+//                }
+//                if (getNextTokenType() == Token.ASSIGN) {
+//                    consumeNextToken(Token.ASSIGN);
+//                    node.setMiddle(getExp());
+//                } else if (getNextTokenType() == Token.LBRACKET) {
+//                    consumeNextToken(Token.LBRACKET);
+//                    varNode.setLeft(getExp());
+//                    consumeNextToken(Token.RBRACKET);
+//                }
+//                consumeNextToken(Token.SEMI);
+//                node.setLeft(varNode);
+//                return node;
+//            }
             case Token.LBRACE: {
                 TokenList node = new TokenList(TokenList.NULL);
                 TokenList header = node;

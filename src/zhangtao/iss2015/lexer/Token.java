@@ -44,7 +44,7 @@ public class Token {
     public static final int LT = 13;
     // ==
     public static final int EQ = 14;
-    // <>
+    // !=
     public static final int NEQ = 15;
     // (
     public static final int LPARENT = 16;
@@ -79,6 +79,8 @@ public class Token {
     public static final int TERM_EXP = 34;
     //bool
     public static final int BOOL = 35;
+    //bool
+    public static final int STRING = 36;
 
     private int type;
     /*

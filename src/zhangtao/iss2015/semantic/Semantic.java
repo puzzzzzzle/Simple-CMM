@@ -654,7 +654,7 @@ public class Semantic {
 	}
 
 	/**
-	 * 分析read语句
+	 * read语句
 	 * @param root
 	 */
 	private void processRead(TokenTreeNode root) {

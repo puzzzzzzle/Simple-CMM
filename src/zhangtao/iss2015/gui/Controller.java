@@ -9,8 +9,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
-import zhangtao.iss2015.praser.TokenTreeNode;
 import zhangtao.iss2015.praser.CMMParser;
+import zhangtao.iss2015.praser.TokenTreeNode;
 import zhangtao.iss2015.semantic.CodeGenerater;
 import zhangtao.iss2015.semantic.FourCodeItem;
 import zhangtao.iss2015.semantic.Semantic;
@@ -37,8 +37,10 @@ public class Controller implements Initializable, GUIOuterController {
     public TextArea CodeText;
     public TextArea StateOutput;
     public TextArea PrecessOutput;
-    public TextArea FourText;
+    public TextArea TreeText;
     public Button FourCodeButton;
+    public Button LexTreeButton;
+    public Button GrammarTreeButton;
 
     private Stage stage = null;
 
@@ -48,6 +50,7 @@ public class Controller implements Initializable, GUIOuterController {
 
     /**
      * 初始化
+     *
      * @param location
      * @param resources
      */
@@ -124,7 +127,7 @@ public class Controller implements Initializable, GUIOuterController {
         //运行按钮
         RunButton.setOnAction(e -> {
             PrecessOutput.textProperty().setValue("");
-            FourText.textProperty().setValue("");
+            TreeText.textProperty().setValue("");
             StateOutput.textProperty().setValue("");
 
             StringBuilder out = new StringBuilder();
@@ -156,22 +159,28 @@ public class Controller implements Initializable, GUIOuterController {
                 }
                 StateOutput.textProperty().setValue("**********语法分析成功，开始语义分析**********\n");
                 Semantic semanticAnalysis = new Semantic(node, this);
-                semanticAnalysis.start();
-                if (semanticAnalysis.getErrorNum() != 0) {
-                    out.append("**********语意分析失败**********\n");
-                    out.append(semanticAnalysis.getErrorInfo());
-                    out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
-                    StateOutput.textProperty().setValue(out.toString());
-                    PrecessOutput.textProperty().setValue("语意分析失败");
-                } else {
-                    StateOutput.textProperty().setValue(StateOutput.textProperty().get() + "**********程序正常结束**********\n");
+                try {
+                    semanticAnalysis.start();
+                    if (semanticAnalysis.getErrorNum() != 0) {
+                        out.append("**********语意分析失败**********\n");
+                        out.append(semanticAnalysis.getErrorInfo());
+                        out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
+                        StateOutput.textProperty().setValue(out.toString());
+                        PrecessOutput.textProperty().setValue(PrecessOutput.textProperty().get()+"\n"+"语意分析失败");
+                    } else {
+                        StateOutput.textProperty().setValue(StateOutput.textProperty().get() + "**********程序正常结束**********\n");
+                    }
+                } catch (Exception e1) {
+                    StateOutput.textProperty().setValue("*********语意分析失败,出现未记录的语意错误！*********");
+                    PrecessOutput.textProperty().setValue(PrecessOutput.textProperty().get()+"\n"+"语意分析失败");
                 }
+
             }
         });
         //四元式解析按钮
         FourCodeButton.setOnAction(e -> {
             PrecessOutput.textProperty().setValue("");
-            FourText.textProperty().setValue("");
+            TreeText.textProperty().setValue("");
             StateOutput.textProperty().setValue("");
 
             StringBuilder out = new StringBuilder();
@@ -203,20 +212,100 @@ public class Controller implements Initializable, GUIOuterController {
                 }
                 StateOutput.textProperty().setValue("**********语法分析成功，开始语义分析**********\n");
                 Semantic semanticAnalysis = new Semantic(node, this);
-                semanticAnalysis.start();
-                if (semanticAnalysis.getErrorNum() != 0) {
-                    out.append("**********语意分析失败**********\n");
-                    out.append(semanticAnalysis.getErrorInfo());
-                    out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
-                    StateOutput.textProperty().setValue(out.toString());
+                try {
+                    semanticAnalysis.start();
+                    if (semanticAnalysis.getErrorNum() != 0) {
+                        out.append("**********语意分析失败**********\n");
+                        out.append(semanticAnalysis.getErrorInfo());
+                        out.append("该程序中共有" + semanticAnalysis.getErrorNum() + "个语意错误！\n");
+                        StateOutput.textProperty().setValue(out.toString());
+                        PrecessOutput.textProperty().setValue("语意分析失败");
+                    } else {
+                        StateOutput.textProperty().setValue("**********程序正常结束**********\n");
+                    }
+                } catch (Exception e1) {
+                    StateOutput.textProperty().setValue("*********语意分析失败,出现未记录的语意错误！*********");
                     PrecessOutput.textProperty().setValue("语意分析失败");
                     return;
                 }
             }
             generateCode();
         });
+        LexTreeButton.setOnAction(e -> {
+            ArrayList<Token> result = null;
+            StringBuilder lexText = new StringBuilder();
+            Lexer lexer = new Lexer();
+            if (CodeText.textProperty().get().equals("")) {
+                lexText.append("请确认输入CMM程序不为空！");
+            } else {
+                TokenTreeNode root = lexer.parse((CodeText.textProperty().get()));
+                lexText.append("**********词法分析结果**********\n");
+                lexText.append(lexer.getErrorInfo());
+                lexText.append("该程序中共有" + lexer.getErrorNum() + "个词法错误！\n");
+                result = lexer.getDisplayTokens();
+                StateOutput.textProperty().setValue(lexText.toString());
+                StringBuilder tree = new StringBuilder();
+                tree.append("   第1行：\n");
+                int j[] = {1};
+                result.forEach(i -> {
+                    if (i.getContent().equals("\n")) {
+                        j[0]++;
+                        tree.append("\n   第" + j[0] + "行：\n");
+                    }
+                    if (i.getContent().equals("\n")) {
+                        tree.append(i.getKind() + " : " + "\\n" + "\n");
+                    } else {
+                        tree.append(i.getKind() + " : " + i.getContent() + "\n");
+                    }
+                });
+                TreeText.textProperty().setValue(tree.toString());
+            }
+        });
+        GrammarTreeButton.setOnAction(e -> {
+            StringBuilder out = new StringBuilder();
+            TokenTreeNode result = null;
+            CMMParser parser = null;
+            Lexer lexer = new Lexer();
+            if (CodeText.textProperty().get().equals("")) {
+                out.append("请确认输入CMM程序不为空！");
+            } else {
+                TokenTreeNode lexRoot = lexer.parse(CodeText.textProperty().get());
+                if (lexer.getErrorNum() != 0) {
+                    out.append("**********词法分析失败**********\n");
+                    out.append(lexer.getErrorInfo());
+                    out.append("该程序中共有" + lexer.getErrorNum() + "个词法错误！\n");
+                } else {
+                    out.append("**********词法分析成功，开始语法分析**********\n");
+                    parser = new CMMParser(lexer.getTokens());
+                    result = parser.execute();
+                    out.append("**********语法分析结果**********\n");
+                    out.append(parser.getErrorInfo());
+                    out.append("该程序中共有" + parser.getErrorNum() + "个语法错误！\n");
+                    StateOutput.textProperty().setValue(out.toString());
+                    TreeText.textProperty().setValue(iteratorTree(result, ""));
+                }
+            }
+        });
     }
 
+    //遍历多叉树
+    public String iteratorTree(TokenTreeNode treeNode, String space) {
+        space += " ";
+        StringBuilder sb = new StringBuilder();
+        if (treeNode != null) {
+            if ("Parser".equals(treeNode.getContent())) {
+                sb.append(treeNode.getContent() + "\n");
+            }
+            for (int i = 0; i < treeNode.getChildCount(); i++) {
+                sb.append(space + treeNode.getChildAt(i).getContent() + "\n");
+                if (treeNode.getChildAt(i).getChildCount() != 0) {
+                    sb.append(iteratorTree(treeNode.getChildAt(i), space));
+                }
+            }
+        }
+
+        return sb.toString();
+    }
 
     //生成中间代码
     private void generateCode() {
@@ -230,7 +319,7 @@ public class Controller implements Initializable, GUIOuterController {
         for (FourCodeItem code : codes) {
             sb.append(code.toString() + "\r\n");
         }
-        FourText.textProperty().setValue(sb.toString());
+        TreeText.textProperty().setValue(sb.toString());
     }
 
     /**

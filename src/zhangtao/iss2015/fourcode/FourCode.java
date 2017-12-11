@@ -1,9 +1,11 @@
-package zhangtao.iss2015.semantic;
+package zhangtao.iss2015.fourcode;
 
 
 import zhangtao.iss2015.lexer.Lexer;
 import zhangtao.iss2015.lexer.Token;
 import zhangtao.iss2015.praser.CMMParser;
+import zhangtao.iss2015.semantic.SymbolTable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,7 +13,7 @@ import java.util.LinkedList;
 /**
  * 生成四元式
  */
-public class CodeGenerater {
+public class FourCode {
     private static int mLevel;
     private static int mLine;
     private static LinkedList<FourCodeItem> codes;
@@ -307,7 +309,7 @@ public class CodeGenerater {
             LinkedList<TokenList> nodeList = getNodeList(getTokenList(text));
             symbolTable = SymbolTable.getSymbolTable();
             symbolTable.newTable();
-            CodeGenerater generator = new CodeGenerater();
+            FourCode generator = new FourCode();
             for (TokenList node : nodeList) {
                 generator.interpret(node);
             }

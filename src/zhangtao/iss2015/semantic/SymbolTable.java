@@ -1,5 +1,7 @@
 package zhangtao.iss2015.semantic;
 
+import zhangtao.iss2015.fourcode.Symbol;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -8,20 +10,21 @@ import java.util.Vector;
  * 存放符号表项
  */
 public class SymbolTable {
-	private Vector<SymbolTableElement> tableElementVector = new Vector<>();
+    //符号表内容
+	private Vector<Element> tableElementVector = new Vector<>();
 	private static final String TEMP_PREFIX = "*temp";
+    private ArrayList<Symbol> symbolList;
 
 	private static SymbolTable symbolTable = new SymbolTable();
 	private static LinkedList<Symbol> tempNames;
 
-	private ArrayList<Symbol> symbolList;
-	
+
 	/**
 	 * 根据索引查找符号表项
 	 * @param index 提供的索引
 	 * @return 返回SymbolTableElement对象
 	 */
-	public SymbolTableElement get(int index) {
+	public Element get(int index) {
 		return tableElementVector.get(index);
 	}
 
@@ -31,9 +34,9 @@ public class SymbolTable {
 	 * @param level SymbolTableElement作用域
 	 * @return 如果存在,则返回SymbolTableElement对象;否则返回null
 	 */
-	public SymbolTableElement getAllLevel(String name, int level) {
+	public Element getAllLevel(String name, int level) {
 		while (level > -1) {
-			for (SymbolTableElement element : tableElementVector) {
+			for (Element element : tableElementVector) {
 				if (element.getName().equals(name) && element.getLevel() == level) {
 					return element;
 				}
@@ -49,8 +52,8 @@ public class SymbolTable {
 	 * @param level 作用域
 	 * @return 如果存在,则返回;否则返回null
 	 */
-	public SymbolTableElement getCurrentLevel(String name, int level) {
-		for (SymbolTableElement element : tableElementVector) {
+	public Element getCurrentLevel(String name, int level) {
+		for (Element element : tableElementVector) {
 			if (element.getName().equals(name) && element.getLevel() == level) {
 				return element;
 			}
@@ -63,7 +66,7 @@ public class SymbolTable {
 	 * @param element 要添加的元素
 	 * @return
 	 */
-	public boolean add(SymbolTableElement element) {
+	public boolean add(Element element) {
 		return tableElementVector.add(element);
 	}
 

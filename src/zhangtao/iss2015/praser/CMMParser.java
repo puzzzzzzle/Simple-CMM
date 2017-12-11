@@ -1,9 +1,9 @@
 package zhangtao.iss2015.praser;
 
 
+import zhangtao.iss2015.fourcode.TokenList;
 import zhangtao.iss2015.lexer.ConstValues;
 import zhangtao.iss2015.lexer.Token;
-import zhangtao.iss2015.semantic.TokenList;
 
 import java.util.LinkedList;
 import java.util.List;

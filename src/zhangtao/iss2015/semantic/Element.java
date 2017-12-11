@@ -3,7 +3,7 @@ package zhangtao.iss2015.semantic;
 /**
  * symbolTable中的元素项
  */
-public class SymbolTableElement {
+public class Element {
     // 元素名字
     private String name;
     // 元素类型
@@ -22,7 +22,7 @@ public class SymbolTableElement {
     private int arrayElementsNum;
 
     // 构造方法
-    public SymbolTableElement(String name, String kind, int lineNum, int level) {
+    public Element(String name, String kind, int lineNum, int level) {
         this.name = name;
         this.kind = kind;
         this.lineNum = lineNum;
@@ -34,7 +34,7 @@ public class SymbolTableElement {
     }
 
     public boolean equals(Object object) {
-        SymbolTableElement element = (SymbolTableElement) object;
+        Element element = (Element) object;
         return this.toString().equals(element.toString());
     }
 

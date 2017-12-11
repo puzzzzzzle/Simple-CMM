@@ -1,9 +1,10 @@
-package zhangtao.iss2015.semantic;
+package zhangtao.iss2015.fourcode;
 
 
 import zhangtao.iss2015.lexer.Token;
 
 /**
+ * 四元式解析支持
  * token 列表
  */
 public class TokenList {
@@ -88,22 +89,10 @@ public class TokenList {
     private TokenList mLeft;
     private TokenList mMiddle;
     private TokenList mRight;
-    /**
-     * TokenList.getType()为var时存储变量类型
-     * TokenList.getType()为op时存储操作符类型
-     * TokenList.getType()为exp时表示复合表达式
-     * TokenList.getType()为factor时表示因子
-     * TokenList.getType()为litreal时表示字面值,存储类型
-     */
     private int mDataType;
-    /**
-     * TokenList.getType()为factor时存储表达式的字符串形式的值
-     * TokenList.getType()为var时存储变量名
-     */
     private String value;
-    /**
-     * 若为代码块中的代码,则mNext指向其后面的一条语句
-     */
+    //若为代码块中的代码,则mNext指向其后面的一条语句
+
     private TokenList mNext;
 
     public TokenList(int type) {

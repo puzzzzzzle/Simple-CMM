@@ -134,7 +134,7 @@ public class Semantic {
 			// 判断变量是否已经被声明
 			if (table.getCurrentLevel(name, level) == null) {
 				if (temp.getChildCount() == 0) {
-					SymbolTableElement element = new SymbolTableElement(temp
+					Element element = new Element(temp
 							.getContent(), content, temp.getLineNum(), level);
 					index++;
 					// 判断变量是否在声明时被初始化
@@ -383,7 +383,7 @@ public class Semantic {
 					}
 					table.add(element);
 				} else { // 声明数组
-					SymbolTableElement element = new SymbolTableElement(temp
+					Element element = new Element(temp
 							.getContent(), content, temp.getLineNum(), level);
 					String sizeValue = temp.getChildAt(0).getContent();
 					if (matchInteger(sizeValue)) {
@@ -395,7 +395,7 @@ public class Semantic {
 						}
 					} else if (temp.getChildAt(0).getNodeKind().equals("标识符")) {
 						if (checkID(root, level)) {
-							SymbolTableElement tempElement = table.getAllLevel(
+							Element tempElement = table.getAllLevel(
 									root.getContent(), level);
 							if (tempElement.getKind().equals(ConstValues.INT)) {
 								int i = Integer.parseInt(tempElement
@@ -442,7 +442,7 @@ public class Semantic {
 					index++;
 					for (int j = 0; j < Integer.parseInt(sizeValue); j++) {
 						String s = temp.getContent() + "@" + j;
-						SymbolTableElement ste = new SymbolTableElement(s,
+						Element ste = new Element(s,
 								content, temp.getLineNum(), level);
 						table.add(ste);
 					}
@@ -508,7 +508,7 @@ public class Semantic {
 					else
 						return;
 				}
-				SymbolTableElement temp = table.getAllLevel(node2Value, level);
+				Element temp = table.getAllLevel(node2Value, level);
 				if (temp.getKind().equals(ConstValues.INT)) {
 					value = temp.getIntValue();
 				} else if (temp.getKind().equals(ConstValues.DOUBLE)) {
@@ -661,7 +661,7 @@ public class Semantic {
 		// 要读取的变量的名称
 		String idName = root.getContent();
 		// 查找变量
-		SymbolTableElement element = table.getAllLevel(idName, level);
+		Element element = table.getAllLevel(idName, level);
 		// 判断变量是否已经声明
 		if (element != null) {
 			if (root.getChildCount() != 0) {
@@ -736,7 +736,7 @@ public class Semantic {
 					else
 						return;
 				}
-				SymbolTableElement temp = table.getAllLevel(content, level);
+				Element temp = table.getAllLevel(content, level);
 				if (temp.getKind().equals(ConstValues.INT)) {
                     controller.writeToConsole(temp.getIntValue());
 				} else if (temp.getKind().equals(ConstValues.DOUBLE)) {
@@ -780,7 +780,7 @@ public class Semantic {
 					else
 						return false;
 				}
-				SymbolTableElement temp = table.getAllLevel(content, level);
+				Element temp = table.getAllLevel(content, level);
 				if (temp.getKind().equals(ConstValues.BOOL)) {
 					if(temp.getStringValue().equals(ConstValues.TRUE))
 						return true;
@@ -814,7 +814,7 @@ public class Semantic {
 							else
 								return false;
 						}
-						SymbolTableElement temp = table.getAllLevel(
+						Element temp = table.getAllLevel(
 								tempContent, level);
 						if (temp.getKind().equals(ConstValues.INT)) {
 							results[i] = temp.getIntValue();
@@ -888,7 +888,7 @@ public class Semantic {
 						else
 							return null;
 					}
-					SymbolTableElement temp = table.getAllLevel(tempNode
+					Element temp = table.getAllLevel(tempNode
 							.getContent(), level);
 					if (temp.getKind().equals(ConstValues.INT)) {
 						results[i] = temp.getIntValue();
@@ -963,7 +963,7 @@ public class Semantic {
 		} else if (root.getNodeKind().equals("标识符")) {
 			// 审查标识符
 			if (checkID(root, level)) {
-				SymbolTableElement temp = table.getAllLevel(root.getContent(),
+				Element temp = table.getAllLevel(root.getContent(),
 						level);
 				if (temp.getKind().equals(ConstValues.INT)) {
 					int i = Integer.parseInt(temp.getIntValue());
@@ -1039,7 +1039,7 @@ public class Semantic {
 				else
 					return false;
 			}
-			SymbolTableElement temp = table.getAllLevel(idName, level);
+			Element temp = table.getAllLevel(idName, level);
 			// 变量未初始化
 			if (temp.getIntValue().equals("") && temp.getRealValue().equals("")
 					&& temp.getStringValue().equals("")) {

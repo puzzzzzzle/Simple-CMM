@@ -1,4 +1,4 @@
-package zhangtao.iss2015.semantic;
+package zhangtao.iss2015.fourcode;
 
 /**
  * 四元式
